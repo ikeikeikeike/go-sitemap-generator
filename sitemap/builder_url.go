@@ -16,13 +16,22 @@ type URL struct {
 	Pagemap    string
 }
 
-type BuilderURL struct {
-	// TODO: Its change to struct coz sitemap xml have limit length
-	//		 and that append is slowly runnning.
-	urls []URL
+type url struct {
+    ServerName string `xml:"serverName"`
+    ServerIP   string `xml:"serverIP"`
 }
 
-func (b *BuilderURL) Add(url URL) Builder {
-	b.urls = append(b.urls, url)
-	return b
+func NewSitemapURL(url URL) sitemapURL {
+	smu := sitemapURL{url: url}
+	return smu
+}
+
+type sitemapURL struct {
+	url URL
+}
+
+func (smu sitemapURL) ToXML() string {
+	xml := url{}
+	smu.url
+	return ""
 }
