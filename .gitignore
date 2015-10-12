@@ -22,3 +22,13 @@ _testmain.go
 *.exe
 *.test
 *.prof
+
+/vendor
+/tags
+/sitemap.rb
+/sitemap.go
+/.bundle/
+/Gemfile
+/Gemfile.lock
+/public/
+/requirements.txt
