@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/beevik/etree"
-	"github.com/kr/pretty"
 )
 
 type URL struct {
@@ -55,8 +54,9 @@ func (su sitemapURL) ToXML() string {
 	doc.WriteTo(buf)
 
 	st := buf.String()
-	pretty.Println(st)
-	println("")
+
+	// pretty.Println(st)
+	// println("")
 
 	return st
 }

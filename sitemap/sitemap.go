@@ -7,7 +7,6 @@ func NewSitemap() *Sitemap {
 
 type Sitemap struct {
 	opts *Options
-	bldr Builder
 }
 
 func (sm *Sitemap) SetDefaultHost(host string) {
@@ -19,6 +18,7 @@ func (sm *Sitemap) SetSitemapsPath(path string) {
 }
 
 func (sm *Sitemap) Create() Builder {
-	sm.bldr = &BuilderFile{}
-	return sm.bldr
+	bldr := NewBuilderFile()
+	go bldr.run()
+	return bldr
 }
