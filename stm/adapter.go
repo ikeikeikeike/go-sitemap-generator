@@ -1,4 +1,4 @@
-package sitemap
+package stm
 
 type Adapter interface {
 }

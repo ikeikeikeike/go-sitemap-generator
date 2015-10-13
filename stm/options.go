@@ -1,4 +1,4 @@
-package sitemap
+package stm
 
 func NewOptions() *Options {
 	// Default values

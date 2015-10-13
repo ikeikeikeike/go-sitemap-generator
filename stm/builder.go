@@ -1,7 +1,7 @@
-package sitemap
+package stm
 
 type Builder interface {
 	Content() string
-	Add(URL) Builder
+	Add(interface{}) Builder
 	run()
 }

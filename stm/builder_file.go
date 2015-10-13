@@ -1,4 +1,4 @@
-package sitemap
+package stm
 
 // import (
 	// "sync"
@@ -20,8 +20,9 @@ type BuilderFile struct {
 	urls []URL // For debug
 }
 
-func (b *BuilderFile) Add(url URL) Builder {
-	b.xmlContent += NewSitemapURL(url).ToXML() // TODO: Sitemap xml have limit length
+func (b *BuilderFile) Add(url interface{}) Builder {
+	// b.xmlContent += NewSitemapURL(url).Xml() // TODO: Sitemap xml have limit length
+	b.write <- NewSitemapURL(url)
 	return b
 }
 
@@ -33,7 +34,7 @@ func (b *BuilderFile) run() {
 	for {
 		select {
 		case sitemapurl := <-b.write:
-			b.xmlContent += sitemapurl.ToXML() // TODO: Sitemap xml have limit length
+			b.xmlContent += sitemapurl.Xml() // TODO: Sitemap xml have limit length
 		}
 	}
 }
