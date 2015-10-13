@@ -1,6 +1,10 @@
 package sitemap
 
+import "runtime"
+
 func NewSitemap() *Sitemap {
+	runtime.GOMAXPROCS(runtime.NumCPU())
+
 	sm := &Sitemap{opts: NewOptions()}
 	return sm
 }
