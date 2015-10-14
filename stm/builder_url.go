@@ -2,11 +2,16 @@ package stm
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/beevik/etree"
+	"github.com/fatih/structs"
 )
+
+type URL map[string]interface{}
 
 // http://www.sitemaps.org/protocol.html
 // https://support.google.com/webmasters/answer/178636
@@ -18,23 +23,43 @@ type URLModel struct {
 	Host       string                 `valid:"ipv4"`
 	Loc        string                 `valid:"url"`
 	Images     string                 `valid:"url"`
-	Geo        string                 `valid:"latitude,"longitude`
+	Videos     string                 `valid:"url"`
+	Geo        string                 `valid:"latitude,longitude"`
+	News       string                 `valid:"-"`
 	Mobile     bool                   `valid:"-"`
+	Alternate  string                 `valid:"-"`
 	Alternates map[string]interface{} `valid:"-"`
 	Pagemap    map[string]interface{} `valid:"-"`
 }
 
-type URL map[string]interface{}
+// []string{"priority" "changefreq" "lastmod" "expires" "host" "images"
+// "video" "geo" "news" "videos" "mobile" "alternate" "alternates" "pagemap"}
+var fieldnames []string = defaultSettings(structs.Names(&URLModel{}))
 
-func NewSitemapURL(url interface{}) sitemapURL {
-	return sitemapURL{data: url.(URL)}
+func defaultSettings(befores []string) (afters []string) {
+	for _, name := range befores {
+		afters = append(afters, strings.ToLower(name))
+	}
+	return afters
+}
+
+func NewSitemapURL(url interface{}) (sitemapURL, error) {
+	smu := sitemapURL{data: url.(URL)}
+	err := smu.initialize()
+	return smu, err
 }
 
 type sitemapURL struct {
 	data URL
 }
 
-func (su sitemapURL) initialize() {
+func (su sitemapURL) initialize() error {
+	for _, name := range fieldnames {
+		if _, ok := su.data[name]; !ok {
+			return errors.New(fmt.Sprintf("Unknown key: %s", name))
+		}
+	}
+	return nil
 }
 
 // craete  validators methods
