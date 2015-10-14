@@ -1,15 +1,13 @@
 # go-sitemap-generator
-
 ```go
 package main
 
 import (
-	"github.com/ikeikeikeike/go-sitemap-generator/sitemap"
-	// "github.com/kr/pretty"
+	"github.com/ikeikeikeike/go-sitemap-generator/stm"
 )
 
 func main() {
-	sm := sitemap.NewSitemap()
+	sm := stm.NewSitemap()
 	sm.SetDefaultHost("http://myhost.com")
 	sm.SetSitemapsPath("sitemap/myhost.com")
 
@@ -25,12 +23,12 @@ func main() {
 		// ctx.Lastmod = ""
 	// }))
 
-	sm.Create().
-		Add(sitemap.URL{Changefreq: "1", Mobile: true}).
-		Add(sitemap.URL{Changefreq: "2", Mobile: true})
+	for i := 0; i < 30000; i++ {
+		builder.Add(stm.URL{"changefreq": "1", "mobile": true})
+	}
 
-	// pretty.Println(sm)
+	//pretty.Println(builder.Content())
 
-	sm.PingSearchEngines()
+	sm.PingSearchEngines(builder)
 }
 ```
