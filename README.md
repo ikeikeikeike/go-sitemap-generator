@@ -23,6 +23,8 @@ func main() {
 		// ctx.Lastmod = ""
 	// }))
 
+	builder := sm.Create()
+
 	for i := 0; i < 30000; i++ {
 		builder.Add(stm.URL{"changefreq": "1", "mobile": true})
 	}
