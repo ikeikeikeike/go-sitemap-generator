@@ -2,49 +2,50 @@ package stm
 
 import (
 	"bytes"
+	"fmt"
 	"time"
 
 	"github.com/beevik/etree"
-	"github.com/kr/pretty"
-
-    // "gopkg.in/go-playground/validator.v8"
 )
 
+// http://www.sitemaps.org/protocol.html
+// https://support.google.com/webmasters/answer/178636
 type URLModel struct {
-	Priority   float32   `validate:"required"`
-	Changefreq string    `validate:"required"`
-	Lastmod    time.Time `validate:"required"`
-	Expires    time.Time `validate:"required"`
-	Host       string    `validate:"required"`
-	Loc        string    `validate:"required"`
-	Images     string    `validate:"required"`
-	Geo        string    `validate:"required"`
-	Mobile     bool      `validate:"required"`
-	Alternates string    `validate:"required"`
-	Pagemap    string    `validate:"required"`
+	Priority   float32                `valid:"float,length(0.0|1.0)"`
+	Changefreq string                 `valid:"alpha(always|hourly|daily|weekly|monthly|yearly|never)"`
+	Lastmod    time.Time              `valid:"-"`
+	Expires    time.Time              `valid:"-"`
+	Host       string                 `valid:"ipv4"`
+	Loc        string                 `valid:"url"`
+	Images     string                 `valid:"url"`
+	Geo        string                 `valid:"latitude,"longitude`
+	Mobile     bool                   `valid:"-"`
+	Alternates map[string]interface{} `valid:"-"`
+	Pagemap    map[string]interface{} `valid:"-"`
 }
 
 type URL map[string]interface{}
 
 func NewSitemapURL(url interface{}) sitemapURL {
-	pretty.Println(url)
-	// u := url.(URL)
-	// pretty.Println(structs.Map(u))
-	// su := sitemapURL{url: url}
-	// return su
-	return sitemapURL{}
+	return sitemapURL{data: url.(URL)}
 }
 
 type sitemapURL struct {
-	url URL
+	data URL
 }
 
+func (su sitemapURL) initialize() {
+}
+
+// craete  validators methods
+// valid_keys
+
 func (su sitemapURL) Xml() string {
-
-	// mxj.Map()
-
 	doc := etree.NewDocument()
-	// url := doc.CreateElement("url")
+	url := doc.CreateElement("url")
+	priority := url.CreateElement("priority")
+	priority.SetText(fmt.Sprint(4.2))
+	_ = url.CreateElement("mobile:mobile")
 
 	// if su.url.Priority > 0 {
 	// priority := url.CreateElement("priority")
@@ -61,7 +62,7 @@ func (su sitemapURL) Xml() string {
 	// }
 
 	buf := &bytes.Buffer{}
-	doc.Indent(2)
+	// doc.Indent(2)
 	doc.WriteTo(buf)
 
 	st := buf.String()

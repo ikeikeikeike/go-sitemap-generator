@@ -17,11 +17,12 @@ type BuilderFile struct {
 	write chan sitemapURL
 	// mu    sync.RWMutex
 
-	urls []URL // For debug
+	urls []interface{} // For debug
 }
 
 func (b *BuilderFile) Add(url interface{}) Builder {
 	// b.xmlContent += NewSitemapURL(url).Xml() // TODO: Sitemap xml have limit length
+	b.urls = append(b.urls, url)
 	b.write <- NewSitemapURL(url)
 	return b
 }
