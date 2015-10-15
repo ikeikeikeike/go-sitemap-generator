@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/beevik/etree"
 	"github.com/fatih/structs"
+	"github.com/ikeikeikeike/go-sitemap-generator/stm/utils"
 )
 
 type URL map[string]interface{}
@@ -34,14 +34,7 @@ type URLModel struct {
 
 // []string{"priority" "changefreq" "lastmod" "expires" "host" "images"
 // "video" "geo" "news" "videos" "mobile" "alternate" "alternates" "pagemap"}
-var fieldnames []string = defaultSettings(structs.Names(&URLModel{}))
-
-func defaultSettings(befores []string) (afters []string) {
-	for _, name := range befores {
-		afters = append(afters, strings.ToLower(name))
-	}
-	return afters
-}
+var fieldnames []string = utils.ToLowers(structs.Names(&URLModel{}))
 
 func NewSitemapURL(url interface{}) (sitemapURL, error) {
 	smu := sitemapURL{data: url.(URL)}
