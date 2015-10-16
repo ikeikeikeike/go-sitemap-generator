@@ -16,7 +16,7 @@ type URL map[string]interface{}
 // http://www.sitemaps.org/protocol.html
 // https://support.google.com/webmasters/answer/178636
 type URLModel struct {
-	Priority   float32                `valid:"float,length(0.0|1.0)"`
+	Priority   float64                `valid:"float,length(0.0|1.0)"`
 	Changefreq string                 `valid:"alpha(always|hourly|daily|weekly|monthly|yearly|never)"`
 	Lastmod    time.Time              `valid:"-"`
 	Expires    time.Time              `valid:"-"`
@@ -55,38 +55,35 @@ func (su sitemapURL) initialize() error {
 	return nil
 }
 
-// craete  validators methods
-// valid_keys
-
 func (su sitemapURL) Xml() string {
 	doc := etree.NewDocument()
 	url := doc.CreateElement("url")
-	priority := url.CreateElement("priority")
-	priority.SetText(fmt.Sprint(4.2))
-	_ = url.CreateElement("mobile:mobile")
 
-	// if su.url.Priority > 0 {
-	// priority := url.CreateElement("priority")
-	// priority.SetText(fmt.Sprint("%f", su.url.Priority))
-	// }
-
-	// if su.url.Changefreq != "" {
-	// changefreq := url.CreateElement("changefreq")
-	// changefreq.SetText(su.url.Changefreq)
-	// }
-
-	// if su.url.Mobile {
-	// _ = url.CreateElement("mobile:mobile")
-	// }
+	if v, ok := su.data["priority"]; ok {
+		priority := url.CreateElement("priority")
+		priority.SetText(fmt.Sprint(v.(float64)))
+	}
+	if v, ok := su.data["changefreq"]; ok {
+		changefreq := url.CreateElement("changefreq")
+		changefreq.SetText(v.(string))
+	}
+	if v, ok := su.data["lastmod"]; ok {
+		lastmod := url.CreateElement("lastmod")
+		lastmod.SetText(v.(time.Time).Format("2006-01-02"))
+	}
+	if v, ok := su.data["expires"]; ok {
+		expires := url.CreateElement("expires")
+		expires.SetText(v.(time.Time).Format("2006-01-02"))
+	}
+	if v, ok := su.data["mobile"]; ok {
+		if v.(bool) {
+			_ = url.CreateElement("mobile:mobile")
+		}
+	}
 
 	buf := &bytes.Buffer{}
 	// doc.Indent(2)
 	doc.WriteTo(buf)
 
-	st := buf.String()
-
-	// pretty.Println(st)
-	// println("")
-
-	return st
+	return buf.String()
 }
