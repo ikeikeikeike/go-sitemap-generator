@@ -27,16 +27,18 @@ func (b *BuilderFile) Add(url interface{}) Builder {
 	if err != nil {
 		log.Fatal("Sitemap: ", err)
 	}
-	b.write <- smu; b.urls = append(b.urls, url) // XXX: For debug
+	b.xmlContent += smu.Xml() // TODO: Sitemap xml have limit length
+	// b.write <- smu; b.urls = append(b.urls, url) // XXX: For debug
 	return b
 }
 
 func (b *BuilderFile) AddWithErr(url interface{}) (Builder, error) {
 	smu, err := NewSitemapURL(url)
 	if err != nil {
-		log.Fatal("Sitemap: ", err)
+		log.Println("Sitemap: ", err)
 	}
-	b.write <- smu; b.urls = append(b.urls, url) // XXX: For debug
+	b.xmlContent += smu.Xml() // TODO: Sitemap xml have limit length
+	// b.write <- smu; b.urls = append(b.urls, url) // XXX: For debug
 	return b, err
 }
 
@@ -47,9 +49,8 @@ func (b *BuilderFile) Content() string {
 func (b *BuilderFile) run() {
 	for {
 		select {
-		case sitemapurl := <-b.write:
-			b.xmlContent += sitemapurl.Xml() // TODO: Sitemap xml have limit length
-			// b.xmlContent += NewSitemapURL(url).Xml() // TODO: Sitemap xml have limit length
+		case smu := <-b.write:
+			b.xmlContent += smu.Xml()  // TODO: Sitemap xml have limit length
 		}
 	}
 }

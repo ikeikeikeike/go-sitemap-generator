@@ -9,7 +9,6 @@ import (
 	"github.com/beevik/etree"
 	"github.com/fatih/structs"
 	"github.com/ikeikeikeike/go-sitemap-generator/stm/utils"
-	"github.com/k0kubun/pp"
 )
 
 type URL map[string]interface{}
@@ -48,17 +47,19 @@ type sitemapURL struct {
 }
 
 func (su sitemapURL) initialize() error {
+	var key string
 	var invalid bool
-	var key, name string
 
 	for key, _ = range su.data {
 		invalid = true
-		for _, name = range fieldnames {
+		for _, name := range fieldnames {
 			if key == name {
 				invalid = false
-				pp.Println(key, name)
 				break
 			}
+		}
+		if invalid {
+			break
 		}
 	}
 	if invalid {
@@ -94,7 +95,7 @@ func (su sitemapURL) Xml() string {
 	}
 
 	buf := &bytes.Buffer{}
-	// doc.Indent(2)
+	doc.Indent(2)
 	doc.WriteTo(buf)
 
 	return buf.String()
