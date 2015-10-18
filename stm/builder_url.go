@@ -9,6 +9,7 @@ import (
 	"github.com/beevik/etree"
 	"github.com/fatih/structs"
 	"github.com/ikeikeikeike/go-sitemap-generator/stm/utils"
+	"github.com/k0kubun/pp"
 )
 
 type URL map[string]interface{}
@@ -47,10 +48,21 @@ type sitemapURL struct {
 }
 
 func (su sitemapURL) initialize() error {
-	for _, name := range fieldnames {
-		if _, ok := su.data[name]; !ok {
-			return errors.New(fmt.Sprintf("Unknown key: %s", name))
+	var invalid bool
+	var key, name string
+
+	for key, _ = range su.data {
+		invalid = true
+		for _, name = range fieldnames {
+			if key == name {
+				invalid = false
+				pp.Println(key, name)
+				break
+			}
 		}
+	}
+	if invalid {
+		return errors.New(fmt.Sprintf("unknown map key `%s`", key))
 	}
 	return nil
 }

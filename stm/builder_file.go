@@ -25,7 +25,7 @@ type BuilderFile struct {
 func (b *BuilderFile) Add(url interface{}) Builder {
 	smu, err := NewSitemapURL(url)
 	if err != nil {
-		log.Fatal("Sitemap Key: ", err)
+		log.Fatal("Sitemap: ", err)
 	}
 	b.write <- smu; b.urls = append(b.urls, url) // XXX: For debug
 	return b
@@ -34,7 +34,7 @@ func (b *BuilderFile) Add(url interface{}) Builder {
 func (b *BuilderFile) AddWithErr(url interface{}) (Builder, error) {
 	smu, err := NewSitemapURL(url)
 	if err != nil {
-		log.Fatal("Sitemap Key: ", err)
+		log.Fatal("Sitemap: ", err)
 	}
 	b.write <- smu; b.urls = append(b.urls, url) // XXX: For debug
 	return b, err
