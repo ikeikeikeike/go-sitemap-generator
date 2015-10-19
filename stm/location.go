@@ -127,17 +127,18 @@ func (loc *Location) IsVerbose() bool {
 
 // Write `data` out to a file.
 // Output a summary line if verbose is true.
-// func (loc *Location) Write(data []byte, linkCount int) {
-// loc.adapter.Write(loc, data)
-// if loc.IsVerbose() {
-// pp.Println(summary(link_count)
-// }
-// }
+func (loc *Location) Write(data []byte, linkCount int) {
+	loc.adapter.Write(loc, data)
+	if loc.IsVerbose() {
+		pp.Println(loc.Summary(linkCount))
+	}
+}
 
 // Return a summary string
-// func (loc *Location) summary(link_count)
-// filesize = number_to_human_size(self.filesize)
-// width = self.class::PATH_OUTPUT_WIDTH
-// path = SitemapGenerator::Utilities.ellipsis(self.path_in_public, width)
-// "+ #{('%-'+width.to_s+'s') % path} #{'%10s' % link_count} links / #{'%10s' % filesize}"
-// }
+func (loc *Location) summary(linkCount int) string {
+	// filesize = number_to_human_size(loc.Filesize())
+	// width = self.class::PATH_OUTPUT_WIDTH
+	// path = SitemapGenerator::Utilities.ellipsis(self.path_in_public, width)
+	// fmt.Sprintf("+ #{('%-'+width.to_s+'s') % path} #{'%10s' % link_count} links / #{'%10s' % filesize}")
+	return ""
+}

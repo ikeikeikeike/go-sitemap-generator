@@ -1,4 +1,3 @@
 package stm
 
-type Adapter interface {
-}
+type Adapter interface {}
