@@ -1,9 +1,9 @@
-# go-sitemap-generator
+# go-sitemap-gen
 ```go
 package main
 
 import (
-	"github.com/ikeikeikeike/go-sitemap-generator/stm"
+	"github.com/ikeikeikeike/go-sitemap-gen/stm"
 )
 
 func main() {
