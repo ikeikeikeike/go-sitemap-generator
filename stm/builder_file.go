@@ -25,7 +25,7 @@ type BuilderFile struct {
 func (b *BuilderFile) Add(url interface{}) Builder {
 	smu, err := NewSitemapURL(url)
 	if err != nil {
-		log.Fatal("Sitemap: ", err)
+		log.Fatal("[F] Sitemap: ", err)
 	}
 	b.xmlContent += smu.Xml() // TODO: Sitemap xml have limit length
 	// b.write <- smu; b.urls = append(b.urls, url) // XXX: For debug
@@ -35,7 +35,7 @@ func (b *BuilderFile) Add(url interface{}) Builder {
 func (b *BuilderFile) AddWithErr(url interface{}) (Builder, error) {
 	smu, err := NewSitemapURL(url)
 	if err != nil {
-		log.Println("Sitemap: ", err)
+		log.Println("[E] Sitemap: ", err)
 	}
 	b.xmlContent += smu.Xml() // TODO: Sitemap xml have limit length
 	// b.write <- smu; b.urls = append(b.urls, url) // XXX: For debug
