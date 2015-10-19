@@ -16,7 +16,7 @@ func NewFileAdapter() *FileAdapter {
 
 type FileAdapter struct{}
 
-func (a *FileAdapter) Write(loc Location, data []byte) {
+func (a *FileAdapter) Write(loc *Location, data []byte) {
 	dir := loc.Directory()
 	fi, err := os.Stat(dir)
 	if err != nil {

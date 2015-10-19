@@ -7,7 +7,7 @@ func NewOptions() *Options {
 		"", // http://s3.amazonaws.com/sitemap-generator/,
 		"tmp/",
 		"sitemaps/",
-		FileAdapter{},
+		NewFileAdapter(),
 	}
 }
 

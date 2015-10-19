@@ -1,3 +1,5 @@
 package stm
 
-type Adapter interface {}
+type Adapter interface {
+	Write(loc *Location, data []byte)
+}

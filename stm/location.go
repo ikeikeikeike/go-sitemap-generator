@@ -4,6 +4,8 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+
+	"github.com/k0kubun/pp"
 )
 
 func NewLocation() *Location {
@@ -59,7 +61,6 @@ func (loc *Location) URL() string {
 	return base.String()
 }
 
-// Return the size of the file at
 func (loc *Location) Filesize() int64 {
 	f, _ := os.Open(loc.Path())
 	defer f.Close()
@@ -67,9 +68,6 @@ func (loc *Location) Filesize() int64 {
 	return fi.Size()
 }
 
-// Return the filename.  Raises an exception if no filename or namer is set.
-// If using a namer once the filename has been retrieved from the namer its
-// value is locked so that it is unaffected by further changes to the namer.
 func (loc *Location) Filename() string {
 	return ""
 
@@ -77,19 +75,12 @@ func (loc *Location) Filename() string {
 	// unless self[:filename]
 	// self.send(:[]=, :filename, self[:namer].to_s, :super => true)
 
-	// // Post-process the filename for our compression settings.
-	// // Strip the `.gz` from the extension if we aren't compressing this file.
-	// // If you're setting the filename manually, :all_but_first won't work as
-	// // expected.  Ultimately I should force using a namer in all circumstances.
-	// // Changing the filename here will affect how the FileAdapter writes out the file.
 	// if self[:compress] == false || (self[:namer] && self[:namer].start? && self[:compress] == :all_but_first) {
 	// self[:filename].gsub!(/\.gz$/, '')
 	// }
 	// self[:filename]
 }
 
-// If a namer is set, reserve the filename and increment the namer.
-// Returns the reserved name.
 // func (loc *Location) ReserveName() {
 // if self[:namer]
 // filename
@@ -98,8 +89,6 @@ func (loc *Location) Filename() string {
 // self[:filename]
 // }
 
-// Return true if this location has a fixed filename.  If no name has been
-// reserved from the namer, for instance, returns false.
 // func (loc *Location) IsReservedName() bool {
 // !!self[:filename]
 // }
@@ -112,7 +101,6 @@ func (loc *Location) IsVerbose() bool {
 	return loc.verbose
 }
 
-// If you set the filename, clear the namer and vice versa.
 // func (loc *Location) []=(key, value, opts={})
 // if !opts[:super]
 // case key
@@ -125,8 +113,6 @@ func (loc *Location) IsVerbose() bool {
 // super(key, value)
 // }
 
-// Write `data` out to a file.
-// Output a summary line if verbose is true.
 func (loc *Location) Write(data []byte, linkCount int) {
 	loc.adapter.Write(loc, data)
 	if loc.IsVerbose() {
@@ -134,8 +120,7 @@ func (loc *Location) Write(data []byte, linkCount int) {
 	}
 }
 
-// Return a summary string
-func (loc *Location) summary(linkCount int) string {
+func (loc *Location) Summary(linkCount int) string {
 	// filesize = number_to_human_size(loc.Filesize())
 	// width = self.class::PATH_OUTPUT_WIDTH
 	// path = SitemapGenerator::Utilities.ellipsis(self.path_in_public, width)
