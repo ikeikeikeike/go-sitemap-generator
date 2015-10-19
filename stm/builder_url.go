@@ -36,8 +36,8 @@ type URLModel struct {
 // "video" "geo" "news" "videos" "mobile" "alternate" "alternates" "pagemap"}
 var fieldnames []string = utils.ToLowers(structs.Names(&URLModel{}))
 
-func NewSitemapURL(url interface{}) (sitemapURL, error) {
-	smu := sitemapURL{data: url.(URL)}
+func NewSitemapURL(url interface{}) (*sitemapURL, error) {
+	smu := &sitemapURL{data: url.(URL)}
 	err := smu.validate()
 	return smu, err
 }
@@ -46,7 +46,7 @@ type sitemapURL struct {
 	data URL
 }
 
-func (su sitemapURL) validate() error {
+func (su *sitemapURL) validate() error {
 	var key string
 	var invalid bool
 
@@ -69,7 +69,7 @@ func (su sitemapURL) validate() error {
 	return nil
 }
 
-func (su sitemapURL) Xml() string {
+func (su *sitemapURL) Xml() string {
 	doc := etree.NewDocument()
 	url := doc.CreateElement("url")
 
