@@ -1,6 +1,9 @@
 package stm
 
-import "log"
+import (
+	"fmt"
+	"log"
+)
 
 // import (
 // "sync"
@@ -25,7 +28,7 @@ type BuilderFile struct {
 func (b *BuilderFile) Add(url interface{}) Builder {
 	smu, err := NewSitemapURL(url)
 	if err != nil {
-		log.Fatal("[F] Sitemap: ", err)
+		panic(fmt.Sprintf("[F] Sitemap: %s", err))
 	}
 	b.xmlContent += smu.Xml() // TODO: Sitemap xml have limit length
 	// b.write <- smu; b.urls = append(b.urls, url) // XXX: For debug
@@ -50,7 +53,7 @@ func (b *BuilderFile) run() {
 	for {
 		select {
 		case smu := <-b.write:
-			b.xmlContent += smu.Xml()  // TODO: Sitemap xml have limit length
+			b.xmlContent += smu.Xml() // TODO: Sitemap xml have limit length
 		}
 	}
 }

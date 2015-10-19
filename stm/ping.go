@@ -15,6 +15,7 @@ func PingSearchEngines(bldr Builder, urls ...string) {
 		// "http://www.ing.com/webmaster/ping.aspx?siteMap=%s",
 		// "http://www.kdlakal.com/webmaster/ping.aspx?siteMap=%s",
 	}...)
+	sitemapURL := "http://example.com/sitemap.tar.gz"
 
 	bufs := len(urls)
 	does := make(chan string, bufs)
@@ -24,18 +25,17 @@ func PingSearchEngines(bldr Builder, urls ...string) {
 		go func(url string) {
 			log.Println("[I] Ping now:", url)
 
-			resp, err := client.Get(url + "http://example.com/sitemap.tar.gz")
+			resp, err := client.Get(url + sitemapURL)
 			if err != nil {
-				does <- fmt.Sprintf("[E] Ping failed: %s (URL:%s)", err, url)
+				does <- fmt.Sprintf(
+					"[E] Ping failed: %s (URL:%s)",
+					err, url)
 				return
 			}
 			defer resp.Body.Close()
-
 			does <- fmt.Sprintf("[I] Successful ping of `%s`", url)
 		}(url)
 	}
 
-	for i := 0; i < bufs; i++ {
-		log.Println(<-does)
-	}
+	for i := 0; i < bufs; i++ { log.Println(<-does) }
 }
