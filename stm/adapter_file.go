@@ -18,7 +18,6 @@ type FileAdapter struct{}
 
 func (a *FileAdapter) Write(loc Location, data []byte) {
 	dir := loc.Directory()
-
 	fi, err := os.Stat(dir)
 	if err != nil {
 		_ = os.MkdirAll(dir, 0755)
@@ -26,7 +25,7 @@ func (a *FileAdapter) Write(loc Location, data []byte) {
 		log.Fatal("%s should be a directory", dir)
 	}
 
-	file, err := os.Open(loc.Path())
+	file, _ := os.Open(loc.Path())
 	fi, err = file.Stat()
 	if err != nil {
 		log.Fatal("%s file not exists", loc.Path())
