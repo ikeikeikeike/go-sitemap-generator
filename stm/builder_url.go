@@ -38,7 +38,7 @@ var fieldnames []string = utils.ToLowers(structs.Names(&URLModel{}))
 
 func NewSitemapURL(url interface{}) (sitemapURL, error) {
 	smu := sitemapURL{data: url.(URL)}
-	err := smu.initialize()
+	err := smu.validate()
 	return smu, err
 }
 
@@ -46,7 +46,7 @@ type sitemapURL struct {
 	data URL
 }
 
-func (su sitemapURL) initialize() error {
+func (su sitemapURL) validate() error {
 	var key string
 	var invalid bool
 

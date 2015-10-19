@@ -3,6 +3,7 @@ package stm
 import (
 	"net/url"
 	"os"
+	"path/filepath"
 )
 
 func NewLocation() *Location {
@@ -30,34 +31,30 @@ func (loc *Location) SetSitemapsPath(path string) {
 	loc.sitemapsPath = path
 }
 
-// Return a new Location instance with the given options merged in
 // func (loc *Location) with(opts={})
 // self.merge(opts)
 // }
 
-// Full path to the directory of the file.
 func (loc *Location) Directory() string {
-	(loc.publicPath + loc.sitemapsPath).expand_path.to_s
+	return filepath.Join(loc.publicPath, loc.sitemapsPath)
 }
 
-// Full path of the file including the filename.
 func (loc *Location) Path() string {
-	(loc.publicPath + loc.sitemapsPath + filename).expand_path.to_s
+	return filepath.Join(loc.publicPath, loc.sitemapsPath, loc.Filename())
 }
 
-// Relative path of the file (including the filename) relative to <tt>public_path</tt>
-func (loc *Location) PathInPublic() {
-	(loc.sitemapsPath + loc.Filename()).to_s
+func (loc *Location) PathInPublic() string {
+	return filepath.Join(loc.sitemapsPath, loc.Filename())
 }
 
-// Full URL of the file.
 func (loc *Location) URL() string {
 	base, _ := url.Parse(loc.host)
 
-	u, _ := url.Parse(loc.sitemapsPath)
-	base.ResolveReference(u)
-	u, _ = url.Parse(loc.Filename())
-	base.ResolveReference(u)
+	var u *url.URL
+	for _, ref := range []string{loc.sitemapsPath, loc.Filename()} {
+		u, _ = url.Parse(ref)
+		base.ResolveReference(u)
+	}
 
 	return base.String()
 }
