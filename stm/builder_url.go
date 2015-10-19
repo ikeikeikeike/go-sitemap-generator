@@ -63,7 +63,8 @@ func (su sitemapURL) initialize() error {
 		}
 	}
 	if invalid {
-		return errors.New(fmt.Sprintf("unknown map key `%s`", key))
+		msg := fmt.Sprintf("unknown map key `%s`", key)
+		return errors.New(msg)
 	}
 	return nil
 }
