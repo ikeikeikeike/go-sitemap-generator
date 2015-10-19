@@ -16,8 +16,8 @@ func PingSearchEngines(bldr Builder, urls ...string) {
 		// "http://www.kdlakal.com/webmaster/ping.aspx?siteMap=%s",
 	}...)
 
-	nums := len(urls)
-	does := make(chan string, nums)
+	bufs := len(urls)
+	does := make(chan string, bufs)
 	client := http.Client{Timeout: time.Duration(5 * time.Second)}
 
 	for _, url := range urls {
@@ -35,7 +35,7 @@ func PingSearchEngines(bldr Builder, urls ...string) {
 		}(url)
 	}
 
-	for i := 0; i < nums; i++ {
+	for i := 0; i < bufs; i++ {
 		log.Println(<-does)
 	}
 }
