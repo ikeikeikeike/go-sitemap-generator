@@ -27,8 +27,7 @@ func PingSearchEngines(bldr Builder, urls ...string) {
 
 			resp, err := client.Get(url + sitemapURL)
 			if err != nil {
-				does <- fmt.Sprintf(
-					"[E] Ping failed: %s (URL:%s)",
+				does <- fmt.Sprintf("[E] Ping failed: %s (URL:%s)",
 					err, url)
 				return
 			}
@@ -37,5 +36,7 @@ func PingSearchEngines(bldr Builder, urls ...string) {
 		}(url)
 	}
 
-	for i := 0; i < bufs; i++ { log.Println(<-does) }
+	for i := 0; i < bufs; i++ {
+		log.Println(<-does)
+	}
 }
