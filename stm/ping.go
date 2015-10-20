@@ -11,9 +11,6 @@ func PingSearchEngines(bldr Builder, urls ...string) {
 	urls = append(urls, []string{
 		"http://www.google.com/webmasters/tools/ping?sitemap=%s",
 		"http://www.bing.com/webmaster/ping.aspx?siteMap=%s",
-		// "http://www.oogle.com/webmasters/tools/ping?sitemap=%s",
-		// "http://www.ing.com/webmaster/ping.aspx?siteMap=%s",
-		// "http://www.kdlakal.com/webmaster/ping.aspx?siteMap=%s",
 	}...)
 	sitemapURL := "http://example.com/sitemap.tar.gz"
 

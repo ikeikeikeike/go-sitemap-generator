@@ -7,6 +7,7 @@ func NewOptions() *Options {
 		"", // http://s3.amazonaws.com/sitemap-generator/,
 		"tmp/",
 		"sitemaps/",
+		// "sitemap",
 		NewFileAdapter(),
 	}
 }
@@ -16,6 +17,7 @@ type Options struct {
 	sitemapsHost string
 	publicPath   string
 	sitemapsPath string
+	// filename	 string
 	adapter      Adapter
 }
 
@@ -37,4 +39,11 @@ func (opts *Options) SetSitemapsPath(path string) {
 
 func (opts *Options) SetAdapter(adapter Adapter) {
 	opts.adapter = adapter
+}
+
+func (opts *Options) SitemapsHost() string {
+	if opts.sitemapsHost != "" {
+		return opts.sitemapsHost
+	}
+	return opts.defaultHost
 }
