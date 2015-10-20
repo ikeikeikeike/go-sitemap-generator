@@ -16,7 +16,7 @@ func NewFileAdapter() *FileAdapter {
 
 type FileAdapter struct{}
 
-func (a *FileAdapter) Write(loc *Location, data []byte) {
+func (adp *FileAdapter) Write(loc *Location, data []byte) {
 	dir := loc.Directory()
 	fi, err := os.Stat(dir)
 	if err != nil {
@@ -34,19 +34,19 @@ func (a *FileAdapter) Write(loc *Location, data []byte) {
 	}
 
 	if gzipPtn.MatchString(loc.Path()) {
-		a.gzip(file, data)
+		adp.gzip(file, data)
 	} else {
-		a.plain(file, data)
+		adp.plain(file, data)
 	}
 }
 
-func (a *FileAdapter) gzip(file *os.File, data []byte) {
+func (adp *FileAdapter) gzip(file *os.File, data []byte) {
 	gz := zlib.NewWriter(file)
 	defer gz.Close()
 	gz.Write(data)
 }
 
-func (a *FileAdapter) plain(file *os.File, data []byte) {
+func (adp *FileAdapter) plain(file *os.File, data []byte) {
 	file.Write(data)
 	defer file.Close()
 }

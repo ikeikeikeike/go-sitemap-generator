@@ -3,12 +3,13 @@ package stm
 func NewOptions() *Options {
 	// Default values
 	return &Options{
-		"http://www.example.com",
-		"", // http://s3.amazonaws.com/sitemap-generator/,
-		"tmp/",
-		"sitemaps/",
-		// "sitemap",
-		NewFileAdapter(),
+		defaultHost:  "http://www.example.com",
+		sitemapsHost: "", // http://s3.amazonaws.com/sitemap-generator/,
+		publicPath:   "tmp/",
+		sitemapsPath: "sitemaps/",
+		filename:     "sitemap",
+		verbose:      false,
+		compress:     true,
 	}
 }
 
@@ -17,8 +18,9 @@ type Options struct {
 	sitemapsHost string
 	publicPath   string
 	sitemapsPath string
-	// filename	 string
-	adapter      Adapter
+	filename     string
+	verbose      bool
+	compress     bool
 }
 
 func (opts *Options) SetDefaultHost(host string) {
@@ -35,10 +37,6 @@ func (opts *Options) SetPublicPath(path string) {
 
 func (opts *Options) SetSitemapsPath(path string) {
 	opts.sitemapsPath = path
-}
-
-func (opts *Options) SetAdapter(adapter Adapter) {
-	opts.adapter = adapter
 }
 
 func (opts *Options) SitemapsHost() string {
