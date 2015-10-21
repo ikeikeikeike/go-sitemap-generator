@@ -5,6 +5,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"regexp"
 
 	"github.com/k0kubun/pp"
 )
@@ -48,7 +49,7 @@ func (loc *Location) URL() string {
 
 	var u *url.URL
 	for _, ref := range []string{
-			loc.opts.sitemapsPath, loc.Filename()} {
+		loc.opts.sitemapsPath, loc.Filename()} {
 		u, _ = url.Parse(ref)
 		base.ResolveReference(u)
 	}
@@ -63,13 +64,22 @@ func (loc *Location) Filesize() int64 {
 	return fi.Size()
 }
 
+var reGzip = regexp.MustCompile(`\.gz$`)
+
 func (loc *Location) Filename() string {
-	if loc.opts.filename == "" && loc.opts.Namer() == nil {
+	nmr := loc.opts.Namer()
+	if loc.opts.filename == "" && nmr == nil {
 		log.Fatal("No filename or namer set")
 	}
 
 	if loc.opts.filename == "" {
-		loc.opts.SetFilename(loc.opts.Namer().String())
+		loc.opts.SetFilename(nmr.String())
+
+		if !loc.opts.compress || (nmr != nil && nmr.IsStart()) {
+			// XXX: Need fix: && loc.opts.compress: all_but_first
+			newName := reGzip.ReplaceAllString(loc.opts.filename, "")
+			loc.opts.SetFilename(newName)
+		}
 	}
 	return loc.opts.filename
 }
