@@ -43,11 +43,8 @@ func (opts *Options) SetSitemapsPath(path string) {
 	opts.sitemapsPath = path
 }
 
-func (opts *Options) SitemapsHost() string {
-	if opts.sitemapsHost != "" {
-		return opts.sitemapsHost
-	}
-	return opts.defaultHost
+func (opts *Options) SetFilename(filename string) {
+	opts.filename = filename
 }
 
 func (opts *Options) SetAdapter(adp Adapter) {
@@ -55,15 +52,14 @@ func (opts *Options) SetAdapter(adp Adapter) {
 }
 
 func (opts *Options) Location() *Location {
-	loc := NewLocation()
-	// opts.SitemapsHost(),
-	// opts.Namer(),
-	// opts.publicPath,
-	// opts.sitemapsPath,
-	// opts.adp,
-	// opts.verbose,
-	// opts.compress,
-	return loc
+	return NewLocation(opts)
+}
+
+func (opts *Options) SitemapsHost() string {
+	if opts.sitemapsHost != "" {
+		return opts.sitemapsHost
+	}
+	return opts.defaultHost
 }
 
 func (opts *Options) Namer() *Namer {

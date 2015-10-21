@@ -1,6 +1,7 @@
 package stm
 
 import (
+	"log"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -8,54 +9,46 @@ import (
 	"github.com/k0kubun/pp"
 )
 
-func NewLocation() *Location {
+func NewLocation(opts *Options) *Location {
 	loc := &Location{
-		adp:        NewFileAdapter(),
-		publicPath: "public/",
+		opts: opts,
 	}
 	return loc
 }
 
-// 状態は options で持つ方法のがシンプル
 type Location struct {
-	adp Adapter
-	nmr *Namer
-
-	verbose      bool
-	host         string
-	publicPath   string
-	sitemapsPath string
+	adp  Adapter
+	opts *Options
 }
-
-func (loc *Location) SetPublicPath(path string) {
-	loc.publicPath = path
-}
-
-func (loc *Location) SetSitemapsPath(path string) {
-	loc.sitemapsPath = path
-}
-
-// func (loc *Location) with(opts={})
-// self.merge(opts)
-// }
 
 func (loc *Location) Directory() string {
-	return filepath.Join(loc.publicPath, loc.sitemapsPath)
+	return filepath.Join(
+		loc.opts.publicPath,
+		loc.opts.sitemapsPath,
+	)
 }
 
 func (loc *Location) Path() string {
-	return filepath.Join(loc.publicPath, loc.sitemapsPath, loc.Filename())
+	return filepath.Join(
+		loc.opts.publicPath,
+		loc.opts.sitemapsPath,
+		loc.Filename(),
+	)
 }
 
 func (loc *Location) PathInPublic() string {
-	return filepath.Join(loc.sitemapsPath, loc.Filename())
+	return filepath.Join(
+		loc.opts.sitemapsPath,
+		loc.Filename(),
+	)
 }
 
 func (loc *Location) URL() string {
-	base, _ := url.Parse(loc.host)
+	base, _ := url.Parse(loc.opts.sitemapsHost)
 
 	var u *url.URL
-	for _, ref := range []string{loc.sitemapsPath, loc.Filename()} {
+	for _, ref := range []string{
+			loc.opts.sitemapsPath, loc.Filename()} {
 		u, _ = url.Parse(ref)
 		base.ResolveReference(u)
 	}
@@ -71,49 +64,40 @@ func (loc *Location) Filesize() int64 {
 }
 
 func (loc *Location) Filename() string {
-	return ""
+	if loc.opts.filename == "" && loc.opts.Namer() == nil {
+		log.Fatal("No filename or namer set")
+	}
 
-	// raise SitemapGenerator::SitemapError, "No filename or namer set" unless self[:filename] || self[:namer]
-	// unless self[:filename]
-	// self.send(:[]=, :filename, self[:namer].to_s, :super => true)
-
-	// if self[:compress] == false || (self[:namer] && self[:namer].start? && self[:compress] == :all_but_first) {
-	// self[:filename].gsub!(/\.gz$/, '')
-	// }
-	// self[:filename]
+	if loc.opts.filename == "" {
+		loc.opts.SetFilename(loc.opts.Namer().String())
+	}
+	return loc.opts.filename
 }
 
-// func (loc *Location) ReserveName() {
-// if self[:namer]
-// filename
-// self[:namer].next
-// end
-// self[:filename]
-// }
+func (loc *Location) ReserveName() string {
+	nmr := loc.opts.Namer()
+	if nmr != nil {
+		loc.Filename()
+		nmr.Next()
+	}
 
-// func (loc *Location) IsReservedName() bool {
-// !!self[:filename]
-// }
+	return loc.opts.filename
+}
 
-// func (loc *Location) namer() {
-// self[:namer]
-// }
+func (loc *Location) IsReservedName() bool {
+	if loc.opts.filename == "" {
+		return false
+	}
+	return true
+}
+
+func (loc *Location) Namer() *Namer {
+	return loc.opts.Namer()
+}
 
 func (loc *Location) IsVerbose() bool {
-	return loc.verbose
+	return loc.opts.verbose
 }
-
-// func (loc *Location) []=(key, value, opts={})
-// if !opts[:super]
-// case key
-// when :namer
-// super(:filename, nil)
-// when :filename
-// super(:namer, nil)
-// end
-// end
-// super(key, value)
-// }
 
 func (loc *Location) Write(data []byte, linkCount int) {
 	loc.adp.Write(loc, data)
