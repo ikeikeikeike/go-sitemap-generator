@@ -10,6 +10,7 @@ func NewOptions() *Options {
 		filename:     "sitemap",
 		verbose:      false,
 		compress:     true,
+		adp:  NewFileAdapter(),
 	}
 }
 
@@ -21,6 +22,9 @@ type Options struct {
 	filename     string
 	verbose      bool
 	compress     bool
+	adp          Adapter
+	nmr          *Namer
+	loc          *Location
 }
 
 func (opts *Options) SetDefaultHost(host string) {
@@ -44,4 +48,31 @@ func (opts *Options) SitemapsHost() string {
 		return opts.sitemapsHost
 	}
 	return opts.defaultHost
+}
+
+func (opts *Options) SetAdapter(adp Adapter) {
+	opts.adp = adp
+}
+
+func (opts *Options) Location() *Location {
+	loc := NewLocation()
+	// opts.SitemapsHost(),
+	// opts.Namer(),
+	// opts.publicPath,
+	// opts.sitemapsPath,
+	// opts.adp,
+	// opts.verbose,
+	// opts.compress,
+	return loc
+}
+
+func (opts *Options) Namer() *Namer {
+	if opts.nmr == nil {
+		// if opts.bldr != nil {
+		// opts.nmr = opts.bldr.loc.nmr
+		// } else {
+		opts.nmr = NewNamer(opts.filename)
+		// }
+	}
+	return opts.nmr
 }

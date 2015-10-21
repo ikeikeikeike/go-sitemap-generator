@@ -9,10 +9,11 @@ import (
 // "sync"
 // )
 
-func NewBuilderFile() *BuilderFile {
+func NewBuilderFile(loc *Location) *BuilderFile {
 	return &BuilderFile{
 		xmlContent: "",
 		write:      make(chan sitemapURL),
+		loc:        loc,
 		// mu: sync.RWMutex{},
 	}
 }
@@ -20,7 +21,7 @@ func NewBuilderFile() *BuilderFile {
 type BuilderFile struct {
 	xmlContent string // We can use this later
 	write      chan sitemapURL
-	// mu    sync.RWMutex
+	loc        *Location
 
 	urls []interface{} // XXX: For debug
 }
@@ -48,6 +49,10 @@ func (b *BuilderFile) AddWithErr(url interface{}) (Builder, error) {
 func (b *BuilderFile) Content() string {
 	return b.xmlContent
 }
+
+// func (b *BuilderFile) location() *Location {
+	// return b.loc
+// }
 
 func (b *BuilderFile) run() {
 	for {

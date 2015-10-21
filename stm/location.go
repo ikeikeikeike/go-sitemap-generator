@@ -10,14 +10,16 @@ import (
 
 func NewLocation() *Location {
 	loc := &Location{
-		adapter:    NewFileAdapter(),
+		adp:        NewFileAdapter(),
 		publicPath: "public/",
 	}
 	return loc
 }
 
+// 状態は options で持つ方法のがシンプル
 type Location struct {
-	adapter Adapter
+	adp Adapter
+	nmr *Namer
 
 	verbose      bool
 	host         string
@@ -114,7 +116,7 @@ func (loc *Location) IsVerbose() bool {
 // }
 
 func (loc *Location) Write(data []byte, linkCount int) {
-	loc.adapter.Write(loc, data)
+	loc.adp.Write(loc, data)
 	if loc.IsVerbose() {
 		pp.Println(loc.Summary(linkCount))
 	}
