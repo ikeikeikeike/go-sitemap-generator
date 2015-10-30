@@ -75,8 +75,7 @@ func (loc *Location) Filename() string {
 	if loc.opts.filename == "" {
 		loc.opts.SetFilename(nmr.String())
 
-		if !loc.opts.compress || (nmr != nil && nmr.IsStart()) {
-			// XXX: Need fix: && loc.opts.compress: all_but_first
+		if !loc.opts.compress || (nmr != nil && nmr.IsStart()) {  // XXX: Need fix: && loc.opts.compress: all_but_first
 			newName := reGzip.ReplaceAllString(loc.opts.filename, "")
 			loc.opts.SetFilename(newName)
 		}

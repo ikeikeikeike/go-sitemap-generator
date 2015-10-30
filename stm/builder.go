@@ -1,9 +1,9 @@
 package stm
 
 type Builder interface {
-	Content() string
+	// Content() string
 	Add(interface{}) Builder
-	AddWithErr(url interface{}) (Builder, error)
+	// AddWithErr(url interface{}) (Builder, error)
 	// location() *Location
 	run()
 }
