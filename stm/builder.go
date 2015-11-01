@@ -5,5 +5,7 @@ type Builder interface {
 	Add(interface{}) Builder
 	// AddWithErr(url interface{}) (Builder, error)
 	// location() *Location
+	finalize()
+	write()
 	run()
 }

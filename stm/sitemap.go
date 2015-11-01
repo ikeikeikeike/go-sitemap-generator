@@ -14,7 +14,7 @@ func NewSitemap() *Sitemap {
 type Sitemap struct {
 	opts *Options
 	bldr Builder
-	bldrIdx *BuilderIndexFile
+	bldrs Builder
 }
 
 func (sm *Sitemap) SetDefaultHost(host string) {
@@ -29,14 +29,35 @@ func (sm *Sitemap) SetAdapter(adp Adapter) {
 	sm.opts.SetAdapter(adp)
 }
 
-func (sm *Sitemap) Add() Builder {
-	sm.bldr = NewBuilderFile(sm.opts.Location())
+func (sm *Sitemap) Create() *Sitemap {
+	sm.bldrs = NewBuilderIndexfile(sm.opts.Location())
 	go sm.bldr.run()
-	return sm.bldr
+	go sm.bldrs.run()
+	return sm
 }
 
-func (sm *Sitemap) Create() Builder {
-	sm.bldrIdx = NewBuilderIndexFile()
-	go sm.bldrIdx.run()
-	return sm.bldrIdx
+func (sm *Sitemap) Add(url interface{}) *Sitemap {
+	if sm.bldr.isFull() {
+      sm.finalizeFile()
+    } else if sm.bldr.isFinalized() {
+      sm.bldr = NewBuilderfile(sm.opts.Location())
+	}
+
+	sm.bldr.Add(url)
+	return sm
+}
+
+func (sm *Sitemap) finalize() {
+	sm.finalizeFile()
+	sm.finalizeIndexfile()
+}
+
+func (sm *Sitemap) finalizeFile() {
+	sm.bldr.finalize()
+	sm.bldrs.Add(sm.bldr)
+}
+
+func (sm *Sitemap) finalizeIndexfile() {
+	sm.bldrs.finalize()
+	sm.bldrs.write()
 }

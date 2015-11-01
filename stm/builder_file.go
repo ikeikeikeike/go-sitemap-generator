@@ -5,22 +5,17 @@ import (
 	"log"
 )
 
-// import (
-// "sync"
-// )
-
 func NewBuilderFile(loc *Location) *BuilderFile {
 	return &BuilderFile{
 		xmlContent: "",
-		write:      make(chan sitemapURL),
+		build:      make(chan sitemapURL),
 		loc:        loc,
-		// mu: sync.RWMutex{},
 	}
 }
 
 type BuilderFile struct {
 	xmlContent string // We can use this later
-	write      chan sitemapURL
+	build      chan sitemapURL
 	loc        *Location
 
 	urls []interface{} // XXX: For debug
@@ -32,7 +27,7 @@ func (b *BuilderFile) Add(url interface{}) Builder {
 		panic(fmt.Sprintf("[F] Sitemap: %s", err))
 	}
 	b.xmlContent += smu.Xml() // TODO: Sitemap xml have limit length
-	// b.write <- smu; b.urls = append(b.urls, url) // XXX: For debug
+	// b.build <- smu; b.urls = append(b.urls, url) // XXX: For debug
 	return b
 }
 
@@ -42,7 +37,7 @@ func (b *BuilderFile) AddWithErr(url interface{}) (Builder, error) {
 		log.Println("[E] Sitemap: ", err)
 	}
 	b.xmlContent += smu.Xml() // TODO: Sitemap xml have limit length
-	// b.write <- smu; b.urls = append(b.urls, url) // XXX: For debug
+	// b.build <- smu; b.urls = append(b.urls, url) // XXX: For debug
 	return b, err
 }
 
@@ -51,13 +46,24 @@ func (b *BuilderFile) Content() string {
 }
 
 // func (b *BuilderFile) location() *Location {
-	// return b.loc
+// return b.loc
 // }
+
+func (b *BuilderFile) finalize() {}
+func (b *BuilderFile) write()    {
+	
+        // raise SitemapGenerator::SitemapError.new("Sitemap already written!") if written?
+        // finalize! unless finalized?
+        // reserve_name
+        // @location.write(@xml_wrapper_start + @xml_content + @xml_wrapper_end, link_count)
+        // @xml_content = @xml_wrapper_start = @xml_wrapper_end = ''
+        // @written = true
+}
 
 func (b *BuilderFile) run() {
 	for {
 		select {
-		case smu := <-b.write:
+		case smu := <-b.build:
 			b.xmlContent += smu.Xml() // TODO: Sitemap xml have limit length
 		}
 	}
