@@ -51,13 +51,21 @@ func (b *BuilderFile) Content() string {
 
 func (b *BuilderFile) finalize() {}
 func (b *BuilderFile) write()    {
-	
+
         // raise SitemapGenerator::SitemapError.new("Sitemap already written!") if written?
         // finalize! unless finalized?
         // reserve_name
         // @location.write(@xml_wrapper_start + @xml_content + @xml_wrapper_end, link_count)
         // @xml_content = @xml_wrapper_start = @xml_wrapper_end = ''
         // @written = true
+}
+
+func (b *BuilderFile) isFull() bool {
+	return true
+}
+
+func (b *BuilderFile) isFinalized()  bool   {
+	return true
 }
 
 func (b *BuilderFile) run() {

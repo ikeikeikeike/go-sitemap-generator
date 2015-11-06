@@ -31,19 +31,24 @@ func (sm *Sitemap) SetAdapter(adp Adapter) {
 
 func (sm *Sitemap) Create() *Sitemap {
 	sm.bldrs = NewBuilderIndexfile(sm.opts.Location())
-	go sm.bldr.run()
-	go sm.bldrs.run()
+	// go sm.bldr.run()
+	// go sm.bldrs.run()
 	return sm
 }
 
 func (sm *Sitemap) Add(url interface{}) *Sitemap {
+
 	if sm.bldr.isFull() {
       sm.finalizeFile()
-    } else if sm.bldr.isFinalized() {
-      sm.bldr = NewBuilderfile(sm.opts.Location())
+	  return sm.Add(url)
+	}
+
+	if sm.bldr.isFinalized() {
+      sm.bldr = NewBuilderFile(sm.opts.Location())
 	}
 
 	sm.bldr.Add(url)
+
 	return sm
 }
 
