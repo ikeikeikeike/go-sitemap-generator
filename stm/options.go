@@ -10,7 +10,7 @@ func NewOptions() *Options {
 		filename:     "sitemap",
 		verbose:      false,
 		compress:     true,
-		adp:  NewFileAdapter(),
+		adp:          NewFileAdapter(),
 	}
 }
 
@@ -32,15 +32,15 @@ func (opts *Options) SetDefaultHost(host string) {
 }
 
 func (opts *Options) SetSitemapsHost(host string) {
-	opts.sitemapsPath = host
-}
-
-func (opts *Options) SetPublicPath(path string) {
-	opts.publicPath = path
+	opts.sitemapsHost = host
 }
 
 func (opts *Options) SetSitemapsPath(path string) {
 	opts.sitemapsPath = path
+}
+
+func (opts *Options) SetPublicPath(path string) {
+	opts.publicPath = path
 }
 
 func (opts *Options) SetFilename(filename string) {
@@ -71,4 +71,9 @@ func (opts *Options) Namer() *Namer {
 		// }
 	}
 	return opts.nmr
+}
+
+func (opts *Options) Clone() *Options {
+	o := *opts
+	return &o
 }
