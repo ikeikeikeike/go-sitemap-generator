@@ -12,23 +12,15 @@ type BuilderIndexfile struct {
 	bldrLinkCount int
 }
 
-func (b *BuilderIndexfile) Add(link interface{}) Builder {
+func (b *BuilderIndexfile) Add(link interface{}) BuilderError {
 	bldr := link.(Builder)
 	bldr.write()
-	return bldr
+	return nil
 }
 
-func (b *BuilderIndexfile) AddWithErr(url interface{}) (Builder, error) {
-	return b, nil
-}
-
-func (b *BuilderIndexfile) isFull() bool {
-	return true
-}
-
-func (b *BuilderIndexfile) isFinalized() bool {
-	return true
-}
+// func (b *BuilderIndexfile) AddWithErr(url interface{}) (Builder, error) {
+	// return b, nil
+// }
 
 func (b *BuilderIndexfile) finalize() {}
 func (b *BuilderIndexfile) write()    {}

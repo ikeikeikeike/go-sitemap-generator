@@ -1,9 +1,6 @@
 package stm
 
-import (
-	"fmt"
-	"log"
-)
+import "log"
 
 func NewBuilderFile(loc *Location) *BuilderFile {
 	return &BuilderFile{
@@ -21,25 +18,27 @@ type BuilderFile struct {
 	urls []interface{} // XXX: For debug
 }
 
-func (b *BuilderFile) Add(url interface{}) Builder {
+func (b *BuilderFile) Add(url interface{}) BuilderError {
 	smu, err := NewSitemapURL(url)
 	if err != nil {
-		panic(fmt.Sprintf("[F] Sitemap: %s", err))
+		// panic(fmt.Sprintf("[F] Sitemap: %s", err))
+		log.Println("[F] Sitemap: ", err)
+		return &builderFileError{err, true, false}
 	}
 	b.xmlContent += smu.Xml() // TODO: Sitemap xml have limit length
 	// b.build <- smu; b.urls = append(b.urls, url) // XXX: For debug
-	return b
+	return nil
 }
 
-func (b *BuilderFile) AddWithErr(url interface{}) (Builder, error) {
-	smu, err := NewSitemapURL(url)
-	if err != nil {
-		log.Println("[E] Sitemap: ", err)
-	}
-	b.xmlContent += smu.Xml() // TODO: Sitemap xml have limit length
-	// b.build <- smu; b.urls = append(b.urls, url) // XXX: For debug
-	return b, err
-}
+// func (b *BuilderFile) AddWithErr(url interface{}) (Builder, error) {
+// smu, err := NewSitemapURL(url)
+// if err != nil {
+// log.Println("[E] Sitemap: ", err)
+// }
+// b.xmlContent += smu.Xml() // TODO: Sitemap xml have limit length
+// // b.build <- smu; b.urls = append(b.urls, url) // XXX: For debug
+// return b, nil
+// }
 
 func (b *BuilderFile) Content() string {
 	return b.xmlContent
@@ -50,22 +49,14 @@ func (b *BuilderFile) Content() string {
 // }
 
 func (b *BuilderFile) finalize() {}
-func (b *BuilderFile) write()    {
+func (b *BuilderFile) write() {
 
-        // raise SitemapGenerator::SitemapError.new("Sitemap already written!") if written?
-        // finalize! unless finalized?
-        // reserve_name
-        // @location.write(@xml_wrapper_start + @xml_content + @xml_wrapper_end, link_count)
-        // @xml_content = @xml_wrapper_start = @xml_wrapper_end = ''
-        // @written = true
-}
-
-func (b *BuilderFile) isFull() bool {
-	return true
-}
-
-func (b *BuilderFile) isFinalized()  bool   {
-	return true
+	// raise SitemapGenerator::SitemapError.new("Sitemap already written!") if written?
+	// finalize! unless finalized?
+	// reserve_name
+	// @location.write(@xml_wrapper_start + @xml_content + @xml_wrapper_end, link_count)
+	// @xml_content = @xml_wrapper_start = @xml_wrapper_end = ''
+	// @written = true
 }
 
 func (b *BuilderFile) run() {
@@ -75,4 +66,18 @@ func (b *BuilderFile) run() {
 			b.xmlContent += smu.Xml() // TODO: Sitemap xml have limit length
 		}
 	}
+}
+
+type builderFileError struct {
+	error
+	isFull      bool
+	isFinalized bool
+}
+
+func (e *builderFileError) FullError() bool {
+	return e.isFull
+}
+
+func (e *builderFileError) FinalizedError() bool {
+	return e.isFinalized
 }

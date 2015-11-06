@@ -12,8 +12,8 @@ func NewSitemap() *Sitemap {
 }
 
 type Sitemap struct {
-	opts *Options
-	bldr Builder
+	opts  *Options
+	bldr  Builder
 	bldrs Builder
 }
 
@@ -37,17 +37,19 @@ func (sm *Sitemap) Create() *Sitemap {
 }
 
 func (sm *Sitemap) Add(url interface{}) *Sitemap {
-
-	if sm.bldr.isFull() {
-      sm.finalizeFile()
-	  return sm.Add(url)
+	if sm.bldr == nil {
+		sm.bldr = NewBuilderFile(sm.opts.Location())
 	}
 
-	if sm.bldr.isFinalized() {
-      sm.bldr = NewBuilderFile(sm.opts.Location())
+	err := sm.bldr.Add(url)
+	if err != nil {
+		if err.FinalizedError() {
+			sm.bldr = NewBuilderFile(sm.opts.Location())
+		} else if err.FullError() {
+			sm.finalizeFile()
+			return sm.Add(url)
+		}
 	}
-
-	sm.bldr.Add(url)
 
 	return sm
 }
