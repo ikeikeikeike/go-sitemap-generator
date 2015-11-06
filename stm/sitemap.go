@@ -45,6 +45,7 @@ func (sm *Sitemap) Add(url interface{}) *Sitemap {
 	if err != nil {
 		if err.FinalizedError() {
 			sm.bldr = NewBuilderFile(sm.opts.Location())
+			return sm.Add(url)
 		} else if err.FullError() {
 			sm.finalizeFile()
 			return sm.Add(url)
