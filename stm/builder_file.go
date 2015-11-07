@@ -4,14 +4,14 @@ import "log"
 
 func NewBuilderFile(loc *Location) *BuilderFile {
 	return &BuilderFile{
-		xmlContent: "",
+		xmlContent: make([]byte, 50000, 52428800),  // Number of URLs = 50,000 File size ( uncompressed ) = 50MB
 		build:      make(chan sitemapURL),
 		loc:        loc,
 	}
 }
 
 type BuilderFile struct {
-	xmlContent string // We can use this later
+	xmlContent []byte // We can use this later
 	build      chan sitemapURL
 	loc        *Location
 
@@ -25,7 +25,8 @@ func (b *BuilderFile) Add(url interface{}) BuilderError {
 		log.Println("[F] Sitemap: ", err)
 		return &builderFileError{err, true, false}
 	}
-	b.xmlContent += smu.Xml() // TODO: Sitemap xml have limit length
+
+	b.xmlContent = append(b.xmlContent, smu.Xml()...) // TODO: Sitemap xml have limit length
 	// b.build <- smu; b.urls = append(b.urls, url) // XXX: For debug
 	return nil
 }
@@ -40,7 +41,7 @@ func (b *BuilderFile) Add(url interface{}) BuilderError {
 // return b, nil
 // }
 
-func (b *BuilderFile) Content() string {
+func (b *BuilderFile) Content() []byte {
 	return b.xmlContent
 }
 
@@ -63,7 +64,7 @@ func (b *BuilderFile) run() {
 	for {
 		select {
 		case smu := <-b.build:
-			b.xmlContent += smu.Xml() // TODO: Sitemap xml have limit length
+			b.xmlContent = append(b.xmlContent, smu.Xml()...) // TODO: Sitemap xml have limit length
 		}
 	}
 }

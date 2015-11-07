@@ -69,7 +69,7 @@ func (su *sitemapURL) validate() error {
 	return nil
 }
 
-func (su *sitemapURL) Xml() string {
+func (su *sitemapURL) Xml() []byte {
 	doc := etree.NewDocument()
 	url := doc.CreateElement("url")
 
@@ -99,5 +99,5 @@ func (su *sitemapURL) Xml() string {
 	doc.Indent(2)
 	doc.WriteTo(buf)
 
-	return buf.String()
+	return buf.Bytes()
 }
