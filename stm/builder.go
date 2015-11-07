@@ -12,7 +12,7 @@ type Builder interface {
 	// AddWithErr(url interface{}) (Builder, error)
 	// location() *Location
 
-	finalize()
-	write()
+	Finalize()
+	Write()
 	run()
 }

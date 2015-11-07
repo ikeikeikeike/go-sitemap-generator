@@ -22,16 +22,17 @@ func (adp *FileAdapter) Write(loc *Location, data []byte) {
 	if err != nil {
 		_ = os.MkdirAll(dir, 0755)
 	} else if !fi.IsDir() {
-		log.Fatal("%s should be a directory", dir)
+		log.Fatalf("%s should be a directory", dir)
 	}
 
-	file, _ := os.Open(loc.Path())
+	file, _ := os.OpenFile(loc.Path(), os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	fi, err = file.Stat()
 	if err != nil {
-		log.Fatal("%s file not exists", loc.Path())
+		log.Fatalf("%s file not exists", loc.Path())
 	} else if !fi.Mode().IsRegular() {
-		log.Fatal("%s should be a filename", loc.Path())
+		log.Fatalf("%s should be a filename", loc.Path())
 	}
+	defer file.Close()
 
 	if gzipPtn.MatchString(loc.Path()) {
 		adp.gzip(file, data)

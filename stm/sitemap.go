@@ -1,8 +1,12 @@
 package stm
 
-import "runtime"
+import (
+	"log"
+	"runtime"
+)
 
 func NewSitemap() *Sitemap {
+	log.SetFlags(log.LstdFlags | log.Llongfile)
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	sm := &Sitemap{
@@ -61,11 +65,11 @@ func (sm *Sitemap) finalize() {
 }
 
 func (sm *Sitemap) finalizeFile() {
-	sm.bldr.finalize()
+	sm.bldr.Finalize()
 	sm.bldrs.Add(sm.bldr)
 }
 
 func (sm *Sitemap) finalizeIndexfile() {
-	sm.bldrs.finalize()
-	sm.bldrs.write()
+	sm.bldrs.Finalize()
+	sm.bldrs.Write()
 }

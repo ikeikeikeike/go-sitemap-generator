@@ -33,3 +33,4 @@ _testmain.go
 /Gemfile.lock
 /public/
 /requirements.txt
+/tmp

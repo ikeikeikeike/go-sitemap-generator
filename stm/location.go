@@ -18,7 +18,7 @@ func NewLocation(opts *Options) *Location {
 }
 
 type Location struct {
-	adp  Adapter
+	// adp  Adapter
 	opts *Options
 }
 
@@ -109,7 +109,7 @@ func (loc *Location) IsVerbose() bool {
 }
 
 func (loc *Location) Write(data []byte, linkCount int) {
-	loc.adp.Write(loc, data)
+	loc.opts.adp.Write(loc, data)
 	if loc.IsVerbose() {
 		pp.Println(loc.Summary(linkCount))
 	}

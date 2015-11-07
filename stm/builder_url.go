@@ -96,7 +96,7 @@ func (su *sitemapURL) Xml() []byte {
 	}
 
 	buf := &bytes.Buffer{}
-	doc.Indent(2)
+	// doc.Indent(2)
 	doc.WriteTo(buf)
 
 	return buf.Bytes()
