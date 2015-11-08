@@ -32,7 +32,7 @@ type Namer struct {
 
 func (n *Namer) String() string {
 	ext := n.opts.extension
-	return fmt.Sprintf("%s%s%s", n.base, ext, n.count)
+	return fmt.Sprintf("%s%d%s", n.base, n.count, ext)
 }
 
 func (n *Namer) Reset() {

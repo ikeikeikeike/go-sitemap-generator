@@ -18,8 +18,8 @@ func NewLocation(opts *Options) *Location {
 }
 
 type Location struct {
-	// adp  Adapter
-	opts *Options
+	opts     *Options
+	filename string
 }
 
 func (loc *Location) Directory() string {
@@ -68,19 +68,19 @@ var reGzip = regexp.MustCompile(`\.gz$`)
 
 func (loc *Location) Filename() string {
 	nmr := loc.opts.Namer()
-	if loc.opts.filename == "" && nmr == nil {
+	if loc.filename == "" && nmr == nil {
 		log.Fatal("No filename or namer set")
 	}
 
-	if loc.opts.filename == "" {
-		loc.opts.SetFilename(nmr.String())
+	if loc.filename == "" {
+		loc.filename = nmr.String()
 
-		if !loc.opts.compress || (nmr != nil && nmr.IsStart()) {  // XXX: Need fix: && loc.opts.compress: all_but_first
-			newName := reGzip.ReplaceAllString(loc.opts.filename, "")
-			loc.opts.SetFilename(newName)
+		if !loc.opts.compress || (nmr != nil && nmr.IsStart()) { // XXX: Need fix: && loc.opts.compress: all_but_first
+			newName := reGzip.ReplaceAllString(loc.filename, "")
+			loc.filename = newName
 		}
 	}
-	return loc.opts.filename
+	return loc.filename
 }
 
 func (loc *Location) ReserveName() string {
@@ -90,11 +90,11 @@ func (loc *Location) ReserveName() string {
 		nmr.Next()
 	}
 
-	return loc.opts.filename
+	return loc.filename
 }
 
 func (loc *Location) IsReservedName() bool {
-	if loc.opts.filename == "" {
+	if loc.filename == "" {
 		return false
 	}
 	return true
