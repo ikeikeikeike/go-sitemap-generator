@@ -1,7 +1,7 @@
 package stm
 
 import (
-	"compress/zlib"
+	"compress/gzip"
 	"log"
 	"os"
 	"regexp"
@@ -41,7 +41,7 @@ func (adp *FileAdapter) Write(loc *Location, data []byte) {
 }
 
 func (adp *FileAdapter) gzip(file *os.File, data []byte) {
-	gz := zlib.NewWriter(file)
+	gz := gzip.NewWriter(file)
 	defer gz.Close()
 	gz.Write(data)
 }
