@@ -11,8 +11,6 @@ import (
 	"github.com/ikeikeikeike/go-sitemap-generator/stm/utils"
 )
 
-type URL map[string]interface{}
-
 // http://www.sitemaps.org/protocol.html
 // https://support.google.com/webmasters/answer/178636
 type URLModel struct {

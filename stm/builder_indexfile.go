@@ -1,7 +1,5 @@
 package stm
 
-import "github.com/k0kubun/pp"
-
 func NewBuilderIndexfile(loc *Location) *BuilderIndexfile {
 	return &BuilderIndexfile{
 		loc: loc,
@@ -10,33 +8,31 @@ func NewBuilderIndexfile(loc *Location) *BuilderIndexfile {
 
 type BuilderIndexfile struct {
 	loc      *Location
+	content  []byte
 	linkcnt  int
 	totalcnt int
 }
 
 func (b *BuilderIndexfile) Add(link interface{}) BuilderError {
 	bldr := link.(*BuilderFile)
+	bldr.Write()
+
+	smu := NewSitemapIndexURL(URL{"loc": b.loc.Filename()})
+	b.content = append(b.content, smu.Xml()...)
 
 	b.totalcnt += bldr.linkcnt
-
-	if !bldr.isFinalized() {
-		bldr.Finalize()
-	}
-
-	// TODO: first sitemap
-	// if b.linkcnt == 0 { }
-
-	bldr.Write()
+	b.linkcnt += 1
 	return nil
 }
 
-// func (b *BuilderIndexfile) AddWithErr(url interface{}) (Builder, error) {
-// return b, nil
-// }
+func (b *BuilderIndexfile) Content() []byte {
+	return b.content
+}
 
-func (b *BuilderIndexfile) Finalize() {}
 func (b *BuilderIndexfile) Write() {
-	pp.Println("write indexfile")
+	// TODO: header and footer
+	// TODO: Change loc.Filename, loc.Path
+	b.loc.Write(b.Content(), b.linkcnt) // @location.write(@xml_wrapper_start + @xml_content + @xml_wrapper_end, link_count)
 }
 
 func (b *BuilderIndexfile) run() {}

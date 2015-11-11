@@ -47,11 +47,8 @@ func (sm *Sitemap) Add(url interface{}) *Sitemap {
 
 	err := sm.bldr.Add(url)
 	if err != nil {
-		if err.FinalizedError() {
-			sm.bldr = NewBuilderFile(sm.opts.Location())
-			return sm.Add(url)
-		} else if err.FullError() {
-			sm.finalizeFile()
+		if err.FullError() {
+			sm.Finalize()
 			return sm.Add(url)
 		}
 	}
@@ -59,17 +56,8 @@ func (sm *Sitemap) Add(url interface{}) *Sitemap {
 	return sm
 }
 
-func (sm *Sitemap) finalize() {
-	sm.finalizeFile()
-	sm.finalizeIndexfile()
-}
-
-func (sm *Sitemap) finalizeFile() {
-	sm.bldr.Finalize()
+func (sm *Sitemap) Finalize() {
 	sm.bldrs.Add(sm.bldr)
-}
-
-func (sm *Sitemap) finalizeIndexfile() {
-	sm.bldrs.Finalize()
 	sm.bldrs.Write()
+	sm.bldr = NewBuilderFile(sm.opts.Location())
 }
