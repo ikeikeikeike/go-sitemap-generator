@@ -1,10 +1,10 @@
-# go-sitemap-gen
+##### How I do generate sitemap in Go.
 
 ```go
 package main
 
 import (
-	"github.com/ikeikeikeike/go-sitemap-gen/stm"
+	"github.com/ikeikeikeike/go-sitemap-generator/stm"
 )
 
 func main() {
