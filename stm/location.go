@@ -45,7 +45,7 @@ func (loc *Location) PathInPublic() string {
 }
 
 func (loc *Location) URL() string {
-	base, _ := url.Parse(loc.opts.sitemapsHost)
+	base, _ := url.Parse(loc.opts.SitemapsHost())
 
 	var u *url.URL
 	for _, ref := range []string{

@@ -4,11 +4,11 @@ func NewOptions() *Options {
 	// Default values
 	return &Options{
 		defaultHost:  "http://www.example.com",
-		sitemapsHost: "http://www.example.com", // http://s3.amazonaws.com/sitemap-generator/,
-		publicPath:   "tmp/",
+		sitemapsHost: "", // http://s3.amazonaws.com/sitemap-generator/,
+		publicPath:   "public/",
 		sitemapsPath: "sitemaps/",
 		filename:     "sitemap",
-		verbose:      false,
+		verbose:      true,
 		compress:     true,
 		adp:          NewFileAdapter(),
 	}
