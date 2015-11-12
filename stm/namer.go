@@ -5,34 +5,34 @@ import (
 	"log"
 )
 
-func NewNamer(base string) *Namer {
-	namer := &Namer{
-		base: base,
-		opts: options{
-			zero:      0,
-			extension: ".xml.gz",
-			start:     1,
-		},
+func NewNamer(opts *NOpts) *Namer {
+	if opts.extension == "" {
+		opts.extension = ".xml.gz"
 	}
+
+	namer := &Namer{opts: opts}
 	namer.Reset()
 	return namer
 }
 
-type options struct {
+type NOpts struct {
+	base      string
 	zero      int
 	extension string
 	start     int
 }
 
 type Namer struct {
-	base  string
 	count int
-	opts  options
+	opts  *NOpts
 }
 
 func (n *Namer) String() string {
 	ext := n.opts.extension
-	return fmt.Sprintf("%s%d%s", n.base, n.count, ext)
+	if n.count == 0 {
+		return fmt.Sprintf("%s%s", n.opts.base, ext)
+	}
+	return fmt.Sprintf("%s%d%s", n.opts.base, n.count, ext)
 }
 
 func (n *Namer) Reset() {

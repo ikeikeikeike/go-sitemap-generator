@@ -19,6 +19,7 @@ func NewLocation(opts *Options) *Location {
 
 type Location struct {
 	opts     *Options
+	nmr      *Namer
 	filename string
 }
 
@@ -49,7 +50,8 @@ func (loc *Location) URL() string {
 
 	var u *url.URL
 	for _, ref := range []string{
-		loc.opts.sitemapsPath, loc.Filename()} {
+		loc.opts.sitemapsPath, loc.Filename(),
+	} {
 		u, _ = url.Parse(ref)
 		base.ResolveReference(u)
 	}
@@ -66,8 +68,12 @@ func (loc *Location) Filesize() int64 {
 
 var reGzip = regexp.MustCompile(`\.gz$`)
 
+func (loc *Location) Namer() *Namer {
+	return loc.opts.Namer()
+}
+
 func (loc *Location) Filename() string {
-	nmr := loc.opts.Namer()
+	nmr := loc.Namer()
 	if loc.filename == "" && nmr == nil {
 		log.Fatal("No filename or namer set")
 	}
@@ -75,7 +81,7 @@ func (loc *Location) Filename() string {
 	if loc.filename == "" {
 		loc.filename = nmr.String()
 
-		if !loc.opts.compress || (nmr != nil && nmr.IsStart()) { // XXX: Need fix: && loc.opts.compress: all_but_first
+		if !loc.opts.compress {
 			newName := reGzip.ReplaceAllString(loc.filename, "")
 			loc.filename = newName
 		}
@@ -84,7 +90,7 @@ func (loc *Location) Filename() string {
 }
 
 func (loc *Location) ReserveName() string {
-	nmr := loc.opts.Namer()
+	nmr := loc.Namer()
 	if nmr != nil {
 		loc.Filename()
 		nmr.Next()
@@ -98,10 +104,6 @@ func (loc *Location) IsReservedName() bool {
 		return false
 	}
 	return true
-}
-
-func (loc *Location) Namer() *Namer {
-	return loc.opts.Namer()
 }
 
 func (loc *Location) IsVerbose() bool {
@@ -120,5 +122,5 @@ func (loc *Location) Summary(linkCount int) string {
 	// width = self.class::PATH_OUTPUT_WIDTH
 	// path = SitemapGenerator::Utilities.ellipsis(self.path_in_public, width)
 	// fmt.Sprintf("+ #{('%-'+width.to_s+'s') % path} #{'%10s' % link_count} links / #{'%10s' % filesize}")
-	return ""
+	return loc.PathInPublic()
 }

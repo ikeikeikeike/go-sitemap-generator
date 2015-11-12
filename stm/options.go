@@ -47,12 +47,12 @@ func (opts *Options) SetFilename(filename string) {
 	opts.filename = filename
 }
 
-func (opts *Options) SetAdapter(adp Adapter) {
-	opts.adp = adp
+func (opts *Options) SetVerbose(verbose bool) {
+	opts.verbose = verbose
 }
 
-func (opts *Options) Location() *Location {
-	return NewLocation(opts)
+func (opts *Options) SetAdapter(adp Adapter) {
+	opts.adp = adp
 }
 
 func (opts *Options) SitemapsHost() string {
@@ -62,13 +62,19 @@ func (opts *Options) SitemapsHost() string {
 	return opts.defaultHost
 }
 
+func (opts *Options) Location() *Location {
+	return NewLocation(opts)
+}
+
+func (opts *Options) IndexLocation() *Location {
+	o := opts.Clone()
+	o.nmr = NewNamer(&NOpts{base: opts.filename})
+	return NewLocation(o)
+}
+
 func (opts *Options) Namer() *Namer {
 	if opts.nmr == nil {
-		// if opts.bldr != nil {
-		// opts.nmr = opts.bldr.loc.nmr
-		// } else {
-		opts.nmr = NewNamer(opts.filename)
-		// }
+		opts.nmr = NewNamer(&NOpts{base: opts.filename, zero: 1, start: 2})
 	}
 	return opts.nmr
 }

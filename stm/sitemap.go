@@ -33,8 +33,12 @@ func (sm *Sitemap) SetAdapter(adp Adapter) {
 	sm.opts.SetAdapter(adp)
 }
 
+func (sm *Sitemap) SetVerbose(verbose bool) {
+	sm.opts.SetVerbose(verbose)
+}
+
 func (sm *Sitemap) Create() *Sitemap {
-	sm.bldrs = NewBuilderIndexfile(sm.opts.Location())
+	sm.bldrs = NewBuilderIndexfile(sm.opts.IndexLocation())
 	// go sm.bldr.run()
 	// go sm.bldrs.run()
 	return sm
@@ -59,5 +63,5 @@ func (sm *Sitemap) Add(url interface{}) *Sitemap {
 func (sm *Sitemap) Finalize() {
 	sm.bldrs.Add(sm.bldr)
 	sm.bldrs.Write()
-	sm.bldr = NewBuilderFile(sm.opts.Location())
+	sm.bldr = nil
 }
