@@ -1,4 +1,4 @@
-##### How I do generate sitemap in Go.
+##### How I do generate sitemap in Golang?
 
 ```go
 package main
