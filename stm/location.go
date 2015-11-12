@@ -52,7 +52,7 @@ func (loc *Location) URL() string {
 		loc.opts.sitemapsPath, loc.Filename(),
 	} {
 		u, _ = url.Parse(ref)
-		base.ResolveReference(u)
+		base = base.ResolveReference(u)
 	}
 
 	return base.String()

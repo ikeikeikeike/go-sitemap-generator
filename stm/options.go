@@ -4,7 +4,7 @@ func NewOptions() *Options {
 	// Default values
 	return &Options{
 		defaultHost:  "http://www.example.com",
-		sitemapsHost: "", // http://s3.amazonaws.com/sitemap-generator/,
+		sitemapsHost: "http://www.example.com", // http://s3.amazonaws.com/sitemap-generator/,
 		publicPath:   "tmp/",
 		sitemapsPath: "sitemaps/",
 		filename:     "sitemap",

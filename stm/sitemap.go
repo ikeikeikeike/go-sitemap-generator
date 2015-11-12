@@ -65,3 +65,7 @@ func (sm *Sitemap) Finalize() {
 	sm.bldrs.Write()
 	sm.bldr = nil
 }
+
+func (sm *Sitemap) PingSearchEngines(urls ...string) {
+	PingSearchEngines(sm.opts, urls...)
+}
