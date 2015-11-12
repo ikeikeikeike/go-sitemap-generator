@@ -1,13 +1,12 @@
 package stm
 
 import (
+	"fmt"
 	"log"
 	"net/url"
 	"os"
 	"path/filepath"
 	"regexp"
-
-	"github.com/k0kubun/pp"
 )
 
 func NewLocation(opts *Options) *Location {
@@ -111,16 +110,28 @@ func (loc *Location) IsVerbose() bool {
 }
 
 func (loc *Location) Write(data []byte, linkCount int) {
+
 	loc.opts.adp.Write(loc, data)
-	if loc.IsVerbose() {
-		pp.Println(loc.Summary(linkCount))
+	if !loc.IsVerbose() {
+		return
+	}
+
+	output := loc.Summary(linkCount)
+	if output != "" {
+		println(output)
 	}
 }
 
 func (loc *Location) Summary(linkCount int) string {
-	// filesize = number_to_human_size(loc.Filesize())
-	// width = self.class::PATH_OUTPUT_WIDTH
-	// path = SitemapGenerator::Utilities.ellipsis(self.path_in_public, width)
-	// fmt.Sprintf("+ #{('%-'+width.to_s+'s') % path} #{'%10s' % link_count} links / #{'%10s' % filesize}")
-	return loc.PathInPublic()
+	nmr := loc.Namer()
+	if nmr.IsStart() {
+		return ""
+	}
+
+	return fmt.Sprintf(
+		"%s '%d' links / %d",
+		loc.PathInPublic(),
+		linkCount,
+		loc.Filesize(),
+	)
 }
