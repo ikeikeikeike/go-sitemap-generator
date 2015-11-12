@@ -60,10 +60,11 @@ func (sm *Sitemap) Add(url interface{}) *Sitemap {
 	return sm
 }
 
-func (sm *Sitemap) Finalize() {
+func (sm *Sitemap) Finalize() *Sitemap {
 	sm.bldrs.Add(sm.bldr)
 	sm.bldrs.Write()
 	sm.bldr = nil
+	return sm
 }
 
 func (sm *Sitemap) PingSearchEngines(urls ...string) {
