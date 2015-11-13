@@ -16,7 +16,7 @@ type sitemapIndexURL struct {
 	data URL
 }
 
-func (su *sitemapIndexURL) Xml() []byte {
+func (su *sitemapIndexURL) XML() []byte {
 	doc := etree.NewDocument()
 	sitemap := doc.CreateElement("sitemap")
 

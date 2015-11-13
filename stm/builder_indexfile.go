@@ -1,5 +1,7 @@
 package stm
 
+import "bytes"
+
 func NewBuilderIndexfile(loc *Location) *BuilderIndexfile {
 	return &BuilderIndexfile{
 		loc: loc,
@@ -17,8 +19,8 @@ func (b *BuilderIndexfile) Add(link interface{}) BuilderError {
 	bldr := link.(*BuilderFile)
 	bldr.Write()
 
-	smu := NewSitemapIndexURL(URL{"loc": bldr.loc.Filename()})
-	b.content = append(b.content, smu.Xml()...)
+	smu := NewSitemapIndexURL(URL{"loc": bldr.loc.URL()})
+	b.content = append(b.content, smu.XML()...)
 
 	b.totalcnt += bldr.linkcnt
 	b.linkcnt += 1
@@ -30,9 +32,10 @@ func (b *BuilderIndexfile) Content() []byte {
 }
 
 func (b *BuilderIndexfile) Write() {
-	// TODO: header and footer
-	// TODO: Change loc.Filename, loc.Path
-	b.loc.Write(b.Content(), b.linkcnt) // @location.write(@xml_wrapper_start + @xml_content + @xml_wrapper_end, link_count)
+	c := bytes.Join(bytes.Fields(IndexXMLHeader), []byte(" "))
+	c = append(append(c, b.Content()...), IndexXMLFooter...)
+
+	b.loc.Write(c, b.linkcnt)
 }
 
 func (b *BuilderIndexfile) run() {}

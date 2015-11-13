@@ -1,10 +1,13 @@
 package stm
 
-import "log"
+import (
+	"bytes"
+	"log"
+)
 
 type builderFileError struct {
 	error
-	full      bool
+	full bool
 }
 
 func (e *builderFileError) FullError() bool {
@@ -21,11 +24,11 @@ func NewBuilderFile(loc *Location) *BuilderFile {
 }
 
 type BuilderFile struct {
-	content      []byte
-	build        chan sitemapURL
-	loc          *Location
-	linkcnt      int
-	newscnt      int
+	content []byte
+	build   chan sitemapURL
+	loc     *Location
+	linkcnt int
+	newscnt int
 
 	urls []interface{} // XXX: For debug
 }
@@ -36,7 +39,7 @@ func (b *BuilderFile) Add(url interface{}) BuilderError {
 		log.Fatalln("[F] Sitemap: %s", err)
 	}
 
-	bytes := smu.Xml()
+	bytes := smu.XML()
 
 	if !b.isFileCanFit(bytes) {
 		return &builderFileError{error: err, full: true}
@@ -55,7 +58,8 @@ func (b *BuilderFile) isFileCanFit(bytes []byte) bool {
 }
 
 func (b *BuilderFile) clear() {
-	b.content = make([]byte, MaxSitemapLinks, MaxSitemapFilesize)
+	// b.content = make([]byte, MaxSitemapLinks, MaxSitemapFilesize)
+	b.content = make([]byte, 0, MaxSitemapFilesize)
 }
 
 func (b *BuilderFile) Content() []byte {
@@ -65,9 +69,10 @@ func (b *BuilderFile) Content() []byte {
 func (b *BuilderFile) Write() {
 	b.loc.ReserveName()
 
-	// TODO: header and footer
-	b.loc.Write(b.Content(), b.linkcnt) // @location.write(@xml_wrapper_start + @xml_content + @xml_wrapper_end, link_count)
+	c := bytes.Join(bytes.Fields(XMLHeader), []byte(" "))
+	c = append(append(c, b.Content()...), XMLFooter...)
 
+	b.loc.Write(c, b.linkcnt)
 	b.clear() // @xml_content = @xml_wrapper_start = @xml_wrapper_end = ''
 }
 
@@ -75,7 +80,7 @@ func (b *BuilderFile) run() {
 	for {
 		select {
 		case smu := <-b.build:
-			b.content = append(b.content, smu.Xml()...) // TODO: Sitemap xml have limit length
+			b.content = append(b.content, smu.XML()...) // TODO: Sitemap xml have limit length
 		}
 	}
 }

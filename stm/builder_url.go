@@ -67,7 +67,7 @@ func (su *sitemapURL) validate() error {
 	return nil
 }
 
-func (su *sitemapURL) Xml() []byte {
+func (su *sitemapURL) XML() []byte {
 	doc := etree.NewDocument()
 	url := doc.CreateElement("url")
 
