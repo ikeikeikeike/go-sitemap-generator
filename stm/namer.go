@@ -54,7 +54,7 @@ func (n *Namer) Next() *Namer {
 
 func (n *Namer) Previous() *Namer {
 	if n.IsStart() {
-		log.Fatal("Already at the start of the series")
+		log.Fatal("[F] Already at the start of the series")
 	}
 	if n.count <= n.opts.start {
 		n.count = n.opts.zero

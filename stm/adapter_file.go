@@ -22,15 +22,15 @@ func (adp *FileAdapter) Write(loc *Location, data []byte) {
 	if err != nil {
 		_ = os.MkdirAll(dir, 0755)
 	} else if !fi.IsDir() {
-		log.Fatalf("%s should be a directory", dir)
+		log.Fatalf("[F] %s should be a directory", dir)
 	}
 
 	file, _ := os.OpenFile(loc.Path(), os.O_RDWR|os.O_CREATE, 0666)
 	fi, err = file.Stat()
 	if err != nil {
-		log.Fatalf("%s file not exists", loc.Path())
+		log.Fatalf("[F] %s file not exists", loc.Path())
 	} else if !fi.Mode().IsRegular() {
-		log.Fatalf("%s should be a filename", loc.Path())
+		log.Fatalf("[F] %s should be a filename", loc.Path())
 	}
 
 	if gzipPtn.MatchString(loc.Path()) {

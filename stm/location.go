@@ -74,7 +74,7 @@ func (loc *Location) Namer() *Namer {
 func (loc *Location) Filename() string {
 	nmr := loc.Namer()
 	if loc.filename == "" && nmr == nil {
-		log.Fatal("No filename or namer set")
+		log.Fatal("[F] No filename or namer set")
 	}
 
 	if loc.filename == "" {

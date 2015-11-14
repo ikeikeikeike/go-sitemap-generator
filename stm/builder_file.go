@@ -36,7 +36,7 @@ type BuilderFile struct {
 func (b *BuilderFile) Add(url interface{}) BuilderError {
 	smu, err := NewSitemapURL(url)
 	if err != nil {
-		log.Fatalln("[F] Sitemap: %s", err)
+		log.Fatalf("[F] Sitemap: %s", err)
 	}
 
 	bytes := smu.XML()
