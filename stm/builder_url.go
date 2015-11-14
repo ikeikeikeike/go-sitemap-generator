@@ -76,40 +76,20 @@ func (su *sitemapURL) XML() []byte {
 	doc := etree.NewDocument()
 	url := doc.CreateElement("url")
 
-	if v, ok := su.data["loc"]; ok {
-		loc := url.CreateElement("loc")
-		loc.SetText(v.(string))
-	}
+	utils.SetElementValue(url, su.data, "loc")
+	utils.SetElementValue(url, su.data, "expires")
+	utils.SetElementValue(url, su.data, "mobile")
 
-	if v, ok := su.data["expires"]; ok {
-		expires := url.CreateElement("expires")
-		expires.SetText(v.(time.Time).Format("2006-01-02"))
-	}
-
-	if v, ok := su.data["mobile"]; ok {
-		if v.(bool) {
-			_ = url.CreateElement("mobile:mobile")
-		}
-	}
-
-	changefreq := url.CreateElement("changefreq")
-	if v, ok := su.data["changefreq"]; ok {
-		changefreq.SetText(v.(string))
-	} else {
+	if !utils.SetElementValue(url, su.data, "changefreq") {
+		changefreq := url.CreateElement("changefreq")
 		changefreq.SetText("weekly")
 	}
-
-	priority := url.CreateElement("priority")
-	if v, ok := su.data["priority"]; ok {
-		priority.SetText(fmt.Sprint(v.(float64)))
-	} else {
+	if !utils.SetElementValue(url, su.data, "priority") {
+		priority := url.CreateElement("priority")
 		priority.SetText("0.5")
 	}
-
-	lastmod := url.CreateElement("lastmod")
-	if v, ok := su.data["lastmod"]; ok {
-		lastmod.SetText(v.(time.Time).Format(time.RFC3339))
-	} else {
+	if !utils.SetElementValue(url, su.data, "lastmod") {
+		lastmod := url.CreateElement("lastmod")
 		lastmod.SetText(time.Now().Format(time.RFC3339))
 	}
 
