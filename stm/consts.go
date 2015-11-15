@@ -8,7 +8,7 @@ const (
 	MaxSitemapLinks    = 50000    // max links per sitemap
 	MaxSitemapImages   = 1000     // max images per url
 	MaxSitemapNews     = 1000     // max news sitemap per index_file
-	MaxSitemapFilesize = 10485760 // bytes
+	MaxSitemapFilesize = 31457280 // bytes
 )
 
 const (

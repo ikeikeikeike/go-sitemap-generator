@@ -2,8 +2,6 @@ package stm
 
 import (
 	"fmt"
-
-	"github.com/ikeikeikeike/go-sitemap-generator/stm/utils"
 )
 
 type BuilderError interface {
@@ -26,7 +24,7 @@ func (u URL) URLJoinBy(key string, joins ...string) URL {
 		values = append(values, fmt.Sprint(u[k]))
 	}
 
-	u[key] = utils.URLJoin("", values...)
+	u[key] = URLJoin("", values...)
 	return u
 }
 
@@ -38,6 +36,8 @@ func (u *URL) BungURLJoinBy(key string, joins ...string) {
 		values = append(values, fmt.Sprint(orig[k]))
 	}
 
-	orig[key] = utils.URLJoin("", values...)
+	orig[key] = URLJoin("", values...)
 	*u = orig
 }
+
+// type News map[string]interface{}

@@ -1,10 +1,13 @@
 package stm
 
 import (
+	"bytes"
+	"reflect"
 	"testing"
 	"time"
 
 	"github.com/beevik/etree"
+	"github.com/clbanning/mxj"
 )
 
 func TestBlank(t *testing.T) {
@@ -145,5 +148,49 @@ func TestAutoGenerateSitemapHost(t *testing.T) {
 	}
 	if elm != nil && elm.Text() != "http://example.com/path" {
 		t.Errorf(`Failed to generate xml thats deferrent value in loc element: %s`, elm.Text())
+	}
+}
+
+func TestNewsSitemaps(t *testing.T) {
+	doc := etree.NewDocument()
+	root := doc.CreateElement("root")
+
+	data := URL{"loc": "/news", "news": URL{
+		"publication": URL{
+			"name":     "Example",
+			"language": "en",
+		},
+		"title":            "My Article",
+		"keywords":         "my article, articles about myself",
+		"stock_tickers":    "SAO:PETR3",
+		"publication_date": "2011-08-22",
+		"access":           "Subscription",
+		"genres":           "PressRelease",
+	}}
+	expect := []byte(`
+	<root>
+		<news:news>
+			<news:keywords>my article, articles about myself</news:keywords>
+			<news:stock_tickers>SAO:PETR3</news:stock_tickers>
+			<news:publication_date>2011-08-22</news:publication_date>
+			<news:access>Subscription</news:access>
+			<news:genres>PressRelease</news:genres>
+			<news:publication>
+				<news:name>Example</news:name>
+				<news:language>en</news:language>
+			</news:publication>
+			<news:title>My Article</news:title>
+		</news:news>
+	</root>`)
+
+	SetBuilderElementValue(root, data, "news")
+	buf := &bytes.Buffer{}
+	doc.WriteTo(buf)
+
+	mdata, _ := mxj.NewMapXml(buf.Bytes())
+	mexpect, _ := mxj.NewMapXml(expect)
+
+	if !reflect.DeepEqual(mdata, mexpect) {
+		t.Error(`Failed to generate sitemap xml thats deferrent output value in URL type`)
 	}
 }

@@ -8,7 +8,6 @@ import (
 
 	"github.com/beevik/etree"
 	"github.com/fatih/structs"
-	"github.com/ikeikeikeike/go-sitemap-generator/stm/utils"
 )
 
 // http://www.sitemaps.org/protocol.html
@@ -32,7 +31,7 @@ type URLModel struct {
 
 // []string{"priority" "changefreq" "lastmod" "expires" "host" "images"
 // "video" "geo" "news" "videos" "mobile" "alternate" "alternates" "pagemap"}
-var fieldnames []string = utils.ToLowers(structs.Names(&URLModel{}))
+var fieldnames []string = ToLowerString(structs.Names(&URLModel{}))
 
 func NewSitemapURL(url URL) (*sitemapURL, error) {
 	smu := &sitemapURL{data: url}
@@ -80,22 +79,24 @@ func (su *sitemapURL) XML() []byte {
 	doc := etree.NewDocument()
 	url := doc.CreateElement("url")
 
-	utils.SetElementValue(url, su.data.URLJoinBy("loc", "host", "loc"), "loc")
-	utils.SetElementValue(url, su.data, "expires")
-	utils.SetElementValue(url, su.data, "mobile")
+	SetBuilderElementValue(url, su.data.URLJoinBy("loc", "host", "loc"), "loc")
+	SetBuilderElementValue(url, su.data, "expires")
+	SetBuilderElementValue(url, su.data, "mobile")
 
-	if !utils.SetElementValue(url, su.data, "changefreq") {
+	if !SetBuilderElementValue(url, su.data, "changefreq") {
 		changefreq := url.CreateElement("changefreq")
 		changefreq.SetText("weekly")
 	}
-	if !utils.SetElementValue(url, su.data, "priority") {
+	if !SetBuilderElementValue(url, su.data, "priority") {
 		priority := url.CreateElement("priority")
 		priority.SetText("0.5")
 	}
-	if !utils.SetElementValue(url, su.data, "lastmod") {
+	if !SetBuilderElementValue(url, su.data, "lastmod") {
 		lastmod := url.CreateElement("lastmod")
 		lastmod.SetText(time.Now().Format(time.RFC3339))
 	}
+
+	SetBuilderElementValue(url, su.data, "news")
 
 	buf := &bytes.Buffer{}
 	// doc.Indent(2)

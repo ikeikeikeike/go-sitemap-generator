@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/beevik/etree"
-	"github.com/ikeikeikeike/go-sitemap-generator/stm/utils"
 )
 
 func NewSitemapIndexURL(url URL) *sitemapIndexURL {
@@ -20,9 +19,9 @@ func (su *sitemapIndexURL) XML() []byte {
 	doc := etree.NewDocument()
 	sitemap := doc.CreateElement("sitemap")
 
-	utils.SetElementValue(sitemap, su.data, "loc")
+	SetBuilderElementValue(sitemap, su.data, "loc")
 
-	if !utils.SetElementValue(sitemap, su.data, "lastmod") {
+	if !SetBuilderElementValue(sitemap, su.data, "lastmod") {
 		lastmod := sitemap.CreateElement("lastmod")
 		lastmod.SetText(time.Now().Format(time.RFC3339))
 	}

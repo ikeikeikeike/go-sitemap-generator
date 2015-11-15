@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"log"
 
-	"github.com/ikeikeikeike/go-sitemap-generator/stm/utils"
 )
 
 type builderFileError struct {
@@ -36,7 +35,7 @@ type BuilderFile struct {
 }
 
 func (b *BuilderFile) Add(url interface{}) BuilderError {
-	u := utils.MergeMap(url.(URL),
+	u := MergeMap(url.(URL),
 		URL{"host": b.loc.opts.SitemapsHost()},
 	)
 
