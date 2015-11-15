@@ -14,7 +14,7 @@ func TestBlank(t *testing.T) {
 	}
 }
 
-func TestItHaveLocElement(t *testing.T) {
+func TestItHasLocElement(t *testing.T) {
 	if _, err := NewSitemapURL(URL{}); err == nil {
 		t.Errorf(`Failed to validate about must have loc attribute in URL type ( URL{} ): %s`, err)
 	}
