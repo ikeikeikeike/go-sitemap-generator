@@ -36,7 +36,7 @@ type BuilderFile struct {
 
 func (b *BuilderFile) Add(url interface{}) BuilderError {
 	u := MergeMap(url.(URL),
-		URL{"host": b.loc.opts.SitemapsHost()},
+		URL{"host": b.loc.opts.defaultHost},
 	)
 
 	smu, err := NewSitemapURL(u)

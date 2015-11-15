@@ -25,8 +25,16 @@ func (sm *Sitemap) SetDefaultHost(host string) {
 	sm.opts.SetDefaultHost(host)
 }
 
+func (sm *Sitemap) SetSitemapsHost(host string) {
+	sm.opts.SetSitemapsHost(host)
+}
+
 func (sm *Sitemap) SetSitemapsPath(path string) {
 	sm.opts.SetSitemapsPath(path)
+}
+
+func (sm *Sitemap) SetPublicPath(path string) {
+	sm.opts.SetPublicPath(path)
 }
 
 func (sm *Sitemap) SetAdapter(adp Adapter) {
@@ -39,6 +47,10 @@ func (sm *Sitemap) SetVerbose(verbose bool) {
 
 func (sm *Sitemap) SetCompress(compress bool) {
 	sm.opts.SetCompress(compress)
+}
+
+func (sm *Sitemap) SetFilename(filename string) {
+	sm.opts.SetFilename(filename)
 }
 
 func (sm *Sitemap) Create() *Sitemap {

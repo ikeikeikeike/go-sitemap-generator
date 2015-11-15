@@ -40,6 +40,38 @@ sm := stm.NewSitemap()
 sm.SetVerbose(false)
 ```
 
+### Pinging Search Engines
+
+```go
+sm.Finalize().PingSearchEngines()
+```
+
+If you want to add `new search engine`, you can set that to method's arguments. like this.
+
+```go
+sm.Finalize().PingSearchEngines("http://newengine.com/ping?url=%s")
+```
+
+```go
+// Your website's host name
+sm.SetDefaultHost("http://www.example.com")
+
+// The remote host where your sitemaps will be hosted
+sm.SetSitemapsHost("http://s3.amazonaws.com/sitemap-generator/")
+
+// The directory to write sitemaps to locally
+sm.SetPublicPath("tmp/")
+
+// Set this to a directory/path if you don't want to upload to the root of your `SitemapsHost`
+sm.SetSitemapsPath("sitemaps/")
+
+// Struct of `stm.S3Adapter`
+sm.SetAdapter(stm.NewS3Adapter())
+
+// It changes to output filename
+sm.SetFilename("new_filename")
+```
+
 ### News Sitemaps
 
 ```go
