@@ -51,6 +51,10 @@ func (opts *Options) SetVerbose(verbose bool) {
 	opts.verbose = verbose
 }
 
+func (opts *Options) SetCompress(compress bool) {
+	opts.compress = compress
+}
+
 func (opts *Options) SetAdapter(adp Adapter) {
 	opts.adp = adp
 }

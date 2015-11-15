@@ -34,8 +34,8 @@ type URLModel struct {
 // "video" "geo" "news" "videos" "mobile" "alternate" "alternates" "pagemap"}
 var fieldnames []string = utils.ToLowers(structs.Names(&URLModel{}))
 
-func NewSitemapURL(url interface{}) (*sitemapURL, error) {
-	smu := &sitemapURL{data: url.(URL)}
+func NewSitemapURL(url URL) (*sitemapURL, error) {
+	smu := &sitemapURL{data: url}
 	err := smu.validate()
 	return smu, err
 }
@@ -62,11 +62,15 @@ func (su *sitemapURL) validate() error {
 	}
 
 	if invalid {
-		msg := fmt.Sprintf("Unknown map key `%s` in URL type", key)
+		msg := fmt.Sprintf("Unknown map's key `%s` in URL type", key)
 		return errors.New(msg)
 	}
 	if _, ok := su.data["loc"]; !ok {
-		msg := fmt.Sprintf("URL type must have loc attribute")
+		msg := fmt.Sprintf("URL type must have loc map's key")
+		return errors.New(msg)
+	}
+	if _, ok := su.data["host"]; !ok {
+		msg := fmt.Sprintf("URL type must have host map's key")
 		return errors.New(msg)
 	}
 	return nil

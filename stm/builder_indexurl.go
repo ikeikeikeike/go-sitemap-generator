@@ -8,8 +8,8 @@ import (
 	"github.com/ikeikeikeike/go-sitemap-generator/stm/utils"
 )
 
-func NewSitemapIndexURL(url interface{}) *sitemapIndexURL {
-	return &sitemapIndexURL{data: url.(URL)}
+func NewSitemapIndexURL(url URL) *sitemapIndexURL {
+	return &sitemapIndexURL{data: url}
 }
 
 type sitemapIndexURL struct {

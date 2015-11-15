@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/beevik/etree"
+	"github.com/k0kubun/pp"
 )
 
 func TestBlank(t *testing.T) {
@@ -124,4 +125,21 @@ func TestSetNilValue(t *testing.T) {
 	if elm != nil {
 		t.Errorf(`Failed to generate xml that lastmod element must be nil: %s`, elm)
 	}
+}
+
+func TestAutoGenerateSitemapHost(t *testing.T) {
+	smu, err := NewSitemapURL(URL{"loc": "path"})
+
+	if err != nil {
+		t.Fatalf(`Fatal to validate! This is a critical error: %s`, err)
+	}
+
+	doc := etree.NewDocument()
+	doc.ReadFromBytes(smu.XML())
+
+	// var elm *etree.Element
+	// url := doc.SelectElement("url")
+
+	pp.Println(smu.data)
+	pp.Println(string(smu.XML()))
 }

@@ -37,6 +37,10 @@ func (sm *Sitemap) SetVerbose(verbose bool) {
 	sm.opts.SetVerbose(verbose)
 }
 
+func (sm *Sitemap) SetCompress(compress bool) {
+	sm.opts.SetCompress(compress)
+}
+
 func (sm *Sitemap) Create() *Sitemap {
 	sm.bldrs = NewBuilderIndexfile(sm.opts.IndexLocation())
 	// go sm.bldr.run()

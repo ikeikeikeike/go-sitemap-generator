@@ -16,10 +16,7 @@ func SetElementValue(elm *etree.Element, data map[string]interface{}, key string
 		case string:
 			child := elm.CreateElement(key)
 			child.SetText(v)
-		case float64:
-			child := elm.CreateElement(key)
-			child.SetText(fmt.Sprint(v))
-		case float32:
+		case float64, float32:
 			child := elm.CreateElement(key)
 			child.SetText(fmt.Sprint(v))
 		case time.Time:
