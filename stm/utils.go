@@ -10,7 +10,8 @@ import (
 	"github.com/imdario/mergo"
 )
 
-// Change to News type def
+// XXX: It changes to News type def
+// It will change to struct from map if the future's author is feeling a bothersome in this function.
 func SetBuilderElementValue(elm *etree.Element, data map[string]interface{}, basekey string) bool {
 	key := basekey
 	ts, tk := spaceDecompose(elm.Tag)
@@ -42,6 +43,11 @@ func SetBuilderElementValue(elm *etree.Element, data map[string]interface{}, bas
 			child.SetText(value.Format(time.RFC3339))
 		case bool:
 			_ = elm.CreateElement(fmt.Sprintf("%s:%s", key, key))
+		case []int:
+			for _, v := range value {
+				child := elm.CreateElement(key)
+				child.SetText(fmt.Sprint(v))
+			}
 		case []string:
 			for _, v := range value {
 				child := elm.CreateElement(key)
