@@ -22,3 +22,10 @@ func main() {
 	sm.Finalize().PingSearchEngines()
 }
 ```
+
+
+#### How to testing
+
+```
+$ (cd ./stm ; go test -v github.com/ikeikeikeike/go-sitemap-generator/stm...)
+```
