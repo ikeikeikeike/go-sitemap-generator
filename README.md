@@ -31,6 +31,15 @@ func main() {
 $ go get github.com/ikeikeikeike/go-sitemap-generator/stm
 ```
 
+### Getting Started
+
+#### Preventing Output
+
+```go
+sm := stm.NewSitemap()
+sm.SetVerbose(false)
+```
+
 #### News Sitemaps
 
 ```go
@@ -79,6 +88,21 @@ sm.Add(stm.URL{"loc": "/geos", "geo": stm.URL{
 }})
 ```
 
+#### PageMap Sitemaps
+
+```go
+```
+
+#### Alternate Links
+
+```go
+```
+
+#### Mobile Sitemaps
+
+```go
+sm.Add(stm.URL{"loc": "mobiles", "mobile": true})
+```
 
 #### How to testing
 
