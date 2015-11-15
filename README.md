@@ -52,6 +52,8 @@ If you want to add `new search engine`, you can set that to method's arguments. 
 sm.Finalize().PingSearchEngines("http://newengine.com/ping?url=%s")
 ```
 
+### Options
+
 ```go
 // Your website's host name
 sm.SetDefaultHost("http://www.example.com")
