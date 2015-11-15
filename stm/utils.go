@@ -43,18 +43,25 @@ func SetBuilderElementValue(elm *etree.Element, data map[string]interface{}, bas
 		case bool:
 			_ = elm.CreateElement(fmt.Sprintf("%s:%s", key, key))
 		case interface{}:
-			switch mvalue := value.(type) {
-			case URL:
-				var childkey string
-				if sk == "" {
-					childkey = fmt.Sprintf("%s:%s", key, key)
-				} else {
-					childkey = fmt.Sprint(key)
-				}
+			var childkey string
+			if sk == "" {
+				childkey = fmt.Sprintf("%s:%s", key, key)
+			} else {
+				childkey = fmt.Sprint(key)
+			}
 
+			switch mvalues := value.(type) {
+			case []URL:
+				for _, mvalue := range mvalues {
+					child := elm.CreateElement(childkey)
+					for mk, _ := range mvalue {
+						SetBuilderElementValue(child, mvalue, mk)
+					}
+				}
+			case URL:
 				child := elm.CreateElement(childkey)
-				for mk, _ := range mvalue {
-					SetBuilderElementValue(child, mvalue, mk)
+				for mk, _ := range mvalues {
+					SetBuilderElementValue(child, mvalues, mk)
 				}
 			}
 		}

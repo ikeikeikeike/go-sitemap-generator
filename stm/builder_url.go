@@ -19,7 +19,7 @@ type URLModel struct {
 	Expires    time.Time              `valid:"-"`
 	Host       string                 `valid:"ipv4"`
 	Loc        string                 `valid:"url"`
-	Images     string                 `valid:"url"`
+	Image     string                 `valid:"url"`
 	Videos     string                 `valid:"url"`
 	Geo        string                 `valid:"latitude,longitude"`
 	News       string                 `valid:"-"`
@@ -97,6 +97,7 @@ func (su *sitemapURL) XML() []byte {
 	}
 
 	SetBuilderElementValue(url, su.data, "news")
+	SetBuilderElementValue(url, su.data, "image")
 
 	buf := &bytes.Buffer{}
 	// doc.Indent(2)

@@ -23,7 +23,7 @@ func main() {
 }
 ```
 
-#### News Sitemaps
+### News Sitemaps
 
 ```go
 sm.Add(stm.URL{"loc": "/news", "news": stm.URL{
@@ -38,6 +38,16 @@ sm.Add(stm.URL{"loc": "/news", "news": stm.URL{
     "access":           "Subscription",
     "genres":           "PressRelease",
 }})
+```
+
+### Image Sitemaps
+
+```go
+sm.Add(stm.URL{"loc": "/images", "image": []stm.URL{
+    stm.URL{"loc": "http://www.example.com/image.png", "title": "Image"},
+    stm.URL{"loc": "http://www.example.com/image1.png", "title": "Image1"},
+}})
+
 ```
 
 #### How to testing
