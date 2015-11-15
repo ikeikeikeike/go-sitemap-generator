@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/beevik/etree"
-	"github.com/k0kubun/pp"
 )
 
 func TestBlank(t *testing.T) {
@@ -21,7 +20,7 @@ func TestItHasLocElement(t *testing.T) {
 }
 
 func TestJustSetLocElement(t *testing.T) {
-	smu, err := NewSitemapURL(URL{"loc": "path"})
+	smu, err := NewSitemapURL(URL{"loc": "path", "host": "http://example.com"})
 
 	if err != nil {
 		t.Fatalf(`Fatal to validate! This is a critical error: %s`, err)
@@ -37,13 +36,13 @@ func TestJustSetLocElement(t *testing.T) {
 	if elm == nil {
 		t.Errorf(`Failed to generate xml that loc element is blank: %s`, elm)
 	}
-	if elm != nil && elm.Text() != "path" {
+	if elm != nil && elm.Text() != "http://example.com/path" {
 		t.Errorf(`Failed to generate xml thats deferrent value in loc element: %s`, elm.Text())
 	}
 }
 
 func TestJustSetLocElementAndThenItNeedsCompleteValues(t *testing.T) {
-	smu, err := NewSitemapURL(URL{"loc": "path"})
+	smu, err := NewSitemapURL(URL{"loc": "path", "host": "http://example.com"})
 
 	if err != nil {
 		t.Fatalf(`Fatal to validate! This is a critical error: %s`, err)
@@ -59,7 +58,7 @@ func TestJustSetLocElementAndThenItNeedsCompleteValues(t *testing.T) {
 	if elm == nil {
 		t.Errorf(`Failed to generate xml that loc element is blank: %s`, elm)
 	}
-	if elm != nil && elm.Text() != "path" {
+	if elm != nil && elm.Text() != "http://example.com/path" {
 		t.Errorf(`Failed to generate xml thats deferrent value in loc element: %s`, elm.Text())
 	}
 
@@ -91,7 +90,7 @@ func TestJustSetLocElementAndThenItNeedsCompleteValues(t *testing.T) {
 }
 
 func TestSetNilValue(t *testing.T) {
-	smu, err := NewSitemapURL(URL{"loc": "path", "priority": nil, "changefreq": nil, "lastmod": nil})
+	smu, err := NewSitemapURL(URL{"loc": "path", "priority": nil, "changefreq": nil, "lastmod": nil, "host": "http://example.com"})
 
 	if err != nil {
 		t.Fatalf(`Fatal to validate! This is a critical error: %s`, err)
@@ -107,7 +106,7 @@ func TestSetNilValue(t *testing.T) {
 	if elm == nil {
 		t.Errorf(`Failed to generate xml that loc element is blank: %s`, elm)
 	}
-	if elm != nil && elm.Text() != "path" {
+	if elm != nil && elm.Text() != "http://example.com/path" {
 		t.Errorf(`Failed to generate xml thats deferrent value in loc element: %s`, elm.Text())
 	}
 
@@ -128,7 +127,7 @@ func TestSetNilValue(t *testing.T) {
 }
 
 func TestAutoGenerateSitemapHost(t *testing.T) {
-	smu, err := NewSitemapURL(URL{"loc": "path"})
+	smu, err := NewSitemapURL(URL{"loc": "path", "host": "http://example.com"})
 
 	if err != nil {
 		t.Fatalf(`Fatal to validate! This is a critical error: %s`, err)
@@ -137,9 +136,14 @@ func TestAutoGenerateSitemapHost(t *testing.T) {
 	doc := etree.NewDocument()
 	doc.ReadFromBytes(smu.XML())
 
-	// var elm *etree.Element
-	// url := doc.SelectElement("url")
+	var elm *etree.Element
+	url := doc.SelectElement("url")
 
-	pp.Println(smu.data)
-	pp.Println(string(smu.XML()))
+	elm = url.SelectElement("loc")
+	if elm == nil {
+		t.Errorf(`Failed to generate xml that loc element is blank: %s`, elm)
+	}
+	if elm != nil && elm.Text() != "http://example.com/path" {
+		t.Errorf(`Failed to generate xml thats deferrent value in loc element: %s`, elm.Text())
+	}
 }

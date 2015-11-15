@@ -66,11 +66,11 @@ func (su *sitemapURL) validate() error {
 		return errors.New(msg)
 	}
 	if _, ok := su.data["loc"]; !ok {
-		msg := fmt.Sprintf("URL type must have loc map's key")
+		msg := fmt.Sprintf("URL type must have `loc` map's key")
 		return errors.New(msg)
 	}
 	if _, ok := su.data["host"]; !ok {
-		msg := fmt.Sprintf("URL type must have host map's key")
+		msg := fmt.Sprintf("URL type must have `host` map's key")
 		return errors.New(msg)
 	}
 	return nil
@@ -80,7 +80,7 @@ func (su *sitemapURL) XML() []byte {
 	doc := etree.NewDocument()
 	url := doc.CreateElement("url")
 
-	utils.SetElementValue(url, su.data, "loc")
+	utils.SetElementValue(url, su.data.URLJoinBy("loc", "host", "loc"), "loc")
 	utils.SetElementValue(url, su.data, "expires")
 	utils.SetElementValue(url, su.data, "mobile")
 
