@@ -25,6 +25,12 @@ func main() {
 }
 ```
 
+#### Installing
+
+```
+$ go get github.com/ikeikeikeike/go-sitemap-generator/stm
+```
+
 #### News Sitemaps
 
 ```go
