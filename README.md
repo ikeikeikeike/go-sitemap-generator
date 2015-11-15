@@ -1,4 +1,4 @@
-##### How I do generate sitemap in Golang?
+##### How do I generate sitemap in Golang?
 
 ```go
 package main
@@ -7,16 +7,17 @@ import (
 	"github.com/ikeikeikeike/go-sitemap-generator/stm"
 )
 
+
 func main() {
 	sm := stm.NewSitemap()
-	sm.SetDefaultHost("http://myhost.com")
-	sm.SetSitemapsPath("sitemap/myhost.com")
+	sm.SetDefaultHost("http://example.com")
+	sm.SetSitemapsPath("sitemap/example.com")
 
 	sm.Create()
 
-	for i := 0; i < 30000; i++ {
-		sm.Add(stm.URL{"changefreq": "1", "mobile": true})
-	}
+	sm.Add(stm.URL{"loc": "home", "changefreq": "always", "mobile": true})
+	sm.Add(stm.URL{"loc": "readme"})
+	sm.Add(stm.URL{"loc": "aboutme", "priority": 0.1})
 
 	sm.Finalize().PingSearchEngines()
 }
