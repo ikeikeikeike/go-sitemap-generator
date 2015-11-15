@@ -1,33 +1,33 @@
 package stm
 
 import (
-  "bytes"
-  "errors"
-  "fmt"
-  "time"
+	"bytes"
+	"errors"
+	"fmt"
+	"time"
 
-  "github.com/beevik/etree"
-  "github.com/fatih/structs"
+	"github.com/beevik/etree"
+	"github.com/fatih/structs"
 )
 
 // http://www.sitemaps.org/protocol.html
 // https://support.google.com/webmasters/answer/178636
 type URLModel struct {
-  Priority   float64                `valid:"float,length(0.0|1.0)"`
-  Changefreq string                 `valid:"alpha(always|hourly|daily|weekly|monthly|yearly|never)"`
-  Lastmod    time.Time              `valid:"-"`
-  Expires    time.Time              `valid:"-"`
-  Host       string                 `valid:"ipv4"`
-  Loc        string                 `valid:"url"`
-  Image      string                 `valid:"url"`
-  Video     string                  `valid:"url"`
-  Tag        string                 `valid:""`
-  Geo        string                 `valid:"latitude,longitude"`
-  News       string                 `valid:"-"`
-  Mobile     bool                   `valid:"-"`
-  Alternate  string                 `valid:"-"`
-  Alternates map[string]interface{} `valid:"-"`
-  Pagemap    map[string]interface{} `valid:"-"`
+	Priority   float64                `valid:"float,length(0.0|1.0)"`
+	Changefreq string                 `valid:"alpha(always|hourly|daily|weekly|monthly|yearly|never)"`
+	Lastmod    time.Time              `valid:"-"`
+	Expires    time.Time              `valid:"-"`
+	Host       string                 `valid:"ipv4"`
+	Loc        string                 `valid:"url"`
+	Image      string                 `valid:"url"`
+	Video      string                 `valid:"url"`
+	Tag        string                 `valid:""`
+	Geo        string                 `valid:"latitude,longitude"`
+	News       string                 `valid:"-"`
+	Mobile     bool                   `valid:"-"`
+	Alternate  string                 `valid:"-"`
+	Alternates map[string]interface{} `valid:"-"`
+	Pagemap    map[string]interface{} `valid:"-"`
 }
 
 // []string{"priority" "changefreq" "lastmod" "expires" "host" "images"
@@ -35,76 +35,76 @@ type URLModel struct {
 var fieldnames []string = ToLowerString(structs.Names(&URLModel{}))
 
 func NewSitemapURL(url URL) (*sitemapURL, error) {
-  smu := &sitemapURL{data: url}
-  err := smu.validate()
-  return smu, err
+	smu := &sitemapURL{data: url}
+	err := smu.validate()
+	return smu, err
 }
 
 type sitemapURL struct {
-  data URL
+	data URL
 }
 
 func (su *sitemapURL) validate() error {
-  var key string
-  var invalid bool
+	var key string
+	var invalid bool
 
-  for key, _ = range su.data {
-    invalid = true
-    for _, name := range fieldnames {
-      if key == name {
-        invalid = false
-        break
-      }
-    }
-    if invalid {
-      break
-    }
-  }
+	for key, _ = range su.data {
+		invalid = true
+		for _, name := range fieldnames {
+			if key == name {
+				invalid = false
+				break
+			}
+		}
+		if invalid {
+			break
+		}
+	}
 
-  if invalid {
-    msg := fmt.Sprintf("Unknown map's key `%s` in URL type", key)
-    return errors.New(msg)
-  }
-  if _, ok := su.data["loc"]; !ok {
-    msg := fmt.Sprintf("URL type must have `loc` map's key")
-    return errors.New(msg)
-  }
-  if _, ok := su.data["host"]; !ok {
-    msg := fmt.Sprintf("URL type must have `host` map's key")
-    return errors.New(msg)
-  }
-  return nil
+	if invalid {
+		msg := fmt.Sprintf("Unknown map's key `%s` in URL type", key)
+		return errors.New(msg)
+	}
+	if _, ok := su.data["loc"]; !ok {
+		msg := fmt.Sprintf("URL type must have `loc` map's key")
+		return errors.New(msg)
+	}
+	if _, ok := su.data["host"]; !ok {
+		msg := fmt.Sprintf("URL type must have `host` map's key")
+		return errors.New(msg)
+	}
+	return nil
 }
 
 func (su *sitemapURL) XML() []byte {
-  doc := etree.NewDocument()
-  url := doc.CreateElement("url")
+	doc := etree.NewDocument()
+	url := doc.CreateElement("url")
 
-  SetBuilderElementValue(url, su.data.URLJoinBy("loc", "host", "loc"), "loc")
-  SetBuilderElementValue(url, su.data, "expires")
-  SetBuilderElementValue(url, su.data, "mobile")
+	SetBuilderElementValue(url, su.data.URLJoinBy("loc", "host", "loc"), "loc")
+	SetBuilderElementValue(url, su.data, "expires")
+	SetBuilderElementValue(url, su.data, "mobile")
 
-  if !SetBuilderElementValue(url, su.data, "changefreq") {
-    changefreq := url.CreateElement("changefreq")
-    changefreq.SetText("weekly")
-  }
-  if !SetBuilderElementValue(url, su.data, "priority") {
-    priority := url.CreateElement("priority")
-    priority.SetText("0.5")
-  }
-  if !SetBuilderElementValue(url, su.data, "lastmod") {
-    lastmod := url.CreateElement("lastmod")
-    lastmod.SetText(time.Now().Format(time.RFC3339))
-  }
+	if !SetBuilderElementValue(url, su.data, "changefreq") {
+		changefreq := url.CreateElement("changefreq")
+		changefreq.SetText("weekly")
+	}
+	if !SetBuilderElementValue(url, su.data, "priority") {
+		priority := url.CreateElement("priority")
+		priority.SetText("0.5")
+	}
+	if !SetBuilderElementValue(url, su.data, "lastmod") {
+		lastmod := url.CreateElement("lastmod")
+		lastmod.SetText(time.Now().Format(time.RFC3339))
+	}
 
-  SetBuilderElementValue(url, su.data, "news")
-  SetBuilderElementValue(url, su.data, "image")
-  SetBuilderElementValue(url, su.data, "video")
-  SetBuilderElementValue(url, su.data, "geo")
+	SetBuilderElementValue(url, su.data, "news")
+	SetBuilderElementValue(url, su.data, "image")
+	SetBuilderElementValue(url, su.data, "video")
+	SetBuilderElementValue(url, su.data, "geo")
 
-  buf := &bytes.Buffer{}
-  // doc.Indent(2)
-  doc.WriteTo(buf)
+	buf := &bytes.Buffer{}
+	// doc.Indent(2)
+	doc.WriteTo(buf)
 
-  return buf.Bytes()
+	return buf.Bytes()
 }
