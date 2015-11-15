@@ -1,3 +1,5 @@
+###### Inspired by [sitemap_generator](http://github.com/kjvarga/sitemap_generator)
+
 ##### How do I generate sitemap in Golang?
 
 ```go
@@ -23,7 +25,7 @@ func main() {
 }
 ```
 
-### News Sitemaps
+#### News Sitemaps
 
 ```go
 sm.Add(stm.URL{"loc": "/news", "news": stm.URL{
@@ -40,7 +42,7 @@ sm.Add(stm.URL{"loc": "/news", "news": stm.URL{
 }})
 ```
 
-### Image Sitemaps
+#### Image Sitemaps
 
 ```go
 sm.Add(stm.URL{"loc": "/images", "image": []stm.URL{
@@ -50,7 +52,7 @@ sm.Add(stm.URL{"loc": "/images", "image": []stm.URL{
 
 ```
 
-### Video Sitemaps
+#### Video Sitemaps
 
 ```go
 sm.Add(stm.URL{"loc": "/videos", "video": stm.URL{
@@ -63,12 +65,19 @@ sm.Add(stm.URL{"loc": "/videos", "video": stm.URL{
 }})
 ```
 
+#### Geo Sitemaps
+
+```go
+sm.Add(stm.URL{"loc": "/geos", "geo": stm.URL{
+    "format": "kml",
+}})
+```
+
+
 #### How to testing
 
 ```
 $ (cd ./stm ; go test -v github.com/ikeikeikeike/go-sitemap-generator/stm...)
 ```
 
-#### Inspired by 
-
-[sitemap_generator](http://github.com/kjvarga/sitemap_generator) 
+##### Inspired by [sitemap_generator](http://github.com/kjvarga/sitemap_generator)
