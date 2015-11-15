@@ -45,3 +45,7 @@ sm.Add(stm.URL{"loc": "/news", "news": stm.URL{
 ```
 $ (cd ./stm ; go test -v github.com/ikeikeikeike/go-sitemap-generator/stm...)
 ```
+
+#### Inspired by 
+
+[sitemap_generator](http://github.com/kjvarga/sitemap_generator) 
