@@ -226,3 +226,42 @@ func TestImageSitemaps(t *testing.T) {
 		t.Error(`Failed to generate sitemap xml thats deferrent output value in URL type`)
 	}
 }
+
+func TestVideoSitemaps(t *testing.T) {
+	doc := etree.NewDocument()
+	root := doc.CreateElement("root")
+
+	data := URL{"loc": "/videos", "video": URL{
+		"thumbnail_loc": "http://www.example.com/video1_thumbnail.png",
+		"title":         "Title",
+		"description":   "Description",
+		"content_loc":   "http://www.example.com/cool_video.mpg",
+		"category":      "Category",
+		"tag":          []string{"one", "two", "three"},
+	}}
+
+	expect := []byte(`
+	<root>
+		<video:video>
+			<video:thumbnail_loc>http://www.example.com/video1_thumbnail.png</video:thumbnail_loc>
+			<video:title>Title</video:title>
+			<video:description>Description</video:description>
+			<video:content_loc>http://www.example.com/cool_video.mpg</video:content_loc>
+			<video:tag>one</video:tag>
+			<video:tag>two</video:tag>
+			<video:tag>three</video:tag>
+			<video:category>Category</video:category>
+		</video:video>
+	</root>`)
+
+	SetBuilderElementValue(root, data, "video")
+	buf := &bytes.Buffer{}
+	doc.WriteTo(buf)
+
+	mdata, _ := mxj.NewMapXml(buf.Bytes())
+	mexpect, _ := mxj.NewMapXml(expect)
+
+	if !reflect.DeepEqual(mdata, mexpect) {
+		t.Error(`Failed to generate sitemap xml thats deferrent output value in URL type`)
+	}
+}

@@ -50,6 +50,19 @@ sm.Add(stm.URL{"loc": "/images", "image": []stm.URL{
 
 ```
 
+### Video Sitemaps
+
+```go
+sm.Add(stm.URL{"loc": "/videos", "video": stm.URL{
+    "thumbnail_loc": "http://www.example.com/video1_thumbnail.png",
+    "title":         "Title",
+    "description":   "Description",
+    "content_loc":   "http://www.example.com/cool_video.mpg",
+    "category":      "Category",
+    "tag":          []string{"one", "two", "three"},
+}})
+```
+
 #### How to testing
 
 ```

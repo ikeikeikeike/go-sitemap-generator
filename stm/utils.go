@@ -22,26 +22,31 @@ func SetBuilderElementValue(elm *etree.Element, data map[string]interface{}, bas
 		key = fmt.Sprintf("%s:%s", sk, basekey)
 	}
 
-	if value, ok := data[basekey]; ok {
-		switch v := value.(type) {
+	if values, ok := data[basekey]; ok {
+		switch value := values.(type) {
 		case nil:
 		default:
 			child := elm.CreateElement(key)
-			child.SetText(fmt.Sprint(v))
+			child.SetText(fmt.Sprint(value))
 		case int:
 			child := elm.CreateElement(key)
-			child.SetText(fmt.Sprint(v))
+			child.SetText(fmt.Sprint(value))
 		case string:
 			child := elm.CreateElement(key)
-			child.SetText(v)
+			child.SetText(value)
 		case float64, float32:
 			child := elm.CreateElement(key)
-			child.SetText(fmt.Sprint(v))
+			child.SetText(fmt.Sprint(value))
 		case time.Time:
 			child := elm.CreateElement(key)
-			child.SetText(v.Format(time.RFC3339))
+			child.SetText(value.Format(time.RFC3339))
 		case bool:
 			_ = elm.CreateElement(fmt.Sprintf("%s:%s", key, key))
+		case []string:
+			for _, v := range value {
+				child := elm.CreateElement(key)
+				child.SetText(v)
+			}
 		case interface{}:
 			var childkey string
 			if sk == "" {
@@ -50,18 +55,18 @@ func SetBuilderElementValue(elm *etree.Element, data map[string]interface{}, bas
 				childkey = fmt.Sprint(key)
 			}
 
-			switch mvalues := value.(type) {
+			switch value := values.(type) {
 			case []URL:
-				for _, mvalue := range mvalues {
+				for _, v := range value {
 					child := elm.CreateElement(childkey)
-					for mk, _ := range mvalue {
-						SetBuilderElementValue(child, mvalue, mk)
+					for ck, _ := range v {
+						SetBuilderElementValue(child, v, ck)
 					}
 				}
 			case URL:
 				child := elm.CreateElement(childkey)
-				for mk, _ := range mvalues {
-					SetBuilderElementValue(child, mvalues, mk)
+				for ck, _ := range value {
+					SetBuilderElementValue(child, value, ck)
 				}
 			}
 		}
