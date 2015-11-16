@@ -27,7 +27,7 @@ func main() {
 
 ### Installing
 
-```
+```console
 $ go get github.com/ikeikeikeike/go-sitemap-generator/stm
 ```
 
@@ -140,7 +140,15 @@ sm.Add(stm.URL{"loc": "mobiles", "mobile": true})
 
 ### How to testing
 
+Prepare testing
+
+```console
+$ go get github.com/clbanning/mxj
 ```
+
+Do testing
+
+```console
 $ (cd ./stm ; go test -v github.com/ikeikeikeike/go-sitemap-generator/stm...)
 ```
 
