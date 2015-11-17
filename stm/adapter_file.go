@@ -7,8 +7,6 @@ import (
 	"regexp"
 )
 
-var gzipPtn = regexp.MustCompile(".gz$")
-
 func NewFileAdapter() *FileAdapter {
 	adapter := &FileAdapter{}
 	return adapter
@@ -33,7 +31,7 @@ func (adp *FileAdapter) Write(loc *Location, data []byte) {
 		log.Fatalf("[F] %s should be a filename", loc.Path())
 	}
 
-	if gzipPtn.MatchString(loc.Path()) {
+	if GzipPtn.MatchString(loc.Path()) {
 		adp.gzip(file, data)
 	} else {
 		adp.plain(file, data)
