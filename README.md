@@ -67,11 +67,41 @@ sm.SetPublicPath("tmp/")
 // Set this to a directory/path if you don't want to upload to the root of your `SitemapsHost`
 sm.SetSitemapsPath("sitemaps/")
 
-// Struct of `stm.S3Adapter`
-sm.SetAdapter(stm.NewS3Adapter())
+// Struct of `S3Adapter`
+sm.SetAdapter(&stm.S3Adapter{Region: "ap-northeast-1", Bucket: "your-bucket", ACL: "public-read"})
 
 // It changes to output filename
 sm.SetFilename("new_filename")
+```
+
+### Upload sitemap to S3 
+
+```go
+package main
+
+import (
+    "github.com/ikeikeikeike/go-sitemap-generator/stm"
+)
+
+func main() {
+    sm := stm.NewSitemap()
+    sm.SetDefaultHost("http://example.com")
+    sm.SetSitemapsPath("sitemap-generator")  // default: public
+    sm.SetSitemapsHost("http://s3.amazonaws.com/sitemap-generator/")
+    sm.SetAdapter(&stm.S3Adapter{
+        Region: "ap-northeast-1", 
+        Bucket: "your-bucket", 
+        ACL: "public-read",
+    })
+
+    sm.Create()
+
+    sm.Add(stm.URL{"loc": "home", "changefreq": "always", "mobile": true})
+    sm.Add(stm.URL{"loc": "readme"})
+    sm.Add(stm.URL{"loc": "aboutme", "priority": 0.1})
+
+    sm.Finalize().PingSearchEngines()
+}
 ```
 
 ### News Sitemaps

@@ -4,7 +4,6 @@ import (
 	"compress/gzip"
 	"log"
 	"os"
-	"regexp"
 )
 
 func NewFileAdapter() *FileAdapter {
