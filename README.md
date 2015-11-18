@@ -1,6 +1,6 @@
 ###### Inspired by [sitemap_generator](http://github.com/kjvarga/sitemap_generator)
 
-##### How do I generate sitemap in Golang?
+##### How do I generate sitemap in Golang?  [![GoDoc](https://godoc.org/github.com/ikeikeikeike/go-sitemap-generator?status.svg)](https://godoc.org/github.com/ikeikeikeike/go-sitemap-generator)
 
 ```go
 package main
@@ -165,6 +165,10 @@ sm.Add(stm.URL{"loc": "/geos", "geo": stm.URL{
 ```go
 sm.Add(stm.URL{"loc": "mobiles", "mobile": true})
 ```
+
+### Documentation
+
+- [API Reference](https://godoc.org/github.com/ikeikeikeike/go-sitemap-generator/stm)
 
 ### How to testing
 
