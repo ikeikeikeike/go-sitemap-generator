@@ -12,8 +12,6 @@ import (
 
 func main() {
     sm := stm.NewSitemap()
-    sm.SetDefaultHost("http://example.com")
-    sm.SetSitemapsPath("sitemap/example.com")
 
     sm.Create()
 
