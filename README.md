@@ -1,6 +1,6 @@
 ###### Inspired by [sitemap_generator](http://github.com/kjvarga/sitemap_generator)
 
-##### How do I generate sitemap in Golang?  [![GoDoc](https://godoc.org/github.com/ikeikeikeike/go-sitemap-generator?status.svg)](https://godoc.org/github.com/ikeikeikeike/go-sitemap-generator)
+##### How do I generate sitemap in Golang?  [![GoDoc](https://godoc.org/github.com/ikeikeikeike/go-sitemap-generator/stm?status.svg)](https://godoc.org/github.com/ikeikeikeike/go-sitemap-generator/stm)
 
 ```go
 package main
