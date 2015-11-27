@@ -8,7 +8,7 @@ import (
 )
 
 // NewSitemapIndexURL and NewSitemapURL are almost the same behavior.
-func NewSitemapIndexURL(url URL) *sitemapIndexURL {
+func NewSitemapIndexURL(url URL) SitemapURL {
 	return &sitemapIndexURL{data: url}
 }
 

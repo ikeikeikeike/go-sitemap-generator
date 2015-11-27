@@ -37,7 +37,7 @@ var fieldnames = ToLowerString(structs.Names(&URLModel{}))
 
 // NewSitemapURL returns the created the SitemapURL's pointer
 // and it validates URL types error.
-func NewSitemapURL(url URL) (*sitemapURL, error) {
+func NewSitemapURL(url URL) (SitemapURL, error) {
 	smu := &sitemapURL{data: url}
 	err := smu.validate()
 	return smu, err

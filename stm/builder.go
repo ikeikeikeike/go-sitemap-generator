@@ -17,6 +17,11 @@ type Builder interface {
 	Write()
 }
 
+// SitemapURL provides generated xml interface.
+type SitemapURL interface {
+	XML() []byte
+}
+
 // URL User should use this typedef in main func.
 type URL map[string]interface{}
 

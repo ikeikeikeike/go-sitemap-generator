@@ -103,7 +103,7 @@ func (loc *Location) Filename() string {
 	return loc.filename
 }
 
-// ReserveName returns that sets filename if this struct didn't keep filename and 
+// ReserveName returns that sets filename if this struct didn't keep filename and
 // it returns reserved filename if this struct keeps filename also.
 func (loc *Location) ReserveName() string {
 	nmr := loc.Namer()
