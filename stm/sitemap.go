@@ -66,13 +66,13 @@ func (sm *Sitemap) SetFilename(filename string) {
 	sm.opts.SetFilename(filename)
 }
 
-// Create method must be that calls first this method in that before call to Add method on this class.
+// Create method must be that calls first this method in that before call to Add method on this struct.
 func (sm *Sitemap) Create() *Sitemap {
 	sm.bldrs = NewBuilderIndexfile(sm.opts.IndexLocation())
 	return sm
 }
 
-// Add Should call this after call to Create method on this class.
+// Add Should call this after call to Create method on this struct.
 func (sm *Sitemap) Add(url interface{}) *Sitemap {
 	if sm.bldr == nil {
 		sm.bldr = NewBuilderFile(sm.opts.Location())

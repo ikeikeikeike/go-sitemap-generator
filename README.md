@@ -4,7 +4,6 @@
 
 [![GoDoc](https://godoc.org/github.com/ikeikeikeike/go-sitemap-generator/stm?status.svg)](https://godoc.org/github.com/ikeikeikeike/go-sitemap-generator/stm) [![Build Status](https://travis-ci.org/ikeikeikeike/go-sitemap-generator.svg)](https://travis-ci.org/ikeikeikeike/go-sitemap-generator)
 
-
 ```go
 package main
 
@@ -16,6 +15,8 @@ import (
 func main() {
     sm := stm.NewSitemap()
 
+    // Create method must be that calls first this method in that before 
+    // call to Add method on this struct.
     sm.Create()
 
     sm.Add(stm.URL{"loc": "home", "changefreq": "always", "mobile": true})
@@ -25,6 +26,10 @@ func main() {
     sm.Finalize().PingSearchEngines()
 }
 ```
+
+Sitemap provides interface for create sitemap xml file and that has convenient interface.
+And also needs to use first Sitemap struct if it wants to use this package.
+
 
 ### Installing
 
@@ -42,6 +47,8 @@ sm.SetVerbose(false)
 ```
 
 ### Pinging Search Engines
+
+PingSearchEngines requests some ping server.
 
 ```go
 sm.Finalize().PingSearchEngines()
