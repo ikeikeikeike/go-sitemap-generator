@@ -7,14 +7,17 @@ import (
 	"github.com/beevik/etree"
 )
 
+// NewSitemapIndexURL and NewSitemapURL are almost the same behavior.
 func NewSitemapIndexURL(url URL) *sitemapIndexURL {
 	return &sitemapIndexURL{data: url}
 }
 
+// sitemapIndexURL and sitemapURL are almost the same behavior.
 type sitemapIndexURL struct {
 	data URL
 }
 
+// XML and sitemapIndexURL.XML are almost the same behavior.
 func (su *sitemapIndexURL) XML() []byte {
 	doc := etree.NewDocument()
 	sitemap := doc.CreateElement("sitemap")

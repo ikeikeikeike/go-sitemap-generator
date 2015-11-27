@@ -6,13 +6,16 @@ import (
 	"os"
 )
 
+// NewFileAdapter returns the created the FileAdapter's pointer
 func NewFileAdapter() *FileAdapter {
 	adapter := &FileAdapter{}
 	return adapter
 }
 
+// FileAdapter provides implementation for the Adapter interface.
 type FileAdapter struct{}
 
+// Write will create sitemap xml file into the file systems.
 func (adp *FileAdapter) Write(loc *Location, data []byte) {
 	dir := loc.Directory()
 	fi, err := os.Stat(dir)
@@ -37,12 +40,14 @@ func (adp *FileAdapter) Write(loc *Location, data []byte) {
 	}
 }
 
+// gzip will create sitemap file as a gzip.
 func (adp *FileAdapter) gzip(file *os.File, data []byte) {
 	gz := gzip.NewWriter(file)
 	defer gz.Close()
 	gz.Write(data)
 }
 
+// plain will create uncompressed file.
 func (adp *FileAdapter) plain(file *os.File, data []byte) {
 	file.Write(data)
 	defer file.Close()

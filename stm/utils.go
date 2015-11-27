@@ -10,8 +10,8 @@ import (
 	"github.com/imdario/mergo"
 )
 
-// XXX: It changes to News type def
-// It will change to struct from map if the future's author is feeling a bothersome in this function.
+// SetBuilderElementValue if it will change to struct from map if the future's
+// author is feeling a bothersome in this function.
 func SetBuilderElementValue(elm *etree.Element, data map[string]interface{}, basekey string) bool {
 	key := basekey
 	ts, tk := spaceDecompose(elm.Tag)
@@ -65,13 +65,13 @@ func SetBuilderElementValue(elm *etree.Element, data map[string]interface{}, bas
 			case []URL:
 				for _, v := range value {
 					child := elm.CreateElement(childkey)
-					for ck, _ := range v {
+					for ck := range v {
 						SetBuilderElementValue(child, v, ck)
 					}
 				}
 			case URL:
 				child := elm.CreateElement(childkey)
-				for ck, _ := range value {
+				for ck := range value {
 					SetBuilderElementValue(child, value, ck)
 				}
 			}
@@ -82,12 +82,13 @@ func SetBuilderElementValue(elm *etree.Element, data map[string]interface{}, bas
 	return false
 }
 
-// TODO: Slow function: It wants to change fast function
+// MergeMap TODO: Slow function: It wants to change fast function
 func MergeMap(src, dst map[string]interface{}) map[string]interface{} {
 	mergo.MapWithOverwrite(&dst, src)
 	return dst
 }
 
+// ToLowerString converts lower strings from including capital or upper strings.
 func ToLowerString(befores []string) (afters []string) {
 	for _, name := range befores {
 		afters = append(afters, strings.ToLower(name))
@@ -95,7 +96,7 @@ func ToLowerString(befores []string) (afters []string) {
 	return afters
 }
 
-// TODO: Too slowly
+// URLJoin TODO: Too slowly
 func URLJoin(src string, joins ...string) string {
 	var u *url.URL
 	lastnum := len(joins)
@@ -113,7 +114,7 @@ func URLJoin(src string, joins ...string) string {
 	return base.String()
 }
 
-
+// spaceDecompose is separating strings for the SetBuilderElementValue
 func spaceDecompose(str string) (space, key string) {
 	colon := strings.IndexByte(str, ':')
 	if colon == -1 {

@@ -3,37 +3,35 @@ package stm
 import (
 	"bytes"
 	"log"
-
 )
 
+// builderFileError is implementation for the BuilderError interface.
 type builderFileError struct {
 	error
 	full bool
 }
 
+// FullError returns true if a sitemap xml had been limit size.
 func (e *builderFileError) FullError() bool {
 	return e.full
 }
 
+// NewBuilderFile returns the created the BuilderFile's pointer
 func NewBuilderFile(loc *Location) *BuilderFile {
-	b := &BuilderFile{
-		build: make(chan sitemapURL),
-		loc:   loc,
-	}
+	b := &BuilderFile{loc: loc}
 	b.clear()
 	return b
 }
 
+// BuilderFile provides implementation for the Builder interface.
 type BuilderFile struct {
 	content []byte
-	build   chan sitemapURL
 	loc     *Location
 	linkcnt int
 	newscnt int
-
-	urls []interface{} // XXX: For debug
 }
 
+// Add method joins old bytes with creates bytes by it calls from Sitemap.Add method.
 func (b *BuilderFile) Add(url interface{}) BuilderError {
 	u := MergeMap(url.(URL),
 		URL{"host": b.loc.opts.defaultHost},
@@ -50,27 +48,30 @@ func (b *BuilderFile) Add(url interface{}) BuilderError {
 		return &builderFileError{error: err, full: true}
 	}
 
-	b.content = append(b.content, bytes...) // TODO: Sitemap xml have limit length
-	b.linkcnt += 1
-	// b.build <- smu; b.urls = append(b.urls, url) // XXX: For debug
+	b.content = append(b.content, bytes...)
+	b.linkcnt++
 	return nil
 }
 
+// isFileCanFit checks bytes to bigger than consts values.
 func (b *BuilderFile) isFileCanFit(bytes []byte) bool {
 	r := len(append(b.content, bytes...)) < MaxSitemapFilesize
 	r = r && b.linkcnt < MaxSitemapLinks
 	return r && b.newscnt < MaxSitemapNews
 }
 
+// clear will initialize xml content.
 func (b *BuilderFile) clear() {
-	// b.content = make([]byte, MaxSitemapLinks, MaxSitemapFilesize)
 	b.content = make([]byte, 0, MaxSitemapFilesize)
 }
 
+// Content will return pooled bytes on content attribute.
 func (b *BuilderFile) Content() []byte {
 	return b.content
 }
 
+// Write will write pooled bytes with header and footer to
+// Location path for output sitemap file.
 func (b *BuilderFile) Write() {
 	b.loc.ReserveName()
 
@@ -78,14 +79,5 @@ func (b *BuilderFile) Write() {
 	c = append(append(c, b.Content()...), XMLFooter...)
 
 	b.loc.Write(c, b.linkcnt)
-	b.clear() // @xml_content = @xml_wrapper_start = @xml_wrapper_end = ''
-}
-
-func (b *BuilderFile) run() {
-	for {
-		select {
-		case smu := <-b.build:
-			b.content = append(b.content, smu.XML()...) // TODO: Sitemap xml have limit length
-		}
-	}
+	b.clear()
 }

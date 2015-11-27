@@ -1,6 +1,9 @@
 ###### Inspired by [sitemap_generator](http://github.com/kjvarga/sitemap_generator)
 
-##### How do I generate sitemap in Golang?  [![GoDoc](https://godoc.org/github.com/ikeikeikeike/go-sitemap-generator/stm?status.svg)](https://godoc.org/github.com/ikeikeikeike/go-sitemap-generator/stm)
+##### How do I generate sitemap in Golang?  
+
+[![GoDoc](https://godoc.org/github.com/ikeikeikeike/go-sitemap-generator/stm?status.svg)](https://godoc.org/github.com/ikeikeikeike/go-sitemap-generator/stm) [![Build Status](https://travis-ci.org/ikeikeikeike/go-sitemap-generator.svg)](https://travis-ci.org/ikeikeikeike/go-sitemap-generator)
+
 
 ```go
 package main
@@ -123,8 +126,8 @@ sm.Add(stm.URL{"loc": "/news", "news": stm.URL{
 
 ```go
 sm.Add(stm.URL{"loc": "/images", "image": []stm.URL{
-    stm.URL{"loc": "http://www.example.com/image.png", "title": "Image"},
-    stm.URL{"loc": "http://www.example.com/image1.png", "title": "Image1"},
+    {"loc": "http://www.example.com/image.png", "title": "Image"},
+    {"loc": "http://www.example.com/image1.png", "title": "Image1"},
 }})
 
 ```
@@ -150,25 +153,77 @@ sm.Add(stm.URL{"loc": "/geos", "geo": stm.URL{
 }})
 ```
 
-### PageMap Sitemaps
-
-```go
-```
-
-### Alternate Links
-
-```go
-```
-
 ### Mobile Sitemaps
 
 ```go
 sm.Add(stm.URL{"loc": "mobiles", "mobile": true})
 ```
 
+### Example
+
+
+```go
+package main
+
+import (
+	"github.com/ikeikeikeike/go-sitemap-generator/stm"
+)
+
+func main() {
+	sm := stm.NewSitemap()
+	sm.SetDefaultHost("http://yourhost.com")
+	sm.SetSitemapsHost("http://s3.amazonaws.com/sitemaps/")
+	sm.SetSitemapsPath("sitemaps/")
+	sm.SetFilename("anothername")
+	sm.SetCompress(true)
+	sm.SetVerbose(true)
+	sm.SetAdapter(&stm.S3Adapter{Region: "ap-northeast-1", Bucket: "your-bucket"})
+
+	sm.Create()
+
+	sm.Add(stm.URL{"loc": "/home", "changefreq": "dayly"})
+
+	sm.Add(stm.URL{"loc": "/abouts", "mobile": true})
+
+	sm.Add(stm.URL{"loc": "/news", "news": stm.URL{
+		"publication": stm.URL{
+			"name":     "Example",
+			"language": "en",
+		},
+		"title":            "My Article",
+		"keywords":         "my article, articles about myself",
+		"stock_tickers":    "SAO:PETR3",
+		"publication_date": "2011-08-22",
+		"access":           "Subscription",
+		"genres":           "PressRelease",
+	}})
+
+	sm.Add(stm.URL{"loc": "/images", "image": []stm.URL{
+		{"loc": "http://www.example.com/image.png", "title": "Image"},
+		{"loc": "http://www.example.com/image1.png", "title": "Image1"},
+	}})
+
+	sm.Add(stm.URL{"loc": "/videos", "video": stm.URL{
+		"thumbnail_loc": "http://www.example.com/video1_thumbnail.png",
+		"title":         "Title",
+		"description":   "Description",
+		"content_loc":   "http://www.example.com/cool_video.mpg",
+		"category":      "Category",
+		"tag":           []string{"one", "two", "three"},
+	}})
+
+	sm.Add(stm.URL{"loc": "/geos", "geo": stm.URL{
+		"format": "kml",
+	}})
+
+	sm.Finalize().PingSearchEngines("http://newengine.com/ping?url=%s")
+}
+```
+
 ### Documentation
 
 - [API Reference](https://godoc.org/github.com/ikeikeikeike/go-sitemap-generator/stm)
+- [sitemap_generator](http://github.com/kjvarga/sitemap_generator)
 
 ### How to testing
 
@@ -181,7 +236,7 @@ $ go get github.com/clbanning/mxj
 Do testing
 
 ```console
-$ (cd ./stm ; go test -v github.com/ikeikeikeike/go-sitemap-generator/stm...)
+$ go test -v -cover ./... 
 ```
 
 #### Inspired by [sitemap_generator](http://github.com/kjvarga/sitemap_generator)

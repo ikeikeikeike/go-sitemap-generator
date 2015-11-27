@@ -12,12 +12,14 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
+// S3Adapter provides implementation for the Adapter interface.
 type S3Adapter struct {
-	Region             string
-	Bucket             string
-	ACL                string
+	Region string
+	Bucket string
+	ACL    string
 }
 
+// Write will create sitemap xml file into the s3.
 func (adp *S3Adapter) Write(loc *Location, data []byte) {
 	var reader io.Reader = bytes.NewReader(data)
 

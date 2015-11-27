@@ -10,6 +10,7 @@ import (
 	"github.com/fatih/structs"
 )
 
+// URLModel is specific sample model for valuedate.
 // http://www.sitemaps.org/protocol.html
 // https://support.google.com/webmasters/answer/178636
 type URLModel struct {
@@ -30,25 +31,30 @@ type URLModel struct {
 	Pagemap    map[string]interface{} `valid:"-"`
 }
 
-// []string{"priority" "changefreq" "lastmod" "expires" "host" "images"
+// fieldnames []string{"priority" "changefreq" "lastmod" "expires" "host" "images"
 // "video" "geo" "news" "videos" "mobile" "alternate" "alternates" "pagemap"}
-var fieldnames []string = ToLowerString(structs.Names(&URLModel{}))
+var fieldnames = ToLowerString(structs.Names(&URLModel{}))
 
+// NewSitemapURL returns the created the SitemapURL's pointer
+// and it validates URL types error.
 func NewSitemapURL(url URL) (*sitemapURL, error) {
 	smu := &sitemapURL{data: url}
 	err := smu.validate()
 	return smu, err
 }
 
+// sitemapURL provides xml validator and xml builder.
 type sitemapURL struct {
 	data URL
 }
 
+// validate is checking correct keys and checks the existence.
+// TODO: Will create value's validator
 func (su *sitemapURL) validate() error {
 	var key string
 	var invalid bool
 
-	for key, _ = range su.data {
+	for key = range su.data {
 		invalid = true
 		for _, name := range fieldnames {
 			if key == name {
@@ -76,6 +82,7 @@ func (su *sitemapURL) validate() error {
 	return nil
 }
 
+// XML is building xml.
 func (su *sitemapURL) XML() []byte {
 	doc := etree.NewDocument()
 	url := doc.CreateElement("url")

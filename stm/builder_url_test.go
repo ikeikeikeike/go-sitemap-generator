@@ -200,8 +200,8 @@ func TestImageSitemaps(t *testing.T) {
 	root := doc.CreateElement("root")
 
 	data := URL{"loc": "/images", "image": []URL{
-		URL{"loc": "http://www.example.com/image.png", "title": "Image"},
-		URL{"loc": "http://www.example.com/image1.png", "title": "Image1"},
+		{"loc": "http://www.example.com/image.png", "title": "Image"},
+		{"loc": "http://www.example.com/image1.png", "title": "Image1"},
 	}}
 	expect := []byte(`
 	<root>
@@ -237,7 +237,7 @@ func TestVideoSitemaps(t *testing.T) {
 		"description":   "Description",
 		"content_loc":   "http://www.example.com/cool_video.mpg",
 		"category":      "Category",
-		"tag":          []string{"one", "two", "three"},
+		"tag":           []string{"one", "two", "three"},
 	}}
 
 	expect := []byte(`

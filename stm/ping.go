@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+// PingSearchEngines requests some ping server from it calls Sitemap.PingSearchEngines.
 func PingSearchEngines(opts *Options, urls ...string) {
 	urls = append(urls, []string{
 		"http://www.google.com/webmasters/tools/ping?sitemap=%s",

@@ -4,20 +4,23 @@ import (
 	"fmt"
 )
 
+// BuilderError provides interface for it can confirm the error in some difference.
 type BuilderError interface {
 	error
 	FullError() bool
 }
 
+// Builder provides interface for adds some kind of url sitemap.
 type Builder interface {
 	Content() []byte
 	Add(interface{}) BuilderError
 	Write()
-	run()
 }
 
+// URL User should use this typedef in main func.
 type URL map[string]interface{}
 
+// URLJoinBy that's convenient.
 func (u URL) URLJoinBy(key string, joins ...string) URL {
 	var values []string
 	for _, k := range joins {
@@ -28,6 +31,7 @@ func (u URL) URLJoinBy(key string, joins ...string) URL {
 	return u
 }
 
+// BungURLJoinBy that's convenient. Though, this is Bung method.
 func (u *URL) BungURLJoinBy(key string, joins ...string) {
 	orig := *u
 
