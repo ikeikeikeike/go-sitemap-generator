@@ -41,6 +41,9 @@ $ go get github.com/ikeikeikeike/go-sitemap-generator/stm
 
 ### Preventing Output
 
+To disable all non-essential output you can give `false` to `sm.SetVerbose`.
+To disable output in-code use the following:
+
 ```go
 sm := stm.NewSitemap()
 sm.SetVerbose(false)
