@@ -244,5 +244,3 @@ Do testing
 ```console
 $ go test -v -cover ./... 
 ```
-
-#### Inspired by [sitemap_generator](http://github.com/kjvarga/sitemap_generator)
