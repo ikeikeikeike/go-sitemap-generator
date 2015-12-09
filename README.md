@@ -242,5 +242,5 @@ $ go get github.com/clbanning/mxj
 Do testing
 
 ```console
-$ go test -v -cover ./... 
+$ go test -v -cover ./...
 ```
