@@ -246,7 +246,7 @@ $ go get github.com/clbanning/mxj
 Do testing
 
 ```console
-$ go test -v -cover ./... 
+$ go test -v -race -cover ./... 
 ```
 
 #### Inspired by [sitemap_generator](http://github.com/kjvarga/sitemap_generator)
