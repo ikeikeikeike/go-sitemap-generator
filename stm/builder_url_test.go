@@ -265,3 +265,58 @@ func TestVideoSitemaps(t *testing.T) {
 		t.Error(`Failed to generate sitemap xml thats deferrent output value in URL type`)
 	}
 }
+
+func TestGeoSitemaps(t *testing.T) {
+	doc := etree.NewDocument()
+	root := doc.CreateElement("root")
+
+	data := URL{"loc": "/geos", "geo": URL{"format": "kml"}}
+
+	expect := []byte(`
+	<root>
+		<geo:geo>
+			<geo:format>kml</geo:format>
+		</geo:geo>
+	</root>`)
+
+	SetBuilderElementValue(root, data, "geo")
+	buf := &bytes.Buffer{}
+	doc.WriteTo(buf)
+
+	mdata, _ := mxj.NewMapXml(buf.Bytes())
+	mexpect, _ := mxj.NewMapXml(expect)
+
+	if !reflect.DeepEqual(mdata, mexpect) {
+		t.Error(`Failed to generate sitemap xml thats deferrent output value in URL type`)
+	}
+}
+
+func TestMobileSitemaps(t *testing.T) {
+	doc := etree.NewDocument()
+	root := doc.CreateElement("root")
+
+	data := URL{"loc": "/mobile", "mobile": true}
+
+	expect := []byte(`
+	<root>
+	  <loc>/mobile</loc>
+	  <mobile:mobile/>
+	</root>`)
+
+	SetBuilderElementValue(root, data.URLJoinBy("loc", "host", "loc"), "loc")
+	SetBuilderElementValue(root, data, "mobile")
+
+	buf := &bytes.Buffer{}
+	doc.WriteTo(buf)
+
+	mdata, _ := mxj.NewMapXml(buf.Bytes())
+	mexpect, _ := mxj.NewMapXml(expect)
+
+	if !reflect.DeepEqual(mdata, mexpect) {
+		t.Error(`Failed to generate sitemap xml thats deferrent output value in URL type`)
+	}
+}
+
+func TestPageMapSitemaps(t *testing.T) {}
+
+func TestAlternateLinks(t *testing.T) {}

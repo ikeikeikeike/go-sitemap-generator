@@ -23,7 +23,7 @@ type URLModel struct {
 	Image      string                 `valid:"url"`
 	Video      string                 `valid:"url"`
 	Tag        string                 `valid:""`
-	Geo        string                 `valid:"latitude,longitude"`
+	Geo        string                 `valid:""`
 	News       string                 `valid:"-"`
 	Mobile     bool                   `valid:"-"`
 	Alternate  string                 `valid:"-"`
@@ -105,8 +105,8 @@ func (su *sitemapURL) XML() []byte {
 	}
 
 	SetBuilderElementValue(url, su.data, "news")
-	SetBuilderElementValue(url, su.data, "image")
 	SetBuilderElementValue(url, su.data, "video")
+	SetBuilderElementValue(url, su.data, "image")
 	SetBuilderElementValue(url, su.data, "geo")
 
 	buf := &bytes.Buffer{}
