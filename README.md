@@ -116,12 +116,12 @@ import (
 func main() {
 	sm := stm.NewSitemap()
 	sm.SetDefaultHost("http://example.com")
-	sm.SetSitemapsPath("sitemap-generator")  // default: public
+	sm.SetSitemapsPath("sitemap-generator") // default: public
 	sm.SetSitemapsHost("http://s3.amazonaws.com/sitemap-generator/")
 	sm.SetAdapter(&stm.S3Adapter{
 		Region: "ap-northeast-1",
 		Bucket: "your-bucket",
-		ACL: "public-read",
+		ACL:    "public-read",
 	})
 
 	sm.Create()
@@ -139,15 +139,15 @@ func main() {
 ```go
 sm.Add(stm.URL{"loc": "/news", "news": stm.URL{
 	"publication": stm.URL{
-		"name":	 "Example",
+		"name":     "Example",
 		"language": "en",
 	},
-	"title":			"My Article",
-	"keywords":		 "my article, articles about myself",
-	"stock_tickers":	"SAO:PETR3",
+	"title":            "My Article",
+	"keywords":         "my article, articles about myself",
+	"stock_tickers":    "SAO:PETR3",
 	"publication_date": "2011-08-22",
-	"access":			"Subscription",
-	"genres":			"PressRelease",
+	"access":           "Subscription",
+	"genres":           "PressRelease",
 }})
 ```
 
@@ -158,11 +158,11 @@ Look at [Creating a Google News Sitemap](https://support.google.com/news/publish
 ```go
 sm.Add(stm.URL{"loc": "/videos", "video": stm.URL{
 	"thumbnail_loc": "http://www.example.com/video1_thumbnail.png",
-	"title":		 "Title",
-	"description":	"Description",
-	"content_loc":	"http://www.example.com/cool_video.mpg",
-	"category":		"Category",
-	"tag":			[]string{"one", "two", "three"},
+	"title":         "Title",
+	"description":   "Description",
+	"content_loc":   "http://www.example.com/cool_video.mpg",
+	"category":      "Category",
+	"tag":           []string{"one", "two", "three"},
 }})
 ```
 
@@ -234,15 +234,15 @@ func main() {
 
 	sm.Add(stm.URL{"loc": "/news", "news": stm.URL{
 		"publication": stm.URL{
-			"name":	 "Example",
+			"name":     "Example",
 			"language": "en",
 		},
-		"title":			"My Article",
-		"keywords":		 "my article, articles about myself",
-		"stock_tickers":	"SAO:PETR3",
+		"title":            "My Article",
+		"keywords":         "my article, articles about myself",
+		"stock_tickers":    "SAO:PETR3",
 		"publication_date": "2011-08-22",
-		"access":			"Subscription",
-		"genres":			"PressRelease",
+		"access":           "Subscription",
+		"genres":           "PressRelease",
 	}})
 
 	sm.Add(stm.URL{"loc": "/images", "image": []stm.URL{
@@ -252,11 +252,11 @@ func main() {
 
 	sm.Add(stm.URL{"loc": "/videos", "video": stm.URL{
 		"thumbnail_loc": "http://www.example.com/video1_thumbnail.png",
-		"title":		 "Title",
-		"description":	"Description",
-		"content_loc":	"http://www.example.com/cool_video.mpg",
-		"category":		"Category",
-		"tag":			[]string{"one", "two", "three"},
+		"title":         "Title",
+		"description":   "Description",
+		"content_loc":   "http://www.example.com/cool_video.mpg",
+		"category":      "Category",
+		"tag":           []string{"one", "two", "three"},
 	}})
 
 	sm.Add(stm.URL{"loc": "/geos", "geo": stm.URL{
