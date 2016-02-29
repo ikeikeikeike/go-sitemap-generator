@@ -17,6 +17,7 @@ type S3Adapter struct {
 	Region string
 	Bucket string
 	ACL    string
+	Creds  *credentials.Credentials
 }
 
 // Write will create sitemap xml file into the s3.
@@ -36,7 +37,10 @@ func (adp *S3Adapter) Write(loc *Location, data []byte) {
 		}()
 	}
 
-	creds := credentials.NewEnvCredentials()
+	creds := adp.Creds
+	if creds == nil {
+		creds = credentials.NewEnvCredentials()
+	}
 	creds.Get()
 
 	sess := session.New(&aws.Config{

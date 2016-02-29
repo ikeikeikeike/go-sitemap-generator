@@ -110,6 +110,7 @@ sm.SetFilename("new_filename")
 package main
 
 import (
+	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/ikeikeikeike/go-sitemap-generator/stm"
 )
 
@@ -122,6 +123,7 @@ func main() {
 		Region: "ap-northeast-1",
 		Bucket: "your-bucket",
 		ACL:    "public-read",
+		Creds:  credentials.NewEnvCredentials(),
 	})
 
 	sm.Create()
