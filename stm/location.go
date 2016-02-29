@@ -73,7 +73,12 @@ func (loc *Location) URL() string {
 func (loc *Location) Filesize() int64 {
 	f, _ := os.Open(loc.Path())
 	defer f.Close()
-	fi, _ := f.Stat()
+
+	fi, err := f.Stat()
+	if err != nil {
+		return 0
+	}
+
 	return fi.Size()
 }
 
@@ -149,10 +154,13 @@ func (loc *Location) Summary(linkCount int) string {
 		return ""
 	}
 
-	return fmt.Sprintf(
-		"%s '%d' links / %d",
-		loc.PathInPublic(),
-		linkCount,
-		loc.Filesize(),
-	)
+	out := fmt.Sprintf("%s '%d' links",
+		loc.PathInPublic(), linkCount)
+
+	size := loc.Filesize()
+	if size <= 1 {
+		return out
+	}
+
+	return fmt.Sprintf("%s / %d bytes", out, size)
 }
