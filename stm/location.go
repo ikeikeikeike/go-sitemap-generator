@@ -158,7 +158,7 @@ func (loc *Location) Summary(linkCount int) string {
 		loc.PathInPublic(), linkCount)
 
 	size := loc.Filesize()
-	if size <= 1 {
+	if size <= 0 {
 		return out
 	}
 
