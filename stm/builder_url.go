@@ -1,7 +1,6 @@
 package stm
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
 	"time"
@@ -109,9 +108,12 @@ func (su *sitemapURL) XML() []byte {
 	SetBuilderElementValue(url, su.data, "image")
 	SetBuilderElementValue(url, su.data, "geo")
 
-	buf := &bytes.Buffer{}
+	buf := poolBuffer.Get()
 	// doc.Indent(2)
 	doc.WriteTo(buf)
 
-	return buf.Bytes()
+	bytes := buf.Bytes()
+	poolBuffer.Put(buf)
+
+	return bytes
 }

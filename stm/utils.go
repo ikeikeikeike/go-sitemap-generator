@@ -1,14 +1,43 @@
 package stm
 
 import (
+	"bytes"
 	"fmt"
 	"net/url"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/beevik/etree"
 	"github.com/imdario/mergo"
 )
+
+// BufferPool is
+type BufferPool struct {
+	sync.Pool
+}
+
+// NewBufferPool is
+func NewBufferPool() *BufferPool {
+	return &BufferPool{
+		Pool: sync.Pool{New: func() interface{} {
+			b := bytes.NewBuffer(make([]byte, 256))
+			b.Reset()
+			return b
+		}},
+	}
+}
+
+// Get is
+func (bp *BufferPool) Get() *bytes.Buffer {
+	return bp.Pool.Get().(*bytes.Buffer)
+}
+
+// Put is
+func (bp *BufferPool) Put(b *bytes.Buffer) {
+	b.Reset()
+	bp.Pool.Put(b)
+}
 
 // SetBuilderElementValue if it will change to struct from map if the future's
 // author is feeling a bothersome in this function.

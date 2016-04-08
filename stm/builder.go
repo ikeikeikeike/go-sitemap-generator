@@ -4,6 +4,8 @@ import (
 	"fmt"
 )
 
+var poolBuffer = NewBufferPool()
+
 // BuilderError provides interface for it can confirm the error in some difference.
 type BuilderError interface {
 	error

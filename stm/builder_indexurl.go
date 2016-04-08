@@ -1,7 +1,6 @@
 package stm
 
 import (
-	"bytes"
 	"time"
 
 	"github.com/beevik/etree"
@@ -29,9 +28,12 @@ func (su *sitemapIndexURL) XML() []byte {
 		lastmod.SetText(time.Now().Format(time.RFC3339))
 	}
 
-	buf := &bytes.Buffer{}
+	buf := poolBuffer.Get()
 	// doc.Indent(2)
 	doc.WriteTo(buf)
 
-	return buf.Bytes()
+	bytes := buf.Bytes()
+	poolBuffer.Put(buf)
+
+	return bytes
 }
