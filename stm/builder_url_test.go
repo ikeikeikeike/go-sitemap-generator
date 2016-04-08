@@ -320,3 +320,57 @@ func TestMobileSitemaps(t *testing.T) {
 func TestPageMapSitemaps(t *testing.T) {}
 
 func TestAlternateLinks(t *testing.T) {}
+
+func BenchmarkGenerateXML(b *testing.B) {
+
+	b.ReportAllocs()
+	b.ResetTimer()
+
+	forPerformance := 500
+
+	for k := 0; k <= forPerformance; k++ {
+		for i := 1; i <= forPerformance; i++ {
+
+			var smu SitemapURL
+			var data URL
+
+			data = URL{"loc": "/mobile", "mobile": true}
+			smu, _ = NewSitemapURL(data)
+			smu.XML()
+
+			data = URL{"loc": "/images", "image": []URL{
+				{"loc": "http://www.example.com/image.png", "title": "Image"},
+				{"loc": "http://www.example.com/image1.png", "title": "Image1"},
+			}}
+			smu, _ = NewSitemapURL(data)
+			smu.XML()
+
+			data = URL{"loc": "/videos", "video": URL{
+				"thumbnail_loc": "http://www.example.com/video1_thumbnail.png",
+				"title":         "Title",
+				"description":   "Description",
+				"content_loc":   "http://www.example.com/cool_video.mpg",
+				"category":      "Category",
+				"tag":           []string{"one", "two", "three"},
+			}}
+			smu, _ = NewSitemapURL(data)
+			smu.XML()
+
+			data = URL{"loc": "/news", "news": URL{
+				"publication": URL{
+					"name":     "Example",
+					"language": "en",
+				},
+				"title":            "My Article",
+				"keywords":         "my article, articles about myself",
+				"stock_tickers":    "SAO:PETR3",
+				"publication_date": "2011-08-22",
+				"access":           "Subscription",
+				"genres":           "PressRelease",
+			}}
+
+			smu, _ = NewSitemapURL(data)
+			smu.XML()
+		}
+	}
+}
