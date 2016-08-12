@@ -106,6 +106,8 @@ sm.SetFilename("new_filename")
 
 ### Upload sitemap to S3
 
+Recently I disabled this module [here](https://github.com/ikeikeikeike/go-sitemap-generator/blob/master/stm/_adapter_s3.go).
+
 ```go
 package main
 
