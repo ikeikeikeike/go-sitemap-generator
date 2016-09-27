@@ -70,13 +70,20 @@ func (b *BuilderFile) Content() []byte {
 	return b.content
 }
 
+// XMLContent will return an XML of the sitemap built
+func (b *BuilderFile) XMLContent() []byte {
+	c := bytes.Join(bytes.Fields(XMLHeader), []byte(" "))
+	c = append(append(c, b.Content()...), XMLFooter...)
+
+	return c
+}
+
 // Write will write pooled bytes with header and footer to
 // Location path for output sitemap file.
 func (b *BuilderFile) Write() {
 	b.loc.ReserveName()
 
-	c := bytes.Join(bytes.Fields(XMLHeader), []byte(" "))
-	c = append(append(c, b.Content()...), XMLFooter...)
+	c := b.XMLContent()
 
 	b.loc.Write(c, b.linkcnt)
 	b.clear()
