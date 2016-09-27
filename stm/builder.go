@@ -24,6 +24,12 @@ type SitemapURL interface {
 	XML() []byte
 }
 
+// Attrs defines for xml attribute.
+type Attrs []interface{}
+
+// Attr defines for xml attribute.
+type Attr map[string]string
+
 // URL User should use this typedef in main func.
 type URL map[string]interface{}
 

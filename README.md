@@ -167,6 +167,7 @@ sm.Add(stm.URL{"loc": "/videos", "video": stm.URL{
 	"content_loc":   "http://www.example.com/cool_video.mpg",
 	"category":      "Category",
 	"tag":           []string{"one", "two", "three"},
+	"player_loc":    Attrs{"https://example.com/p/flash/moogaloop/6.2.9/moogaloop.swf?clip_id=26", Attr{"allow_embed": "Yes", "autoplay": "autoplay=1"}},
 }})
 ```
 
