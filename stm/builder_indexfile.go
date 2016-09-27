@@ -33,10 +33,17 @@ func (b *BuilderIndexfile) Content() []byte {
 	return b.content
 }
 
-// Write and Builderfile.Write are almost the same behavior.
-func (b *BuilderIndexfile) Write() {
+// XMLContent and BuilderFile.XMLContent share almost the same behavior.
+func (b *BuilderIndexfile) XMLContent() []byte {
 	c := bytes.Join(bytes.Fields(IndexXMLHeader), []byte(" "))
 	c = append(append(c, b.Content()...), IndexXMLFooter...)
+
+	return c
+}
+
+// Write and Builderfile.Write are almost the same behavior.
+func (b *BuilderIndexfile) Write() {
+	c := b.XMLContent()
 
 	b.loc.Write(c, b.linkcnt)
 }

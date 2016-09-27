@@ -14,6 +14,7 @@ type BuilderError interface {
 
 // Builder provides interface for adds some kind of url sitemap.
 type Builder interface {
+	XMLContent() []byte
 	Content() []byte
 	Add(interface{}) BuilderError
 	Write()

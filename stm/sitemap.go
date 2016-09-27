@@ -89,6 +89,11 @@ func (sm *Sitemap) Add(url interface{}) *Sitemap {
 	return sm
 }
 
+// XMLContent returns the XML content of the sitemap
+func (sm *Sitemap) XMLContent() []byte {
+	return sm.bldr.XMLContent()
+}
+
 // Finalize writes sitemap and index files if it had some
 // specific condition in BuilderFile struct.
 func (sm *Sitemap) Finalize() *Sitemap {
