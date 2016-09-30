@@ -366,6 +366,51 @@ func TestAttr(t *testing.T) {
 	}
 }
 
+func TestAttrWithoutTypedef(t *testing.T) {
+	doc := etree.NewDocument()
+	root := doc.CreateElement("root")
+
+	data := URL{"loc": "/videos", "video": URL{
+		"thumbnail_loc": "http://www.example.com/video1_thumbnail.png",
+		"title":         "Title",
+		"description":   "Description",
+		"content_loc":   "http://www.example.com/cool_video.mpg",
+		"category":      "Category",
+		"tag":           []string{"one", "two", "three"},
+		"player_loc":    Attrs{"https://f.vimeocdn.com/p/flash/moogaloop/6.2.9/moogaloop.swf?clip_id=26", map[string]string{"allow_embed": "Yes", "autoplay": "autoplay=1"}},
+	}}
+
+	expect := []byte(`
+	<root>
+		<video:video>
+			<video:thumbnail_loc>http://www.example.com/video1_thumbnail.png</video:thumbnail_loc>
+			<video:title>Title</video:title>
+			<video:description>Description</video:description>
+			<video:content_loc>http://www.example.com/cool_video.mpg</video:content_loc>
+			<video:tag>one</video:tag>
+			<video:tag>two</video:tag>
+			<video:tag>three</video:tag>
+			<video:category>Category</video:category>
+			<video:player_loc allow_embed="Yes" autoplay="autoplay=1">https://f.vimeocdn.com/p/flash/moogaloop/6.2.9/moogaloop.swf?clip_id=26</video:player_loc>
+		</video:video>
+	</root>`)
+
+	SetBuilderElementValue(root, data, "video")
+
+	buf := &bytes.Buffer{}
+	// doc.Indent(2)
+	doc.WriteTo(buf)
+
+	mdata, _ := mxj.NewMapXml(buf.Bytes())
+	mexpect, _ := mxj.NewMapXml(expect)
+
+	// print(string(buf.Bytes()))
+
+	if !reflect.DeepEqual(mdata, mexpect) {
+		t.Error(`Failed to generate sitemap xml thats deferrent output value in URL type`)
+	}
+}
+
 func BenchmarkGenerateXML(b *testing.B) {
 
 	b.ReportAllocs()

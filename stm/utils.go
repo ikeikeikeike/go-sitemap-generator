@@ -88,9 +88,18 @@ func SetBuilderElementValue(elm *etree.Element, data map[string]interface{}, bas
 			val, attrs := value[0], value[1]
 
 			child, _ = SetBuilderElementValue(elm, URL{basekey: val}, basekey)
-			for k, v := range attrs.(Attr) {
-				child.CreateAttr(k, v)
+			switch attr := attrs.(type) {
+			case map[string]string:
+				for k, v := range attr {
+					child.CreateAttr(k, v)
+				}
+			// TODO: gotta remove below
+			case Attr:
+				for k, v := range attr {
+					child.CreateAttr(k, v)
+				}
 			}
+
 		case interface{}:
 			var childkey string
 			if sk == "" {
