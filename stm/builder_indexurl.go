@@ -23,7 +23,7 @@ func (su *sitemapIndexURL) XML() []byte {
 
 	SetBuilderElementValue(sitemap, su.data, "loc")
 
-	if !SetBuilderElementValue(sitemap, su.data, "lastmod") {
+	if _, ok := SetBuilderElementValue(sitemap, su.data, "lastmod"); !ok {
 		lastmod := sitemap.CreateElement("lastmod")
 		lastmod.SetText(time.Now().Format(time.RFC3339))
 	}

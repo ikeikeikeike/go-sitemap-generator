@@ -41,7 +41,9 @@ func (bp *BufferPool) Put(b *bytes.Buffer) {
 
 // SetBuilderElementValue if it will change to struct from map if the future's
 // author is feeling a bothersome in this function.
-func SetBuilderElementValue(elm *etree.Element, data map[string]interface{}, basekey string) bool {
+func SetBuilderElementValue(elm *etree.Element, data map[string]interface{}, basekey string) (*etree.Element, bool) {
+	var child *etree.Element
+
 	key := basekey
 	ts, tk := spaceDecompose(elm.Tag)
 	_, sk := spaceDecompose(elm.Space)
@@ -56,32 +58,48 @@ func SetBuilderElementValue(elm *etree.Element, data map[string]interface{}, bas
 		switch value := values.(type) {
 		case nil:
 		default:
-			child := elm.CreateElement(key)
+			child = elm.CreateElement(key)
 			child.SetText(fmt.Sprint(value))
 		case int:
-			child := elm.CreateElement(key)
+			child = elm.CreateElement(key)
 			child.SetText(fmt.Sprint(value))
 		case string:
-			child := elm.CreateElement(key)
+			child = elm.CreateElement(key)
 			child.SetText(value)
 		case float64, float32:
-			child := elm.CreateElement(key)
+			child = elm.CreateElement(key)
 			child.SetText(fmt.Sprint(value))
 		case time.Time:
-			child := elm.CreateElement(key)
+			child = elm.CreateElement(key)
 			child.SetText(value.Format(time.RFC3339))
 		case bool:
 			_ = elm.CreateElement(fmt.Sprintf("%s:%s", key, key))
 		case []int:
 			for _, v := range value {
-				child := elm.CreateElement(key)
+				child = elm.CreateElement(key)
 				child.SetText(fmt.Sprint(v))
 			}
 		case []string:
 			for _, v := range value {
-				child := elm.CreateElement(key)
+				child = elm.CreateElement(key)
 				child.SetText(v)
 			}
+		case Attrs:
+			val, attrs := value[0], value[1]
+
+			child, _ = SetBuilderElementValue(elm, URL{basekey: val}, basekey)
+			switch attr := attrs.(type) {
+			case map[string]string:
+				for k, v := range attr {
+					child.CreateAttr(k, v)
+				}
+			// TODO: gotta remove below
+			case Attr:
+				for k, v := range attr {
+					child.CreateAttr(k, v)
+				}
+			}
+
 		case interface{}:
 			var childkey string
 			if sk == "" {
@@ -106,9 +124,10 @@ func SetBuilderElementValue(elm *etree.Element, data map[string]interface{}, bas
 			}
 		}
 
-		return true
+		return child, true
 	}
-	return false
+
+	return child, false
 }
 
 // MergeMap TODO: Slow function: It wants to change fast function

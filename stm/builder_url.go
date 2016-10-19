@@ -90,15 +90,15 @@ func (su *sitemapURL) XML() []byte {
 	SetBuilderElementValue(url, su.data, "expires")
 	SetBuilderElementValue(url, su.data, "mobile")
 
-	if !SetBuilderElementValue(url, su.data, "changefreq") {
+	if _, ok := SetBuilderElementValue(url, su.data, "changefreq"); !ok {
 		changefreq := url.CreateElement("changefreq")
 		changefreq.SetText("weekly")
 	}
-	if !SetBuilderElementValue(url, su.data, "priority") {
+	if _, ok := SetBuilderElementValue(url, su.data, "priority"); !ok {
 		priority := url.CreateElement("priority")
 		priority.SetText("0.5")
 	}
-	if !SetBuilderElementValue(url, su.data, "lastmod") {
+	if _, ok := SetBuilderElementValue(url, su.data, "lastmod"); !ok {
 		lastmod := url.CreateElement("lastmod")
 		lastmod.SetText(time.Now().Format(time.RFC3339))
 	}
