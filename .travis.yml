@@ -12,4 +12,4 @@ install:
   - go list -f '{{range .Imports}}{{.}} {{end}}' ./... | xargs go get -d -v
   - go list -f '{{range .TestImports}}{{.}} {{end}}' ./... | xargs go get -d -v
 
-gobuild_args: -race
+gobuild_args: -v -race
