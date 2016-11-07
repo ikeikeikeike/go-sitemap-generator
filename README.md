@@ -233,7 +233,7 @@ func main() {
 
 	sm.Create()
 
-	sm.Add(stm.URL{"loc": "/home", "changefreq": "dayly"})
+	sm.Add(stm.URL{"loc": "/home", "changefreq": "daily"})
 
 	sm.Add(stm.URL{"loc": "/abouts", "mobile": true})
 
