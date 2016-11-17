@@ -28,6 +28,15 @@ func (b *BuilderIndexfile) Add(link interface{}) BuilderError {
 	return nil
 }
 
+func (b *BuilderIndexfile) AddLocation(loc *Location) BuilderError {
+	smu := NewSitemapIndexURL(URL{"loc": loc.URL()})
+	b.content = append(b.content, smu.XML()...)
+
+	b.totalcnt ++
+	b.linkcnt++
+	return nil
+}
+
 // Content and BuilderFile.Content are almost the same behavior.
 func (b *BuilderIndexfile) Content() []byte {
 	return b.content
@@ -41,9 +50,16 @@ func (b *BuilderIndexfile) XMLContent() []byte {
 	return c
 }
 
+// clear will initialize xml content.
+func (b *BuilderIndexfile) clear() {
+	b.content = make([]byte, 0, MaxSitemapFilesize)
+}
+
 // Write and Builderfile.Write are almost the same behavior.
 func (b *BuilderIndexfile) Write() {
+	b.loc.ReserveName()
 	c := b.XMLContent()
 
 	b.loc.Write(c, b.linkcnt)
+	b.clear()
 }
