@@ -17,16 +17,17 @@ func (e *builderFileError) FullError() bool {
 }
 
 // NewBuilderFile returns the created the BuilderFile's pointer
-func NewBuilderFile(loc *Location) *BuilderFile {
-	b := &BuilderFile{loc: loc}
+func NewBuilderFile(opts *Options, loc *Location) *BuilderFile {
+	b := &BuilderFile{opts: opts, loc: loc}
 	b.clear()
 	return b
 }
 
 // BuilderFile provides implementation for the Builder interface.
 type BuilderFile struct {
-	content []byte
+	opts    *Options
 	loc     *Location
+	content []byte
 	linkcnt int
 	newscnt int
 }
@@ -37,7 +38,7 @@ func (b *BuilderFile) Add(url interface{}) BuilderError {
 		URL{"host": b.loc.opts.defaultHost},
 	)
 
-	smu, err := NewSitemapURL(u)
+	smu, err := NewSitemapURL(b.opts, u)
 	if err != nil {
 		log.Fatalf("[F] Sitemap: %s", err)
 	}

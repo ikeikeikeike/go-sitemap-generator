@@ -3,12 +3,13 @@ package stm
 import "bytes"
 
 // NewBuilderIndexfile returns the created the BuilderIndexfile's pointer
-func NewBuilderIndexfile(loc *Location) *BuilderIndexfile {
-	return &BuilderIndexfile{loc: loc}
+func NewBuilderIndexfile(opts *Options, loc *Location) *BuilderIndexfile {
+	return &BuilderIndexfile{opts: opts, loc: loc}
 }
 
 // BuilderIndexfile provides implementation for the Builder interface.
 type BuilderIndexfile struct {
+	opts     *Options
 	loc      *Location
 	content  []byte
 	linkcnt  int
@@ -20,7 +21,7 @@ func (b *BuilderIndexfile) Add(link interface{}) BuilderError {
 	bldr := link.(*BuilderFile)
 	bldr.Write()
 
-	smu := NewSitemapIndexURL(URL{"loc": bldr.loc.URL()})
+	smu := NewSitemapIndexURL(b.opts, URL{"loc": bldr.loc.URL()})
 	b.content = append(b.content, smu.XML()...)
 
 	b.totalcnt += bldr.linkcnt
