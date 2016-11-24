@@ -11,19 +11,19 @@ import (
 )
 
 func TestBlank(t *testing.T) {
-	if _, err := NewSitemapURL(URL{}); err == nil {
+	if _, err := NewSitemapURL(&Options{}, URL{}); err == nil {
 		t.Errorf(`Failed to validate blank arg ( URL{} ): %s`, err)
 	}
 }
 
 func TestItHasLocElement(t *testing.T) {
-	if _, err := NewSitemapURL(URL{}); err == nil {
+	if _, err := NewSitemapURL(&Options{}, URL{}); err == nil {
 		t.Errorf(`Failed to validate about must have loc attribute in URL type ( URL{} ): %s`, err)
 	}
 }
 
 func TestJustSetLocElement(t *testing.T) {
-	smu, err := NewSitemapURL(URL{"loc": "path", "host": "http://example.com"})
+	smu, err := NewSitemapURL(&Options{}, URL{"loc": "path", "host": "http://example.com"})
 
 	if err != nil {
 		t.Fatalf(`Fatal to validate! This is a critical error: %s`, err)
@@ -45,7 +45,7 @@ func TestJustSetLocElement(t *testing.T) {
 }
 
 func TestJustSetLocElementAndThenItNeedsCompleteValues(t *testing.T) {
-	smu, err := NewSitemapURL(URL{"loc": "path", "host": "http://example.com"})
+	smu, err := NewSitemapURL(&Options{}, URL{"loc": "path", "host": "http://example.com"})
 
 	if err != nil {
 		t.Fatalf(`Fatal to validate! This is a critical error: %s`, err)
@@ -93,7 +93,7 @@ func TestJustSetLocElementAndThenItNeedsCompleteValues(t *testing.T) {
 }
 
 func TestSetNilValue(t *testing.T) {
-	smu, err := NewSitemapURL(URL{"loc": "path", "priority": nil, "changefreq": nil, "lastmod": nil, "host": "http://example.com"})
+	smu, err := NewSitemapURL(&Options{}, URL{"loc": "path", "priority": nil, "changefreq": nil, "lastmod": nil, "host": "http://example.com"})
 
 	if err != nil {
 		t.Fatalf(`Fatal to validate! This is a critical error: %s`, err)
@@ -130,7 +130,7 @@ func TestSetNilValue(t *testing.T) {
 }
 
 func TestAutoGenerateSitemapHost(t *testing.T) {
-	smu, err := NewSitemapURL(URL{"loc": "path", "host": "http://example.com"})
+	smu, err := NewSitemapURL(&Options{}, URL{"loc": "path", "host": "http://example.com"})
 
 	if err != nil {
 		t.Fatalf(`Fatal to validate! This is a critical error: %s`, err)
@@ -425,14 +425,14 @@ func BenchmarkGenerateXML(b *testing.B) {
 			var data URL
 
 			data = URL{"loc": "/mobile", "mobile": true}
-			smu, _ = NewSitemapURL(data)
+			smu, _ = NewSitemapURL(&Options{}, data)
 			smu.XML()
 
 			data = URL{"loc": "/images", "image": []URL{
 				{"loc": "http://www.example.com/image.png", "title": "Image"},
 				{"loc": "http://www.example.com/image1.png", "title": "Image1"},
 			}}
-			smu, _ = NewSitemapURL(data)
+			smu, _ = NewSitemapURL(&Options{}, data)
 			smu.XML()
 
 			data = URL{"loc": "/videos", "video": URL{
@@ -443,7 +443,7 @@ func BenchmarkGenerateXML(b *testing.B) {
 				"category":      "Category",
 				"tag":           []string{"one", "two", "three"},
 			}}
-			smu, _ = NewSitemapURL(data)
+			smu, _ = NewSitemapURL(&Options{}, data)
 			smu.XML()
 
 			data = URL{"loc": "/news", "news": URL{
@@ -459,7 +459,7 @@ func BenchmarkGenerateXML(b *testing.B) {
 				"genres":           "PressRelease",
 			}}
 
-			smu, _ = NewSitemapURL(data)
+			smu, _ = NewSitemapURL(&Options{}, data)
 			smu.XML()
 		}
 	}

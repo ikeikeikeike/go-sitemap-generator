@@ -36,14 +36,15 @@ var fieldnames = ToLowerString(structs.Names(&URLModel{}))
 
 // NewSitemapURL returns the created the SitemapURL's pointer
 // and it validates URL types error.
-func NewSitemapURL(url URL) (SitemapURL, error) {
-	smu := &sitemapURL{data: url}
+func NewSitemapURL(opts *Options, url URL) (SitemapURL, error) {
+	smu := &sitemapURL{opts: opts, data: url}
 	err := smu.validate()
 	return smu, err
 }
 
 // sitemapURL provides xml validator and xml builder.
 type sitemapURL struct {
+	opts *Options
 	data URL
 }
 
@@ -108,8 +109,10 @@ func (su *sitemapURL) XML() []byte {
 	SetBuilderElementValue(url, su.data, "image")
 	SetBuilderElementValue(url, su.data, "geo")
 
+	if su.opts.pretty {
+		doc.Indent(2)
+	}
 	buf := poolBuffer.Get()
-	// doc.Indent(2)
 	doc.WriteTo(buf)
 
 	bytes := buf.Bytes()

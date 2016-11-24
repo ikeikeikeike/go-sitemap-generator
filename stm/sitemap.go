@@ -61,6 +61,11 @@ func (sm *Sitemap) SetCompress(compress bool) {
 	sm.opts.SetCompress(compress)
 }
 
+// SetPretty option allows pretty formating to the output files.
+func (sm *Sitemap) SetPretty(pretty bool) {
+	sm.opts.SetPretty(pretty)
+}
+
 // SetFilename can apply any name in this method if you wants to change output file name
 func (sm *Sitemap) SetFilename(filename string) {
 	sm.opts.SetFilename(filename)
@@ -68,14 +73,14 @@ func (sm *Sitemap) SetFilename(filename string) {
 
 // Create method must be that calls first this method in that before call to Add method on this struct.
 func (sm *Sitemap) Create() *Sitemap {
-	sm.bldrs = NewBuilderIndexfile(sm.opts.IndexLocation())
+	sm.bldrs = NewBuilderIndexfile(sm.opts, sm.opts.IndexLocation())
 	return sm
 }
 
 // Add Should call this after call to Create method on this struct.
 func (sm *Sitemap) Add(url interface{}) *Sitemap {
 	if sm.bldr == nil {
-		sm.bldr = NewBuilderFile(sm.opts.Location())
+		sm.bldr = NewBuilderFile(sm.opts, sm.opts.Location())
 	}
 
 	err := sm.bldr.Add(url)

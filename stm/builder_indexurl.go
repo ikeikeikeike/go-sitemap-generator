@@ -7,12 +7,13 @@ import (
 )
 
 // NewSitemapIndexURL and NewSitemapURL are almost the same behavior.
-func NewSitemapIndexURL(url URL) SitemapURL {
-	return &sitemapIndexURL{data: url}
+func NewSitemapIndexURL(opts *Options, url URL) SitemapURL {
+	return &sitemapIndexURL{opts: opts, data: url}
 }
 
 // sitemapIndexURL and sitemapURL are almost the same behavior.
 type sitemapIndexURL struct {
+	opts *Options
 	data URL
 }
 
@@ -28,8 +29,10 @@ func (su *sitemapIndexURL) XML() []byte {
 		lastmod.SetText(time.Now().Format(time.RFC3339))
 	}
 
+	if su.opts.pretty {
+		doc.Indent(2)
+	}
 	buf := poolBuffer.Get()
-	// doc.Indent(2)
 	doc.WriteTo(buf)
 
 	bytes := buf.Bytes()

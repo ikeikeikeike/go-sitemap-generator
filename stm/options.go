@@ -11,6 +11,7 @@ func NewOptions() *Options {
 		filename:     "sitemap",
 		verbose:      true,
 		compress:     true,
+		pretty:       false,
 		adp:          NewFileAdapter(),
 	}
 }
@@ -24,6 +25,7 @@ type Options struct {
 	filename     string
 	verbose      bool
 	compress     bool
+	pretty       bool
 	adp          Adapter
 	nmr          *Namer
 	loc          *Location
@@ -62,6 +64,11 @@ func (opts *Options) SetVerbose(verbose bool) {
 // SetCompress sets that arg from Sitemap.SetCompress method
 func (opts *Options) SetCompress(compress bool) {
 	opts.compress = compress
+}
+
+// SetPretty option sets pretty option to Options struct which allows pretty formatting to output files.
+func (opts *Options) SetPretty(pretty bool) {
+	opts.pretty = pretty
 }
 
 // SetAdapter sets that arg from Sitemap.SetAdapter method
