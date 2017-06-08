@@ -284,6 +284,8 @@ func main() {
 		"io/ioutil"
 		"log"
 		"net/http"
+
+		"github.com/ikeikeikeike/go-sitemap-generator/stm"
 	)
 	
 	func buildSitemap() {
