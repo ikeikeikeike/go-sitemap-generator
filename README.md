@@ -212,7 +212,8 @@ sm.Add(stm.URL{"loc": "mobiles", "mobile": true})
 
 Look at [Feature phone sitemaps](https://support.google.com/webmasters/answer/6082207) as required.
 
-### Full Example
+
+### Full example
 
 ```go
 package main
@@ -277,42 +278,40 @@ func main() {
 
 
 ```go
-	package main
+package main
 
-	import (
-		"fmt"
-		"io/ioutil"
-		"log"
-		"net/http"
+import (
+	"log"
+	"net/http"
 
-		"github.com/ikeikeikeike/go-sitemap-generator/stm"
-	)
-	
-	func buildSitemap() {
-		sm := stm.NewSitemap()
-		sm.SetDefaultHost("http://example.com")
+	"github.com/ikeikeikeike/go-sitemap-generator/stm"
+)
 
-		sm.Create()
+func buildSitemap() *stm.Sitemap {
+	sm := stm.NewSitemap()
+	sm.SetDefaultHost("http://example.com")
 
-		sm.Add(stm.URL{"loc": "/", "changefreq": "daily"})
+	sm.Create()
+	sm.Add(stm.URL{"loc": "/", "changefreq": "daily"})
 
-		// Note: Do not call `sm.Finalize()` because it flushes
-		// the underlying datastructure from memory to disk.
+	// Note: Do not call `sm.Finalize()` because it flushes
+	// the underlying datastructure from memory to disk.
 
-		return sm
-	}
+	return sm
+}
 
-	func main() {
-		sm := buildSitemap()
+func main() {
+	sm := buildSitemap()
 
-		r.HandleFunc("/sitemap.xml", func(w http.ResponseWriter, r *http.Request) {
-			// Go's webserver automatically sets the correct `Content-Type` header.
-			w.Write(sm.XMLContent())
-			return
-		})
+	mux := http.NewServeMux()
+	mux.HandleFunc("/sitemap.xml", func(w http.ResponseWriter, r *http.Request) {
+		// Go's webserver automatically sets the correct `Content-Type` header.
+		w.Write(sm.XMLContent())
+		return
+	})
 
-		log.Fatal(http.ListenAndServe(":8080", nil))
-	}
+	log.Fatal(http.ListenAndServe(":8080", mux))
+}
 ```
 
 
