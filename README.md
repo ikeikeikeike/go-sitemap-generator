@@ -273,6 +273,49 @@ func main() {
 }
 ```
 
+### Webserver example
+
+
+```go
+	package main
+
+	import (
+		"fmt"
+		"io/ioutil"
+		"log"
+		"net/http"
+
+		"github.com/ikeikeikeike/go-sitemap-generator/stm"
+	)
+	
+	func buildSitemap() {
+		sm := stm.NewSitemap()
+		sm.SetDefaultHost("http://example.com")
+
+		sm.Create()
+
+		sm.Add(stm.URL{"loc": "/", "changefreq": "daily"})
+
+		// Note: Do not call `sm.Finalize()` because it flushes
+		// the underlying datastructure from memory to disk.
+
+		return sm
+	}
+
+	func main() {
+		sm := buildSitemap()
+
+		r.HandleFunc("/sitemap.xml", func(w http.ResponseWriter, r *http.Request) {
+			// Go's webserver automatically sets the correct `Content-Type` header.
+			w.Write(sm.XMLContent())
+			return
+		})
+
+		log.Fatal(http.ListenAndServe(":8080", nil))
+	}
+```
+
+
 ### Documentation
 
 - [API Reference](https://godoc.org/github.com/ikeikeikeike/go-sitemap-generator/stm)
