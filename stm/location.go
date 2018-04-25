@@ -58,12 +58,10 @@ func (loc *Location) PathInPublic() string {
 func (loc *Location) URL() string {
 	base, _ := url.Parse(loc.opts.SitemapsHost())
 
-	var u *url.URL
 	for _, ref := range []string{
-		loc.opts.sitemapsPath, loc.Filename(),
+		loc.opts.sitemapsPath + "/", loc.Filename(),
 	} {
-		u, _ = url.Parse(ref)
-		base = base.ResolveReference(u)
+		base, _ = base.Parse(ref)
 	}
 
 	return base.String()
