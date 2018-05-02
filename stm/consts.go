@@ -10,7 +10,7 @@ const (
 	// MaxSitemapNews defines max news sitemap per index_file
 	MaxSitemapNews = 1000
 	// MaxSitemapFilesize defines file size for sitemap.
-	MaxSitemapFilesize = 10000000 // bytes
+	MaxSitemapFilesize = 50000000 // bytes
 )
 
 const (
