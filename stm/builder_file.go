@@ -38,6 +38,8 @@ func (b *BuilderFile) Add(url interface{}) BuilderError {
 		URL{"host": b.loc.opts.defaultHost},
 	)
 
+	b.linkcnt++
+
 	smu, err := NewSitemapURL(b.opts, u)
 	if err != nil {
 		log.Fatalf("[F] Sitemap: %s", err)
@@ -50,7 +52,7 @@ func (b *BuilderFile) Add(url interface{}) BuilderError {
 	}
 
 	b.content = append(b.content, bytes...)
-	b.linkcnt++
+
 	return nil
 }
 
