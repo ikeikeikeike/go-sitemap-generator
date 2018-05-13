@@ -8,7 +8,7 @@ import (
 // NewSitemap returns the created the Sitemap's pointer
 func NewSitemap() *Sitemap {
 	log.SetFlags(log.LstdFlags | log.Llongfile)
-	runtime.GOMAXPROCS(runtime.NumCPU())
+	runtime.GOMAXPROCS(runtime.NumCPU()) // XXX: no need
 
 	sm := &Sitemap{
 		opts: NewOptions(),

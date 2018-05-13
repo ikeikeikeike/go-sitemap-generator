@@ -12,12 +12,12 @@ import (
 	"github.com/imdario/mergo"
 )
 
-// BufferPool is
+// BufferPool for performace
 type BufferPool struct {
 	sync.Pool
 }
 
-// NewBufferPool is
+// NewBufferPool for performace
 func NewBufferPool() *BufferPool {
 	return &BufferPool{
 		Pool: sync.Pool{New: func() interface{} {
@@ -28,19 +28,20 @@ func NewBufferPool() *BufferPool {
 	}
 }
 
-// Get is
+// Get returns buffer which contains bufferpool struct
 func (bp *BufferPool) Get() *bytes.Buffer {
 	return bp.Pool.Get().(*bytes.Buffer)
 }
 
-// Put is
+// Put puts bufferpool struct
 func (bp *BufferPool) Put(b *bytes.Buffer) {
 	b.Reset()
 	bp.Pool.Put(b)
 }
 
-// SetBuilderElementValue if it will change to struct from map if the future's
-// author is feeling a bothersome in this function.
+// SetBuilderElementValue will be changed to struct base instead of map base
+// if the future's author is feeling a bothersome in this function.
+//
 func SetBuilderElementValue(elm *etree.Element, data map[string]interface{}, basekey string) (*etree.Element, bool) {
 	var child *etree.Element
 
