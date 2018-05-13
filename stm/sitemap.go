@@ -2,26 +2,43 @@ package stm
 
 import (
 	"log"
-	"runtime"
 )
 
 // NewSitemap returns the created the Sitemap's pointer
 func NewSitemap() *Sitemap {
 	log.SetFlags(log.LstdFlags | log.Llongfile)
-	runtime.GOMAXPROCS(runtime.NumCPU()) // XXX: no need
 
 	sm := &Sitemap{
-		opts: NewOptions(),
+		opts:   NewOptions(),
+		store:  make(chan interface{}, 200000),
+		finish: make(chan chan struct{}),
 	}
+
+	go sm.run()
+
 	return sm
 }
 
 // Sitemap provides interface for create sitemap xml file and that has convenient interface.
 // And also needs to use first this struct if it wants to use this package.
 type Sitemap struct {
-	opts  *Options
-	bldr  Builder
-	bldrs Builder
+	opts   *Options
+	bldr   Builder
+	bldrs  Builder
+	store  chan interface{}
+	finish chan chan struct{}
+}
+
+func (sm *Sitemap) run() {
+	for {
+		select {
+		case url := <-sm.store:
+			sm.add(url)
+		case ch := <-sm.finish:
+			sm.finalize()
+			ch <- struct{}{}
+		}
+	}
 }
 
 // SetDefaultHost is your website's host name
@@ -79,6 +96,11 @@ func (sm *Sitemap) Create() *Sitemap {
 
 // Add Should call this after call to Create method on this struct.
 func (sm *Sitemap) Add(url interface{}) *Sitemap {
+	sm.store <- url
+	return sm
+}
+
+func (sm *Sitemap) add(url interface{}) {
 	if sm.bldr == nil {
 		sm.bldr = NewBuilderFile(sm.opts, sm.opts.Location())
 	}
@@ -86,12 +108,10 @@ func (sm *Sitemap) Add(url interface{}) *Sitemap {
 	err := sm.bldr.Add(url)
 	if err != nil {
 		if err.FullError() {
-			sm.Finalize()
-			return sm.Add(url)
+			sm.finalize()
+			sm.add(url)
 		}
 	}
-
-	return sm
 }
 
 // XMLContent returns the XML content of the sitemap
@@ -102,10 +122,16 @@ func (sm *Sitemap) XMLContent() []byte {
 // Finalize writes sitemap and index files if it had some
 // specific condition in BuilderFile struct.
 func (sm *Sitemap) Finalize() *Sitemap {
+	ch := make(chan struct{})
+	sm.finish <- ch
+	<-ch
+	return sm
+}
+
+func (sm *Sitemap) finalize() {
 	sm.bldrs.Add(sm.bldr)
 	sm.bldrs.Write()
 	sm.bldr = nil
-	return sm
 }
 
 // PingSearchEngines requests some ping server.

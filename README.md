@@ -2,6 +2,8 @@
 
 [![GoDoc](https://godoc.org/github.com/ikeikeikeike/go-sitemap-generator/stm?status.svg)](https://godoc.org/github.com/ikeikeikeike/go-sitemap-generator/stm) [![Build Status](https://travis-ci.org/ikeikeikeike/go-sitemap-generator.svg)](https://travis-ci.org/ikeikeikeike/go-sitemap-generator)
 
+#### Note: feature/concurrency blanch is experimental.
+
 ```go
 package main
 
@@ -331,7 +333,7 @@ $ go get github.com/clbanning/mxj
 Do testing
 
 ```console
-$ go test -v -cover ./...
+$ go test -v -cover -race ./...
 ```
 
 #### Inspired by [sitemap_generator](http://github.com/kjvarga/sitemap_generator)
