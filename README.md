@@ -11,15 +11,15 @@ import (
 
 
 func main() {
-	sm := stm.NewSitemap()
+	sm := stm.NewSitemap(1)
 
 	// Create method must be that calls first this method in that before
 	// call to Add method on this struct.
 	sm.Create()
 
-	sm.Add(stm.URL{"loc": "home", "changefreq": "always", "mobile": true})
-	sm.Add(stm.URL{"loc": "readme"})
-	sm.Add(stm.URL{"loc": "aboutme", "priority": 0.1})
+	sm.Add(stm.URL{{"loc", "home"}, {"changefreq", "always"}, {"mobile", true}})
+	sm.Add(stm.URL{{"loc", "readme"}})
+	sm.Add(stm.URL{{"loc", "aboutme"}, {"priority", 0.1}})
 
 	sm.Finalize().PingSearchEngines()
 }
@@ -58,13 +58,24 @@ Current Features or To-Do
 
 ## Getting Started
 
+### Setting concurrency
+To disable concurrency, set number of CPUs to 1.
+```go
+sm := stm.NewSitemap(1)
+```
+
+If you want to set max CPUs that are available, set number of CPUs <= 0.
+```go
+sm := stm.NewSitemap(0)
+```
+
 ### Preventing Output
 
 To disable all non-essential output you can give `false` to `sm.SetVerbose`.
 To disable output in-code use the following:
 
 ```go
-sm := stm.NewSitemap()
+sm := stm.NewSitemap(1)
 sm.SetVerbose(false)
 ```
 
@@ -117,7 +128,7 @@ import (
 )
 
 func main() {
-	sm := stm.NewSitemap()
+	sm := stm.NewSitemap(1)
 	sm.SetDefaultHost("http://example.com")
 	sm.SetSitemapsPath("sitemap-generator") // default: public
 	sm.SetSitemapsHost("http://s3.amazonaws.com/sitemap-generator/")
@@ -130,9 +141,9 @@ func main() {
 
 	sm.Create()
 
-	sm.Add(stm.URL{"loc": "home", "changefreq": "always", "mobile": true})
-	sm.Add(stm.URL{"loc": "readme"})
-	sm.Add(stm.URL{"loc": "aboutme", "priority": 0.1})
+	sm.Add(stm.URL{{"loc", "home"}, {"changefreq", "always"}, {"mobile", true}})
+	sm.Add(stm.URL{{"loc", "readme"}})
+	sm.Add(stm.URL{{"loc", "aboutme"}, {"priority", 0.1}})
 
 	sm.Finalize().PingSearchEngines()
 }
@@ -141,18 +152,21 @@ func main() {
 ### News sitemaps
 
 ```go
-sm.Add(stm.URL{"loc": "/news", "news": stm.URL{
-	"publication": stm.URL{
-		"name":     "Example",
-		"language": "en",
+sm.Add(stm.URL{
+	{"loc", "/news"}, 
+	{"news", stm.URL{
+	{"publication", stm.URL{
+		{"name",     "Example"},
+		{"language", "en"},
 	},
-	"title":            "My Article",
-	"keywords":         "my article, articles about myself",
-	"stock_tickers":    "SAO:PETR3",
-	"publication_date": "2011-08-22",
-	"access":           "Subscription",
-	"genres":           "PressRelease",
-}})
+	},
+	{"title",            "My Article"},
+	{"keywords",         "my article, articles about myself"},
+	{"stock_tickers",    "SAO:PETR3"},
+	{"publication_date", "2011-08-22"},
+	{"access",           "Subscription"},
+	{"genres",           "PressRelease"},
+},},})
 ```
 
 Look at [Creating a Google News Sitemap](https://support.google.com/news/publisher/answer/74288) as required.
@@ -160,15 +174,19 @@ Look at [Creating a Google News Sitemap](https://support.google.com/news/publish
 ### Video sitemaps
 
 ```go
-sm.Add(stm.URL{"loc": "/videos", "video": stm.URL{
-	"thumbnail_loc": "http://www.example.com/video1_thumbnail.png",
-	"title":         "Title",
-	"description":   "Description",
-	"content_loc":   "http://www.example.com/cool_video.mpg",
-	"category":      "Category",
-	"tag":           []string{"one", "two", "three"},
-    "player_loc":    stm.Attrs{"https://example.com/p/flash/moogaloop/6.2.9/moogaloop.swf?clip_id=26", map[string]string{"allow_embed": "Yes", "autoplay": "autoplay=1"}},
-}})
+sm.Add(stm.URL{
+	{"loc", "/videos"}, 
+	{"video", stm.URL{
+	{"thumbnail_loc", "http://www.example.com/video1_thumbnail.png"},
+	{"title",         "Title"},
+	{"description",   "Description"},
+	{"content_loc",   "http://www.example.com/cool_video.mpg"},
+	{"category",      "Category"},
+	{"tag",           []string{"one", "two", "three"}},
+    {"player_loc",    stm.Attrs{"https://example.com/p/flash/moogaloop/6.2.9/moogaloop.swf?clip_id=26", map[string]string{"allow_embed": "Yes", "autoplay": "autoplay=1"}},},
+},
+},
+})
 ```
 
 Look at [Video sitemaps](https://support.google.com/webmasters/answer/80471) as required.
@@ -176,10 +194,13 @@ Look at [Video sitemaps](https://support.google.com/webmasters/answer/80471) as 
 ### Image sitemaps
 
 ```go
-sm.Add(stm.URL{"loc": "/images", "image": []stm.URL{
-	{"loc": "http://www.example.com/image.png", "title": "Image"},
-	{"loc": "http://www.example.com/image1.png", "title": "Image1"},
-}})
+sm.Add(stm.URL{
+	{"loc", "/images"}, 
+	{"image", []stm.URL{
+	{{"loc", "http://www.example.com/image.png"}, {"title", "Image"}},
+	{{"loc", "http://www.example.com/image1.png"}, {"title", "Image1"}},
+},},
+})
 
 ```
 
@@ -188,9 +209,12 @@ Look at [Image sitemaps](https://support.google.com/webmasters/answer/178636) as
 ### Geo sitemaps
 
 ```go
-sm.Add(stm.URL{"loc": "/geos", "geo": stm.URL{
-	"format": "kml",
-}})
+sm.Add(stm.URL{
+	{"loc", "/geos"}, 
+	{"geo", stm.URL{
+	{"format", "kml"},
+},},
+})
 ```
 
 Couldn't find Geo sitemaps example. Although its like a below.
@@ -207,7 +231,7 @@ Couldn't find Geo sitemaps example. Although its like a below.
 ### Mobile sitemaps
 
 ```go
-sm.Add(stm.URL{"loc": "mobiles", "mobile": true})
+sm.Add(stm.URL{{"loc", "mobiles"}, {"mobile", true}})
 ```
 
 Look at [Feature phone sitemaps](https://support.google.com/webmasters/answer/6082207) as required.
@@ -223,7 +247,7 @@ import (
 )
 
 func main() {
-	sm := stm.NewSitemap()
+	sm := stm.NewSitemap(0)
 	sm.SetDefaultHost("http://yourhost.com")
 	sm.SetSitemapsHost("http://s3.amazonaws.com/sitemaps/")
 	sm.SetSitemapsPath("sitemaps/")
@@ -234,41 +258,50 @@ func main() {
 
 	sm.Create()
 
-	sm.Add(stm.URL{"loc": "/home", "changefreq": "daily"})
+	sm.Add(stm.URL{{"loc", "/home"}, {"changefreq", "daily"}})
 
-	sm.Add(stm.URL{"loc": "/abouts", "mobile": true})
+	sm.Add(stm.URL{{"loc", "/abouts"}, {"mobile", true}})
 
-	sm.Add(stm.URL{"loc": "/news", "news": stm.URL{
-		"publication": stm.URL{
-			"name":     "Example",
-			"language": "en",
+	sm.Add(stm.URL{{"loc", "/news"}, 
+	{"news", stm.URL{
+		{"publication", stm.URL{
+			{"name",     "Example"},
+			{"language", "en"},
 		},
-		"title":            "My Article",
-		"keywords":         "my article, articles about myself",
-		"stock_tickers":    "SAO:PETR3",
-		"publication_date": "2011-08-22",
-		"access":           "Subscription",
-		"genres":           "PressRelease",
-	}})
+		},
+		{"title",            "My Article"},
+		{"keywords",         "my article, articles about myself"},
+		{"stock_tickers",    "SAO:PETR3"},
+		{"publication_date", "2011-08-22"},
+		{"access",           "Subscription"},
+		{"genres",           "PressRelease"},
+	},},
+	})
 
-	sm.Add(stm.URL{"loc": "/images", "image": []stm.URL{
-		{"loc": "http://www.example.com/image.png", "title": "Image"},
-		{"loc": "http://www.example.com/image1.png", "title": "Image1"},
-	}})
+	sm.Add(stm.URL{{"loc", "/images"}, 
+	{"image", []stm.URL{
+		{{"loc", "http://www.example.com/image.png"}, {"title", "Image"}},
+		{{"loc", "http://www.example.com/image1.png"}, {"title", "Image1"}},
+	},},
+	})
 
-	sm.Add(stm.URL{"loc": "/videos", "video": stm.URL{
-		"thumbnail_loc": "http://www.example.com/video1_thumbnail.png",
-		"title":         "Title",
-		"description":   "Description",
-		"content_loc":   "http://www.example.com/cool_video.mpg",
-		"category":      "Category",
-		"tag":           []string{"one", "two", "three"},
-	    "player_loc":    stm.Attrs{"https://example.com/p/flash/moogaloop/6.2.9/moogaloop.swf?clip_id=26", map[string]string{"allow_embed": "Yes", "autoplay": "autoplay=1"}},
-	}})
+	sm.Add(stm.URL{{"loc", "/videos"}, 
+	{"video", stm.URL{
+		{"thumbnail_loc", "http://www.example.com/video1_thumbnail.png"},
+		{"title",         "Title"},
+		{"description",   "Description"},
+		{"content_loc",   "http://www.example.com/cool_video.mpg"},
+		{"category",      "Category"},
+		{"tag",           []string{"one", "two", "three"}},
+	    {"player_loc",    stm.Attrs{"https://example.com/p/flash/moogaloop/6.2.9/moogaloop.swf?clip_id=26", map[string]string{"allow_embed": "Yes", "autoplay": "autoplay=1"}}},
+	},},
+	})
 
-	sm.Add(stm.URL{"loc": "/geos", "geo": stm.URL{
-		"format": "kml",
-	}})
+	sm.Add(stm.URL{{"loc", "/geos"}, 
+	{"geo", stm.URL{
+		{"format", "kml"},
+	},},
+	})
 
 	sm.Finalize().PingSearchEngines("http://newengine.com/ping?url=%s")
 }
@@ -288,11 +321,11 @@ import (
 )
 
 func buildSitemap() *stm.Sitemap {
-	sm := stm.NewSitemap()
+	sm := stm.NewSitemap(1)
 	sm.SetDefaultHost("http://example.com")
 
 	sm.Create()
-	sm.Add(stm.URL{"loc": "/", "changefreq": "daily"})
+	sm.Add(stm.URL{{"loc", "/"}, {"changefreq", "daily"}})
 
 	// Note: Do not call `sm.Finalize()` because it flushes
 	// the underlying datastructure from memory to disk.
