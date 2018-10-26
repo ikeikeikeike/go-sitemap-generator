@@ -13,8 +13,8 @@ import (
 func main() {
 	sm := stm.NewSitemap()
 
-	// Create method must be that calls first this method in that before
-	// call to Add method on this struct.
+	// Create method must be called first before adding entries to
+	// the sitemap.
 	sm.Create()
 
 	sm.Add(stm.URL{"loc": "home", "changefreq": "always", "mobile": true})
@@ -25,11 +25,7 @@ func main() {
 }
 ```
 
-Sitemap provides interface for create sitemap xml file and that has convenient interface.
-And also needs to use first Sitemap struct if it wants to use this package.
-
-
-### Installing
+### Installation
 
 ```console
 $ go get github.com/ikeikeikeike/go-sitemap-generator/stm
@@ -47,10 +43,9 @@ Current Features or To-Do
   - [x] [Mobile sitemaps](#mobile-sitemaps)
   - [ ] PageMap sitemap
   - [ ] Alternate Links
-- [ ] Supports: write some kind of filesystem and object storage.
+- [ ] Supports: adapters for sitemap storage.
   - [x] Filesystem
   - [x] [S3](#upload-sitemap-to-s3)
-  - [ ]  Some adapter
 - [x] [Customizable sitemap working](#preventing-output)
 - [x] [Notifies search engines (Google, Bing) of new sitemaps](#pinging-search-engines)
 - [x] [Gives you complete control over your sitemap contents and naming scheme](#full-example)
@@ -60,8 +55,8 @@ Current Features or To-Do
 
 ### Preventing Output
 
-To disable all non-essential output you can give `false` to `sm.SetVerbose`.
-To disable output in-code use the following:
+To disable all non-essential output you can set `sm.SetVerbose` to `false`.
+To disable output inline use the following:
 
 ```go
 sm := stm.NewSitemap()
@@ -70,13 +65,14 @@ sm.SetVerbose(false)
 
 ### Pinging Search Engines
 
-PingSearchEngines requests some ping server.
+PingSearchEngines notifies search engines of changes once a sitemap
+has been generated or changed. The library will append Google and Bing to any engines passed in to the function.
 
 ```go
 sm.Finalize().PingSearchEngines()
 ```
 
-If you want to add `new search engine`, you can set that to method's arguments. like this.
+If you want to add `new search engine`, you can pass that in to the function:
 
 ```go
 sm.Finalize().PingSearchEngines("http://newengine.com/ping?url=%s")
@@ -100,7 +96,7 @@ sm.SetSitemapsPath("sitemaps/")
 // Struct of `S3Adapter`
 sm.SetAdapter(&stm.S3Adapter{Region: "ap-northeast-1", Bucket: "your-bucket", ACL: "public-read"})
 
-// It changes to output filename
+// Change the output filename
 sm.SetFilename("new_filename")
 ```
 
@@ -193,7 +189,7 @@ sm.Add(stm.URL{"loc": "/geos", "geo": stm.URL{
 }})
 ```
 
-Couldn't find Geo sitemaps example. Although its like a below.
+Couldn't find Geo sitemaps example, although it's similar to:
 
 ```xml
 <url>
@@ -295,7 +291,7 @@ func buildSitemap() *stm.Sitemap {
 	sm.Add(stm.URL{"loc": "/", "changefreq": "daily"})
 
 	// Note: Do not call `sm.Finalize()` because it flushes
-	// the underlying datastructure from memory to disk.
+	// the underlying data structure from memory to disk.
 
 	return sm
 }
@@ -320,15 +316,15 @@ func main() {
 - [API Reference](https://godoc.org/github.com/ikeikeikeike/go-sitemap-generator/stm)
 - [sitemap_generator](http://github.com/kjvarga/sitemap_generator)
 
-### How to testing
+### How to test.
 
-Prepare testing
+Preparation:
 
 ```console
 $ go get github.com/clbanning/mxj
 ```
 
-Do testing
+Run tests:
 
 ```console
 $ go test -v -cover ./...
