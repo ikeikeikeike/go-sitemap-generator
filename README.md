@@ -28,7 +28,7 @@ func main() {
 ### Installation
 
 ```console
-$ go get github.com/ikeikeikeike/go-sitemap-generator/stm
+$ go get gopkg.in/ikeikeikeike/go-sitemap-generator.v2/stm
 ```
 
 ### Features
