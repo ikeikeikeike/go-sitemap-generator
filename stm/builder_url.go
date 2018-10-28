@@ -53,8 +53,17 @@ type sitemapURL struct {
 func (su *sitemapURL) validate() error {
 	var key string
 	var invalid bool
+	var locOk, hostOk bool
 
-	for key = range su.data {
+	for _, value := range su.data {
+		key = value[0].(string)
+		switch key {
+		case "loc":
+			locOk = true
+		case "host":
+			hostOk = true
+		}
+
 		invalid = true
 		for _, name := range fieldnames {
 			if key == name {
@@ -71,11 +80,11 @@ func (su *sitemapURL) validate() error {
 		msg := fmt.Sprintf("Unknown map's key `%s` in URL type", key)
 		return errors.New(msg)
 	}
-	if _, ok := su.data["loc"]; !ok {
+	if !locOk {
 		msg := fmt.Sprintf("URL type must have `loc` map's key")
 		return errors.New(msg)
 	}
-	if _, ok := su.data["host"]; !ok {
+	if !hostOk {
 		msg := fmt.Sprintf("URL type must have `host` map's key")
 		return errors.New(msg)
 	}
