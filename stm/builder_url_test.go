@@ -319,7 +319,44 @@ func TestMobileSitemaps(t *testing.T) {
 
 func TestPageMapSitemaps(t *testing.T) {}
 
-func TestAlternateLinks(t *testing.T) {}
+func TestAlternateLinks(t *testing.T) {
+	doc := etree.NewDocument()
+	root := doc.CreateElement("root")
+
+	loc := "/alternates"
+	data := URL{"loc": loc, "xhtml:link": []Attr{
+		{
+			"rel":      "alternate",
+			"hreflang": "zh-tw",
+			"href":     loc + "?locale=zh-tw",
+		},
+		{
+			"rel":      "alternate",
+			"hreflang": "en-us",
+			"href":     loc + "?locale=en-us",
+		},
+	}}
+
+	expect := []byte(`
+	<root>
+	  <loc>/alternates</loc>
+	  <xhtml:link rel="alternate" hreflang="zh-tw" href="/alternates?locale=zh-tw"/>
+	  <xhtml:link rel="alternate" hreflang="en-us" href="/alternates?locale=en-us"/>
+	</root>`)
+
+	SetBuilderElementValue(root, data.URLJoinBy("loc", "host", "loc"), "loc")
+	SetBuilderElementValue(root, data, "xhtml:link")
+
+	buf := &bytes.Buffer{}
+	doc.WriteTo(buf)
+
+	mdata, _ := mxj.NewMapXml(buf.Bytes())
+	mexpect, _ := mxj.NewMapXml(expect)
+
+	if !reflect.DeepEqual(mdata, mexpect) {
+		t.Error(`Failed to generate sitemap xml thats deferrent output value in URL type`)
+	}
+}
 
 func TestAttr(t *testing.T) {
 	doc := etree.NewDocument()
