@@ -100,10 +100,6 @@ func (su *sitemapURL) XML() []byte {
 		priority := url.CreateElement("priority")
 		priority.SetText("0.5")
 	}
-	if values, ok := su.data["alternates"]; ok {
-		su.data["xhtml:link"] = values
-		SetBuilderElementValue(url, su.data, "xhtml:link")
-	}
 	SetBuilderElementValue(url, su.data, "expires")
 	SetBuilderElementValue(url, su.data, "mobile")
 	SetBuilderElementValue(url, su.data, "news")
