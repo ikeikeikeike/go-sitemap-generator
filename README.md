@@ -42,7 +42,7 @@ Current Features or To-Do
   - [x] [Geo sitemaps](#geo-sitemaps)
   - [x] [Mobile sitemaps](#mobile-sitemaps)
   - [ ] PageMap sitemap
-  - [ ] Alternate Links
+  - [x] Alternate Links
 - [ ] Supports: adapters for sitemap storage.
   - [x] Filesystem
   - [x] [S3](#upload-sitemap-to-s3)
