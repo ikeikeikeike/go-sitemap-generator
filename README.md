@@ -1,5 +1,3 @@
-> NOTE: **This version(v1) is now archived**. The new location of the version can be found [here](https://github.com/ikeikeikeike/go-sitemap-generator/tree/v2)!
-
 
 ##### go-sitemap-generator is the easiest way to generate Sitemaps in Go.
 
