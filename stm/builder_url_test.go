@@ -12,21 +12,21 @@ import (
 
 func TestBlank(t *testing.T) {
 	if _, err := NewSitemapURL(&Options{}, URL{}); err == nil {
-		t.Errorf(`Failed to validate blank arg ( URL{} ): %s`, err)
+		t.Errorf(`Failed to validate blank arg ( URL{} ): %v`, err)
 	}
 }
 
 func TestItHasLocElement(t *testing.T) {
 	if _, err := NewSitemapURL(&Options{}, URL{}); err == nil {
-		t.Errorf(`Failed to validate about must have loc attribute in URL type ( URL{} ): %s`, err)
+		t.Errorf(`Failed to validate about must have loc attribute in URL type ( URL{} ): %v`, err)
 	}
 }
 
 func TestJustSetLocElement(t *testing.T) {
-	smu, err := NewSitemapURL(&Options{}, URL{"loc": "path", "host": "http://example.com"})
+	smu, err := NewSitemapURL(&Options{}, URL{{"loc", "path"}, {"host", "http://example.com"}})
 
 	if err != nil {
-		t.Fatalf(`Fatal to validate! This is a critical error: %s`, err)
+		t.Fatalf(`Fatal to validate! This is a critical error: %v`, err)
 	}
 
 	doc := etree.NewDocument()
@@ -37,18 +37,18 @@ func TestJustSetLocElement(t *testing.T) {
 
 	elm = url.SelectElement("loc")
 	if elm == nil {
-		t.Errorf(`Failed to generate xml that loc element is blank: %s`, elm)
+		t.Errorf(`Failed to generate xml that loc element is blank: %v`, elm)
 	}
 	if elm != nil && elm.Text() != "http://example.com/path" {
-		t.Errorf(`Failed to generate xml thats deferrent value in loc element: %s`, elm.Text())
+		t.Errorf(`Failed to generate xml thats deferrent value in loc element: %v`, elm.Text())
 	}
 }
 
 func TestJustSetLocElementAndThenItNeedsCompleteValues(t *testing.T) {
-	smu, err := NewSitemapURL(&Options{}, URL{"loc": "path", "host": "http://example.com"})
+	smu, err := NewSitemapURL(&Options{}, URL{{"loc", "path"}, {"host", "http://example.com"}})
 
 	if err != nil {
-		t.Fatalf(`Fatal to validate! This is a critical error: %s`, err)
+		t.Fatalf(`Fatal to validate! This is a critical error: %v`, err)
 	}
 
 	doc := etree.NewDocument()
@@ -59,44 +59,44 @@ func TestJustSetLocElementAndThenItNeedsCompleteValues(t *testing.T) {
 
 	elm = url.SelectElement("loc")
 	if elm == nil {
-		t.Errorf(`Failed to generate xml that loc element is blank: %s`, elm)
+		t.Errorf(`Failed to generate xml that loc element is blank: %v`, elm)
 	}
 	if elm != nil && elm.Text() != "http://example.com/path" {
-		t.Errorf(`Failed to generate xml thats deferrent value in loc element: %s`, elm.Text())
+		t.Errorf(`Failed to generate xml thats deferrent value in loc element: %v`, elm.Text())
 	}
 
 	elm = url.SelectElement("priority")
 	if elm == nil {
-		t.Errorf(`Failed to generate xml that priority element is nil: %s`, elm)
+		t.Errorf(`Failed to generate xml that priority element is nil: %v`, elm)
 	}
 	if elm != nil && elm.Text() != "0.5" {
-		t.Errorf(`Failed to generate xml thats deferrent value in priority element: %s`, elm.Text())
+		t.Errorf(`Failed to generate xml thats deferrent value in priority element: %v`, elm.Text())
 	}
 
 	elm = url.SelectElement("changefreq")
 	if elm == nil {
-		t.Errorf(`Failed to generate xml that changefreq element is nil: %s`, elm)
+		t.Errorf(`Failed to generate xml that changefreq element is nil: %v`, elm)
 	}
 	if elm != nil && elm.Text() != "weekly" {
-		t.Errorf(`Failed to generate xml thats deferrent value in changefreq element: %s`, elm.Text())
+		t.Errorf(`Failed to generate xml thats deferrent value in changefreq element: %v`, elm.Text())
 	}
 
 	elm = url.SelectElement("lastmod")
 	if elm == nil {
-		t.Errorf(`Failed to generate xml that lastmod element is nil: %s`, elm)
+		t.Errorf(`Failed to generate xml that lastmod element is nil: %v`, elm)
 	}
 	if elm != nil {
 		if _, err := time.Parse(time.RFC3339, elm.Text()); err != nil {
-			t.Errorf(`Failed to generate xml thats failed to parse datetime in lastmod element: %s`, err)
+			t.Errorf(`Failed to generate xml thats failed to parse datetime in lastmod element: %v`, err)
 		}
 	}
 }
 
 func TestSetNilValue(t *testing.T) {
-	smu, err := NewSitemapURL(&Options{}, URL{"loc": "path", "priority": nil, "changefreq": nil, "lastmod": nil, "host": "http://example.com"})
+	smu, err := NewSitemapURL(&Options{}, URL{{"loc", "path"}, {"priority", nil}, {"changefreq", nil}, {"lastmod", nil}, {"host", "http://example.com"}})
 
 	if err != nil {
-		t.Fatalf(`Fatal to validate! This is a critical error: %s`, err)
+		t.Fatalf(`Fatal to validate! This is a critical error: %v`, err)
 	}
 
 	doc := etree.NewDocument()
@@ -107,33 +107,33 @@ func TestSetNilValue(t *testing.T) {
 
 	elm = url.SelectElement("loc")
 	if elm == nil {
-		t.Errorf(`Failed to generate xml that loc element is blank: %s`, elm)
+		t.Errorf(`Failed to generate xml that loc element is blank: %v`, elm)
 	}
 	if elm != nil && elm.Text() != "http://example.com/path" {
-		t.Errorf(`Failed to generate xml thats deferrent value in loc element: %s`, elm.Text())
+		t.Errorf(`Failed to generate xml thats deferrent value in loc element: %v`, elm.Text())
 	}
 
 	elm = url.SelectElement("priority")
 	if elm != nil {
-		t.Errorf(`Failed to generate xml that priority element must be nil: %s`, elm)
+		t.Errorf(`Failed to generate xml that priority element must be nil: %v`, elm)
 	}
 
 	elm = url.SelectElement("changefreq")
 	if elm != nil {
-		t.Errorf(`Failed to generate xml that changefreq element must be nil: %s`, elm)
+		t.Errorf(`Failed to generate xml that changefreq element must be nil: %v`, elm)
 	}
 
 	elm = url.SelectElement("lastmod")
 	if elm != nil {
-		t.Errorf(`Failed to generate xml that lastmod element must be nil: %s`, elm)
+		t.Errorf(`Failed to generate xml that lastmod element must be nil: %v`, elm)
 	}
 }
 
 func TestAutoGenerateSitemapHost(t *testing.T) {
-	smu, err := NewSitemapURL(&Options{}, URL{"loc": "path", "host": "http://example.com"})
+	smu, err := NewSitemapURL(&Options{}, URL{{"loc", "path"}, {"host", "http://example.com"}})
 
 	if err != nil {
-		t.Fatalf(`Fatal to validate! This is a critical error: %s`, err)
+		t.Fatalf(`Fatal to validate! This is a critical error: %v`, err)
 	}
 
 	doc := etree.NewDocument()
@@ -144,10 +144,10 @@ func TestAutoGenerateSitemapHost(t *testing.T) {
 
 	elm = url.SelectElement("loc")
 	if elm == nil {
-		t.Errorf(`Failed to generate xml that loc element is blank: %s`, elm)
+		t.Errorf(`Failed to generate xml that loc element is blank: %v`, elm)
 	}
 	if elm != nil && elm.Text() != "http://example.com/path" {
-		t.Errorf(`Failed to generate xml thats deferrent value in loc element: %s`, elm.Text())
+		t.Errorf(`Failed to generate xml thats deferrent value in loc element: %v`, elm.Text())
 	}
 }
 
@@ -155,18 +155,18 @@ func TestNewsSitemaps(t *testing.T) {
 	doc := etree.NewDocument()
 	root := doc.CreateElement("root")
 
-	data := URL{"loc": "/news", "news": URL{
-		"publication": URL{
-			"name":     "Example",
-			"language": "en",
-		},
-		"title":            "My Article",
-		"keywords":         "my article, articles about myself",
-		"stock_tickers":    "SAO:PETR3",
-		"publication_date": "2011-08-22",
-		"access":           "Subscription",
-		"genres":           "PressRelease",
-	}}
+	data := URL{{"loc", "/news"}, {"news", URL{
+		{"publication", URL{
+			{"name", "Example"},
+			{"language", "en"},
+		}},
+		{"title", "My Article"},
+		{"keywords", "my article, articles about myself"},
+		{"stock_tickers", "SAO:PETR3"},
+		{"publication_date", "2011-08-22"},
+		{"access", "Subscription"},
+		{"genres", "PressRelease"},
+	}}}
 	expect := []byte(`
 	<root>
 		<news:news>
@@ -199,10 +199,10 @@ func TestImageSitemaps(t *testing.T) {
 	doc := etree.NewDocument()
 	root := doc.CreateElement("root")
 
-	data := URL{"loc": "/images", "image": []URL{
-		{"loc": "http://www.example.com/image.png", "title": "Image"},
-		{"loc": "http://www.example.com/image1.png", "title": "Image1"},
-	}}
+	data := URL{{"loc", "/images"}, {"image", []URL{
+		{{"loc", "http://www.example.com/image.png"}, {"title", "Image"}},
+		{{"loc", "http://www.example.com/image1.png"}, {"title", "Image1"}},
+	}}}
 	expect := []byte(`
 	<root>
 		<image:image>
@@ -231,14 +231,14 @@ func TestVideoSitemaps(t *testing.T) {
 	doc := etree.NewDocument()
 	root := doc.CreateElement("root")
 
-	data := URL{"loc": "/videos", "video": URL{
-		"thumbnail_loc": "http://www.example.com/video1_thumbnail.png",
-		"title":         "Title",
-		"description":   "Description",
-		"content_loc":   "http://www.example.com/cool_video.mpg",
-		"category":      "Category",
-		"tag":           []string{"one", "two", "three"},
-	}}
+	data := URL{{"loc", "/videos"}, {"video", URL{
+		{"thumbnail_loc", "http://www.example.com/video1_thumbnail.png"},
+		{"title", "Title"},
+		{"description", "Description"},
+		{"content_loc", "http://www.example.com/cool_video.mpg"},
+		{"category", "Category"},
+		{"tag", []string{"one", "two", "three"}},
+	}}}
 
 	expect := []byte(`
 	<root>
@@ -270,7 +270,7 @@ func TestGeoSitemaps(t *testing.T) {
 	doc := etree.NewDocument()
 	root := doc.CreateElement("root")
 
-	data := URL{"loc": "/geos", "geo": URL{"format": "kml"}}
+	data := URL{{"loc", "/geos"}, {"geo", URL{{"format", "kml"}}}}
 
 	expect := []byte(`
 	<root>
@@ -295,7 +295,7 @@ func TestMobileSitemaps(t *testing.T) {
 	doc := etree.NewDocument()
 	root := doc.CreateElement("root")
 
-	data := URL{"loc": "/mobile", "mobile": true}
+	data := URL{{"loc", "/mobile"}, {"mobile", true}}
 
 	expect := []byte(`
 	<root>
@@ -324,7 +324,7 @@ func TestAlternateLinks(t *testing.T) {
 	root := doc.CreateElement("root")
 
 	loc := "/alternates"
-	data := URL{"loc": loc, "xhtml:link": []Attr{
+	data := URL{{"loc", loc}, {"xhtml:link", []Attr{
 		{
 			"rel":      "alternate",
 			"hreflang": "zh-tw",
@@ -335,14 +335,14 @@ func TestAlternateLinks(t *testing.T) {
 			"hreflang": "en-us",
 			"href":     loc + "?locale=en-us",
 		},
-	}}
+	}}}
 
 	expect := []byte(`
-	<root>
-	  <loc>/alternates</loc>
-	  <xhtml:link rel="alternate" hreflang="zh-tw" href="/alternates?locale=zh-tw"/>
-	  <xhtml:link rel="alternate" hreflang="en-us" href="/alternates?locale=en-us"/>
-	</root>`)
+       <root>
+         <loc>/alternates</loc>
+         <xhtml:link rel="alternate" hreflang="zh-tw" href="/alternates?locale=zh-tw"/>
+         <xhtml:link rel="alternate" hreflang="en-us" href="/alternates?locale=en-us"/>
+       </root>`)
 
 	SetBuilderElementValue(root, data.URLJoinBy("loc", "host", "loc"), "loc")
 	SetBuilderElementValue(root, data, "xhtml:link")
@@ -362,15 +362,15 @@ func TestAttr(t *testing.T) {
 	doc := etree.NewDocument()
 	root := doc.CreateElement("root")
 
-	data := URL{"loc": "/videos", "video": URL{
-		"thumbnail_loc": "http://www.example.com/video1_thumbnail.png",
-		"title":         "Title",
-		"description":   "Description",
-		"content_loc":   "http://www.example.com/cool_video.mpg",
-		"category":      "Category",
-		"tag":           []string{"one", "two", "three"},
-		"player_loc":    Attrs{"https://f.vimeocdn.com/p/flash/moogaloop/6.2.9/moogaloop.swf?clip_id=26", Attr{"allow_embed": "Yes", "autoplay": "autoplay=1"}},
-	}}
+	data := URL{{"loc", "/videos"}, {"video", URL{
+		{"thumbnail_loc", "http://www.example.com/video1_thumbnail.png"},
+		{"title", "Title"},
+		{"description", "Description"},
+		{"content_loc", "http://www.example.com/cool_video.mpg"},
+		{"category", "Category"},
+		{"tag", []string{"one", "two", "three"}},
+		{"player_loc", Attrs{"https://f.vimeocdn.com/p/flash/moogaloop/6.2.9/moogaloop.swf?clip_id=26", Attr{"allow_embed": "Yes", "autoplay": "autoplay=1"}}},
+	}}}
 
 	expect := []byte(`
 	<root>
@@ -407,15 +407,15 @@ func TestAttrWithoutTypedef(t *testing.T) {
 	doc := etree.NewDocument()
 	root := doc.CreateElement("root")
 
-	data := URL{"loc": "/videos", "video": URL{
-		"thumbnail_loc": "http://www.example.com/video1_thumbnail.png",
-		"title":         "Title",
-		"description":   "Description",
-		"content_loc":   "http://www.example.com/cool_video.mpg",
-		"category":      "Category",
-		"tag":           []string{"one", "two", "three"},
-		"player_loc":    Attrs{"https://f.vimeocdn.com/p/flash/moogaloop/6.2.9/moogaloop.swf?clip_id=26", map[string]string{"allow_embed": "Yes", "autoplay": "autoplay=1"}},
-	}}
+	data := URL{{"loc", "/videos"}, {"video", URL{
+		{"thumbnail_loc", "http://www.example.com/video1_thumbnail.png"},
+		{"title", "Title"},
+		{"description", "Description"},
+		{"content_loc", "http://www.example.com/cool_video.mpg"},
+		{"category", "Category"},
+		{"tag", []string{"one", "two", "three"}},
+		{"player_loc", Attrs{"https://f.vimeocdn.com/p/flash/moogaloop/6.2.9/moogaloop.swf?clip_id=26", map[string]string{"allow_embed": "Yes", "autoplay": "autoplay=1"}}},
+	}}}
 
 	expect := []byte(`
 	<root>
@@ -461,40 +461,40 @@ func BenchmarkGenerateXML(b *testing.B) {
 			var smu SitemapURL
 			var data URL
 
-			data = URL{"loc": "/mobile", "mobile": true}
+			data = URL{{"loc", "/mobile"}, {"mobile", true}}
 			smu, _ = NewSitemapURL(&Options{}, data)
 			smu.XML()
 
-			data = URL{"loc": "/images", "image": []URL{
-				{"loc": "http://www.example.com/image.png", "title": "Image"},
-				{"loc": "http://www.example.com/image1.png", "title": "Image1"},
-			}}
+			data = URL{{"loc", "/images"}, {"image", []URL{
+				{{"loc", "http://www.example.com/image.png"}, {"title", "Image"}},
+				{{"loc", "http://www.example.com/image1.png"}, {"title", "Image1"}},
+			}}}
 			smu, _ = NewSitemapURL(&Options{}, data)
 			smu.XML()
 
-			data = URL{"loc": "/videos", "video": URL{
-				"thumbnail_loc": "http://www.example.com/video1_thumbnail.png",
-				"title":         "Title",
-				"description":   "Description",
-				"content_loc":   "http://www.example.com/cool_video.mpg",
-				"category":      "Category",
-				"tag":           []string{"one", "two", "three"},
-			}}
+			data = URL{{"loc", "/videos"}, {"video", URL{
+				{"thumbnail_loc", "http://www.example.com/video1_thumbnail.png"},
+				{"title", "Title"},
+				{"description", "Description"},
+				{"content_loc", "http://www.example.com/cool_video.mpg"},
+				{"category", "Category"},
+				{"tag", []string{"one", "two", "three"}},
+			}}}
 			smu, _ = NewSitemapURL(&Options{}, data)
 			smu.XML()
 
-			data = URL{"loc": "/news", "news": URL{
-				"publication": URL{
-					"name":     "Example",
-					"language": "en",
-				},
-				"title":            "My Article",
-				"keywords":         "my article, articles about myself",
-				"stock_tickers":    "SAO:PETR3",
-				"publication_date": "2011-08-22",
-				"access":           "Subscription",
-				"genres":           "PressRelease",
-			}}
+			data = URL{{"loc", "/news"}, {"news", URL{
+				{"publication", URL{
+					{"name", "Example"},
+					{"language", "en"},
+				}},
+				{"title", "My Article"},
+				{"keywords", "my article, articles about myself"},
+				{"stock_tickers", "SAO:PETR3"},
+				{"publication_date", "2011-08-22"},
+				{"access", "Subscription"},
+				{"genres", "PressRelease"},
+			}}}
 
 			smu, _ = NewSitemapURL(&Options{}, data)
 			smu.XML()

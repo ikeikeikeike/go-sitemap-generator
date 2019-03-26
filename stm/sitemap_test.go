@@ -11,16 +11,16 @@ import (
 func TestSitemapGenerator(t *testing.T) {
 	buf := BufferAdapter{}
 
-	sm := NewSitemap()
+	sm := NewSitemap(0)
 	sm.SetPretty(true)
 	sm.SetVerbose(false)
 	sm.SetAdapter(&buf)
 
 	sm.Create()
 	for i := 1; i <= 10; i++ {
-		sm.Add(URL{"loc": "home", "changefreq": "always", "mobile": true, "lastmod": "2018-10-28T17:56:02+09:00"})
-		sm.Add(URL{"loc": "readme", "lastmod": "2018-10-28T17:56:02+09:00"})
-		sm.Add(URL{"loc": "aboutme", "priority": 0.1, "lastmod": "2018-10-28T17:56:02+09:00"})
+		sm.Add(URL{{"loc", "home"}, {"changefreq", "always"}, {"mobile", true}, {"lastmod", "2018-10-28T17:56:02+09:00"}})
+		sm.Add(URL{{"loc", "readme"}, {"lastmod", "2018-10-28T17:56:02+09:00"}})
+		sm.Add(URL{{"loc", "aboutme"}, {"priority", 0.1}, {"lastmod", "2018-10-28T17:56:02+09:00"}})
 	}
 	sm.Finalize()
 
