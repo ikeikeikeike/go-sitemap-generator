@@ -6,7 +6,7 @@
 package main
 
 import (
-	"github.com/ikeikeikeike/go-sitemap-generator/stm"
+	"github.com/ikeikeikeike/go-sitemap-generator/v2/stm"
 )
 
 
