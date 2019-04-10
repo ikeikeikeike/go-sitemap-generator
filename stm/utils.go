@@ -181,7 +181,9 @@ func URLJoin(src string, joins ...string) string {
 		}
 
 		u, _ = url.Parse(j)
-		base = base.ResolveReference(u)
+		if u != nil {
+			base = base.ResolveReference(u)
+		}
 	}
 
 	return base.String()
