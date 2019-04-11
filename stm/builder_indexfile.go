@@ -28,8 +28,8 @@ func (b *BuilderIndexfile) Add(link interface{}) BuilderError {
 
 	alternativeURLs := bldr.loc.AlternativeURLs()
 	for _, alternativeURL := range alternativeURLs {
-		s := NewSitemapIndexURL(b.opts, URL{"loc": alternativeURL})
-		b.content = append(b.content, s.XML()...)
+		smu := NewSitemapIndexURL(b.opts, URL{{"loc", alternativeURL}})
+		b.content = append(b.content, smu.XML()...)
 		b.linkcnt++
 	}
 
