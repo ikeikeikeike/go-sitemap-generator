@@ -25,7 +25,7 @@ func PingSearchEngines(opts *Options, urls ...string) {
 
 	for _, url := range urls {
 		for _, sitemapURL := range sitemapURLs {
-			go func(baseurl string) {
+			go func(baseurl, sitemapURL string) {
 				url := fmt.Sprintf(baseurl, sitemapURL)
 				println("Ping now:", url)
 
@@ -38,7 +38,7 @@ func PingSearchEngines(opts *Options, urls ...string) {
 				defer resp.Body.Close()
 
 				does <- fmt.Sprintf("Successful ping of `%s`", url)
-			}(url)
+			}(url, sitemapURL)
 		}
 	}
 
