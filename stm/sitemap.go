@@ -34,6 +34,11 @@ func (sm *Sitemap) SetSitemapsHost(host string) {
 	sm.opts.SetSitemapsHost(host)
 }
 
+// AddAlternativeSitemapsHost is the alternative remote host where your sitemaps will be hosted
+func (sm *Sitemap) AddAlternativeSitemapsHost(host string) {
+	sm.opts.AddAlternativeSitemapsHost(host)
+}
+
 // SetSitemapsPath sets this to a directory/path if you don't
 // want to upload to the root of your `SitemapsHost`
 func (sm *Sitemap) SetSitemapsPath(path string) {
