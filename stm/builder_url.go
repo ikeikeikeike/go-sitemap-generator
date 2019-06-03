@@ -39,6 +39,12 @@ var fieldnames = ToLowerString(structs.Names(&URLModel{}))
 func NewSitemapURL(opts *Options, url URL) (SitemapURL, error) {
 	smu := &sitemapURL{opts: opts, data: url}
 	err := smu.validate()
+	for _, value := range smu.data {
+		key := value[0].(string)
+		if key == "alternates" {
+			smu.data = append(smu.data, []interface{}{"xhtml:link", value[1]})
+		}
+	}
 	return smu, err
 }
 
@@ -109,6 +115,8 @@ func (su *sitemapURL) XML() []byte {
 		priority := url.CreateElement("priority")
 		priority.SetText("0.5")
 	}
+
+	SetBuilderElementValue(url, su.data, "xhtml:link")
 	SetBuilderElementValue(url, su.data, "expires")
 	SetBuilderElementValue(url, su.data, "mobile")
 	SetBuilderElementValue(url, su.data, "news")
