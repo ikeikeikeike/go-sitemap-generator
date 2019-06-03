@@ -4,31 +4,33 @@ package stm
 func NewOptions() *Options {
 	// Default values
 	return &Options{
-		defaultHost:  "http://www.example.com",
-		sitemapsHost: "", // http://s3.amazonaws.com/sitemap-generator/,
-		publicPath:   "public/",
-		sitemapsPath: "sitemaps/",
-		filename:     "sitemap",
-		verbose:      true,
-		compress:     true,
-		pretty:       false,
-		adp:          NewFileAdapter(),
+		defaultHost:              "http://www.example.com",
+		sitemapsHost:             "", // http://s3.amazonaws.com/sitemap-generator/,
+		alternativeSitemapsHosts: []string{},
+		publicPath:               "public/",
+		sitemapsPath:             "sitemaps",
+		filename:                 "sitemap",
+		verbose:                  true,
+		compress:                 true,
+		pretty:                   false,
+		adp:                      NewFileAdapter(),
 	}
 }
 
 // Options exists for the Sitemap struct.
 type Options struct {
-	defaultHost  string
-	sitemapsHost string
-	publicPath   string
-	sitemapsPath string
-	filename     string
-	verbose      bool
-	compress     bool
-	pretty       bool
-	adp          Adapter
-	nmr          *Namer
-	loc          *Location
+	defaultHost              string
+	sitemapsHost             string
+	alternativeSitemapsHosts []string
+	publicPath               string
+	sitemapsPath             string
+	filename                 string
+	verbose                  bool
+	compress                 bool
+	pretty                   bool
+	adp                      Adapter
+	nmr                      *Namer
+	loc                      *Location
 }
 
 // SetDefaultHost sets that arg from Sitemap.Finalize method
@@ -39,6 +41,11 @@ func (opts *Options) SetDefaultHost(host string) {
 // SetSitemapsHost sets that arg from Sitemap.SetSitemapsHost method
 func (opts *Options) SetSitemapsHost(host string) {
 	opts.sitemapsHost = host
+}
+
+// AddAlternativeSitemapsHosts adds that arg from Sitemap.AddAlternativeSitemapsHosts method
+func (opts *Options) AddAlternativeSitemapsHost(host string) {
+	opts.alternativeSitemapsHosts = append(opts.alternativeSitemapsHosts, host)
 }
 
 // SetSitemapsPath sets that arg from Sitemap.SetSitemapsPath method.
@@ -82,6 +89,11 @@ func (opts *Options) SitemapsHost() string {
 		return opts.sitemapsHost
 	}
 	return opts.defaultHost
+}
+
+// AlternativeSitemapsHosts sets that arg from Sitemap.AlternativeSitemapsHosts method
+func (opts *Options) AlternativeSitemapsHosts() []string {
+	return opts.alternativeSitemapsHosts
 }
 
 // Location returns the Location's pointer with

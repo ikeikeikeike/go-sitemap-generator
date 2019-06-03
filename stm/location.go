@@ -67,6 +67,26 @@ func (loc *Location) URL() string {
 	return base.String()
 }
 
+// AlternativeURLs returns path to combine AlternativeSitemapsHost, sitemapsPath and
+// Filename on website with it uses ResolveReference.
+func (loc *Location) AlternativeURLs() []string {
+	alternativeSitemapsHosts := loc.opts.AlternativeSitemapsHosts()
+	alternativeURLs := []string{}
+	for _, alternativeSitemapsHost := range alternativeSitemapsHosts {
+		u, _ := url.Parse(alternativeSitemapsHost)
+
+		for _, ref := range []string{
+			loc.opts.sitemapsPath + "/", loc.Filename(),
+		} {
+			u, _ = u.Parse(ref)
+		}
+
+		alternativeURLs = append(alternativeURLs, u.String())
+	}
+
+	return alternativeURLs
+}
+
 // Filesize returns file size this struct has.
 func (loc *Location) Filesize() int64 {
 	f, _ := os.Open(loc.Path())
