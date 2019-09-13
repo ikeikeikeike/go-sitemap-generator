@@ -18,17 +18,20 @@ func NewOptions() *Options {
 
 // Options exists for the Sitemap struct.
 type Options struct {
-	defaultHost  string
-	sitemapsHost string
-	publicPath   string
-	sitemapsPath string
-	filename     string
-	verbose      bool
-	compress     bool
-	pretty       bool
-	adp          Adapter
-	nmr          *Namer
-	loc          *Location
+	defaultHost           string
+	sitemapsHost          string
+	publicPath            string
+	sitemapsPath          string
+	filename              string
+	verbose               bool
+	compress              bool
+	pretty                bool
+	adp                   Adapter
+	nmr                   *Namer
+	loc                   *Location
+	omitDefaultLastMod    bool
+	omitDefaultChangeFreq bool
+	omitDefaultPriority   bool
 }
 
 // SetDefaultHost sets that arg from Sitemap.Finalize method
@@ -74,6 +77,21 @@ func (opts *Options) SetPretty(pretty bool) {
 // SetAdapter sets that arg from Sitemap.SetAdapter method
 func (opts *Options) SetAdapter(adp Adapter) {
 	opts.adp = adp
+}
+
+// SetOmitDefaultLastMod controls whether to output a lastmod XML entity when none is provided in the URL builder
+func (opts *Options) SetOmitDefaultLastMod(omit bool) {
+	opts.omitDefaultLastMod = omit
+}
+
+// SetOmitDefaultChangeFreq controls whether to output a changefreq XML entity when none is provided in the URL builder
+func (opts *Options) SetOmitDefaultChangeFreq(omit bool) {
+	opts.omitDefaultChangeFreq = omit
+}
+
+// SetOmitDefaultPriority controls whether to output a Priority XML entity when none is provided in the URL builder
+func (opts *Options) SetOmitDefaultPriority(omit bool) {
+	opts.omitDefaultPriority = omit
 }
 
 // SitemapsHost sets that arg from Sitemap.SitemapsHost method

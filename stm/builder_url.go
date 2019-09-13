@@ -97,15 +97,15 @@ func (su *sitemapURL) XML() []byte {
 	url := doc.CreateElement("url")
 
 	SetBuilderElementValue(url, su.data.URLJoinBy("loc", "host", "loc"), "loc")
-	if _, ok := SetBuilderElementValue(url, su.data, "lastmod"); !ok {
+	if _, ok := SetBuilderElementValue(url, su.data, "lastmod"); !ok && !su.opts.omitDefaultLastMod {
 		lastmod := url.CreateElement("lastmod")
 		lastmod.SetText(time.Now().Format(time.RFC3339))
 	}
-	if _, ok := SetBuilderElementValue(url, su.data, "changefreq"); !ok {
+	if _, ok := SetBuilderElementValue(url, su.data, "changefreq"); !ok && !su.opts.omitDefaultChangeFreq {
 		changefreq := url.CreateElement("changefreq")
 		changefreq.SetText("weekly")
 	}
-	if _, ok := SetBuilderElementValue(url, su.data, "priority"); !ok {
+	if _, ok := SetBuilderElementValue(url, su.data, "priority"); !ok && !su.opts.omitDefaultPriority {
 		priority := url.CreateElement("priority")
 		priority.SetText("0.5")
 	}
