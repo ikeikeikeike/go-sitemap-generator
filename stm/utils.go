@@ -82,7 +82,7 @@ func SetBuilderElementValue(elm *etree.Element, data [][]interface{}, basekey st
 		child.SetText(fmt.Sprint(value))
 	case time.Time:
 		child = elm.CreateElement(key)
-		child.SetText(value.Format(time.RFC3339))
+		child.SetText(value.Format("2006-01-02"))
 	case bool:
 		_ = elm.CreateElement(fmt.Sprintf("%s:%s", key, key))
 	case []int:

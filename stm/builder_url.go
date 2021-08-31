@@ -99,7 +99,7 @@ func (su *sitemapURL) XML() []byte {
 	SetBuilderElementValue(url, su.data.URLJoinBy("loc", "host", "loc"), "loc")
 	if _, ok := SetBuilderElementValue(url, su.data, "lastmod"); !ok {
 		lastmod := url.CreateElement("lastmod")
-		lastmod.SetText(time.Now().Format(time.RFC3339))
+		lastmod.SetText(time.Now().Format("2006-01-02"))
 	}
 	if _, ok := SetBuilderElementValue(url, su.data, "changefreq"); !ok {
 		changefreq := url.CreateElement("changefreq")
