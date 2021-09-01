@@ -18,17 +18,18 @@ func NewOptions() *Options {
 
 // Options exists for the Sitemap struct.
 type Options struct {
-	defaultHost  string
-	sitemapsHost string
-	publicPath   string
-	sitemapsPath string
-	filename     string
-	verbose      bool
-	compress     bool
-	pretty       bool
-	adp          Adapter
-	nmr          *Namer
-	loc          *Location
+	defaultHost        string
+	sitemapsHost       string
+	publicPath         string
+	sitemapsPath       string
+	filename           string
+	verbose            bool
+	compress           bool
+	pretty             bool
+	adp                Adapter
+	nmr                *Namer
+	loc                *Location
+	dateFormatYYYYMMDD bool
 }
 
 // SetDefaultHost sets that arg from Sitemap.Finalize method
@@ -74,6 +75,11 @@ func (opts *Options) SetPretty(pretty bool) {
 // SetAdapter sets that arg from Sitemap.SetAdapter method
 func (opts *Options) SetAdapter(adp Adapter) {
 	opts.adp = adp
+}
+
+// SetDateFormatYYYYMMD controls whether to output a Priority XML entity when none is provided in the URL builder
+func (opts *Options) SetDateFormatYYYYMMDD(yyyymmdd bool) {
+	opts.dateFormatYYYYMMDD = yyyymmdd
 }
 
 // SitemapsHost sets that arg from Sitemap.SitemapsHost method
