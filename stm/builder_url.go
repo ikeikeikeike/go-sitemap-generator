@@ -26,13 +26,13 @@ type URLModel struct {
 	News       string                 `valid:"-"`
 	Mobile     bool                   `valid:"-"`
 	Alternate  string                 `valid:"-"`
-	Alternates map[string]interface{} `valid:"-"`
+	Alternates map[string]interface{} `valid:"-" structs:"xhtml:link"`
 	Pagemap    map[string]interface{} `valid:"-"`
 }
 
 // fieldnames []string{"priority" "changefreq" "lastmod" "expires" "host" "images"
-// "video" "geo" "news" "videos" "mobile" "alternate" "alternates" "pagemap"}
-var fieldnames = ToLowerString(structs.Names(&URLModel{}))
+// "video" "geo" "news" "videos" "mobile" "alternate" "xhtml:link" "pagemap"}
+var fieldnames = KeysToLowerString(structs.New(&URLModel{}).Map())
 
 // NewSitemapURL returns the created the SitemapURL's pointer
 // and it validates URL types error.
@@ -115,6 +115,7 @@ func (su *sitemapURL) XML() []byte {
 	SetBuilderElementValue(url, su.data, "video")
 	SetBuilderElementValue(url, su.data, "image")
 	SetBuilderElementValue(url, su.data, "geo")
+	SetBuilderElementValue(url, su.data, "xhtml:link")
 
 	if su.opts.pretty {
 		doc.Indent(2)
