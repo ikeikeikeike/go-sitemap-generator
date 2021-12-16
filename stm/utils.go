@@ -161,9 +161,9 @@ func MergeMap(src, dst [][]interface{}) [][]interface{} {
 	return src
 }
 
-// ToLowerString converts lower strings from including capital or upper strings.
-func ToLowerString(befores []string) (afters []string) {
-	for _, name := range befores {
+// KeysToLowerString converts lower strings from including capital or upper strings.
+func KeysToLowerString(befores map[string]interface{}) (afters []string) {
+	for name := range befores {
 		afters = append(afters, strings.ToLower(name))
 	}
 	return afters
