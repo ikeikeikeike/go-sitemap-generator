@@ -1,4 +1,4 @@
-module github.com/bahador14/go-sitemap-generator/v2
+module github.com/bahador14/go-sitemap-generator
 
 go 1.9
 
