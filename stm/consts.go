@@ -4,7 +4,7 @@ const (
 	// MaxSitemapFiles defines max sitemap links per index file
 	MaxSitemapFiles = 50000
 	// MaxSitemapLinks defines max links per sitemap
-	MaxSitemapLinks = 50000
+	MaxSitemapLinks = 10000
 	// MaxSitemapImages defines max images per url
 	MaxSitemapImages = 1000
 	// MaxSitemapNews defines max news sitemap per index_file
