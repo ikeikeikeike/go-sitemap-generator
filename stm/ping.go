@@ -10,7 +10,6 @@ import (
 func PingSearchEngines(opts *Options, urls ...string) {
 	urls = append(urls, []string{
 		"http://www.google.com/webmasters/tools/ping?sitemap=%s",
-		"http://www.bing.com/webmaster/ping.aspx?siteMap=%s",
 	}...)
 	sitemapURL := opts.IndexLocation().URL()
 
