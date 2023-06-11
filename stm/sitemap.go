@@ -75,6 +75,36 @@ func (sm *Sitemap) SetFilename(filename string) {
 	sm.opts.SetFilename(filename)
 }
 
+// SetImage option allows injecting image header in output file.
+func (sm *Sitemap) SetImage(image bool) {
+	sm.opts.SetImage(image)
+}
+
+// SetVideo option allows injecting video header in output file.
+func (sm *Sitemap) SetVideo(video bool) {
+	sm.opts.SetVideo(video)
+}
+
+// SetGeo option allows injecting geo header in output file.
+func (sm *Sitemap) SetGeo(geo bool) {
+	sm.opts.SetGeo(geo)
+}
+
+// SetNews option allows injecting news header in output file.
+func (sm *Sitemap) SetNews(news bool) {
+	sm.opts.SetNews(news)
+}
+
+// SetMobile option allows injecting mobile header in output file.
+func (sm *Sitemap) SetMobile(mobile bool) {
+	sm.opts.SetMobile(mobile)
+}
+
+// SetPageMap option allows injecting pagemap header in output file.
+func (sm *Sitemap) SetPageMap(pagemap bool) {
+	sm.opts.SetPageMap(pagemap)
+}
+
 // Create method must be that calls first this method in that before call to Add method on this struct.
 func (sm *Sitemap) Create() *Sitemap {
 	sm.bldrs = NewBuilderIndexfile(sm.opts, sm.opts.IndexLocation())

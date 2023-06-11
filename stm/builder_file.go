@@ -75,10 +75,35 @@ func (b *BuilderFile) Content() []byte {
 
 // XMLContent will return an XML of the sitemap built
 func (b *BuilderFile) XMLContent() []byte {
-	c := bytes.Join(bytes.Fields(XMLHeader), []byte(" "))
+	c := bytes.Join(bytes.Fields(b.XMLHeader()), []byte(" "))
 	c = append(append(c, b.Content()...), XMLFooter...)
 
 	return c
+}
+
+// XMLHeader will return an XML of the sitemap additional headers
+func (b *BuilderFile) XMLHeader() []byte {
+	xmlHeader := NewXmlHeaderGenerator()
+	if b.opts.image {
+		xmlHeader.WithImage()
+	}
+	if b.opts.video {
+		xmlHeader.WithVideo()
+	}
+	if b.opts.geo {
+		xmlHeader.WithGeo()
+	}
+	if b.opts.news {
+		xmlHeader.WithNews()
+	}
+	if b.opts.mobile {
+		xmlHeader.WithMobile()
+	}
+	if b.opts.pagemap {
+		xmlHeader.WithPageMap()
+	}
+
+	return xmlHeader.Generate()
 }
 
 // Write will write pooled bytes with header and footer to

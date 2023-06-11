@@ -42,21 +42,66 @@ var (
 )
 
 var (
-	// XMLHeader exists for create sitemap xml as a specific sitemap document.
-	XMLHeader = []byte(`<?xml version="1.0" encoding="UTF-8"?>
+	XMLImageHeader   = `xmlns:image="` + SchemaImage + `" `
+	XMLVideoHeader   = `xmlns:video="` + SchemaVideo + `" `
+	XMLGeoHeader     = `xmlns:geo="` + SchemaGeo + `" `
+	XMLNewsHeader    = `xmlns:news="` + SchemaNews + `" `
+	XMLMobileHeader  = `xmlns:mobile="` + SchemaMobile + `" `
+	XMLPageMapHeader = `xmlns:pagemap="` + SchemaPagemap + `" `
+)
+
+var (
+	// XMLFooter and XMLHeader will used from user together .
+	XMLFooter = []byte("</urlset>")
+)
+
+type HeaderGenerator struct {
+	xml string `json:"xml"`
+}
+
+func NewXmlHeaderGenerator() *HeaderGenerator {
+	return &HeaderGenerator{
+		xml: `<?xml version="1.0" encoding="UTF-8"?>
       <urlset
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
           http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
-        xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="` + SchemaImage + `"
-        xmlns:video="` + SchemaVideo + `"
-        xmlns:geo="` + SchemaGeo + `"
-        xmlns:news="` + SchemaNews + `"
-        xmlns:mobile="` + SchemaMobile + `"
-        xmlns:pagemap="` + SchemaPagemap + `"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml"
-    >`)
-	// XMLFooter and XMLHeader will used from user together .
-	XMLFooter = []byte("</urlset>")
-)
+        xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" `,
+	}
+}
+
+func (h *HeaderGenerator) WithImage() *HeaderGenerator {
+	h.xml += XMLImageHeader
+	return h
+}
+
+func (h *HeaderGenerator) WithVideo() *HeaderGenerator {
+	h.xml += XMLVideoHeader
+	return h
+}
+
+func (h *HeaderGenerator) WithGeo() *HeaderGenerator {
+	h.xml += XMLGeoHeader
+	return h
+}
+
+func (h *HeaderGenerator) WithNews() *HeaderGenerator {
+	h.xml += XMLNewsHeader
+	return h
+}
+
+func (h *HeaderGenerator) WithMobile() *HeaderGenerator {
+	h.xml += XMLMobileHeader
+	return h
+}
+
+func (h *HeaderGenerator) WithPageMap() *HeaderGenerator {
+	h.xml += XMLPageMapHeader
+	return h
+}
+
+func (h *HeaderGenerator) Generate() []byte {
+	h.xml += `xmlns:xhtml="http://www.w3.org/1999/xhtml"
+    >`
+	return []byte(h.xml)
+}
