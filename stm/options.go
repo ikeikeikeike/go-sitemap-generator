@@ -29,6 +29,12 @@ type Options struct {
 	adp          Adapter
 	nmr          *Namer
 	loc          *Location
+	image        bool
+	video        bool
+	geo          bool
+	news         bool
+	mobile       bool
+	pagemap      bool
 }
 
 // SetDefaultHost sets that arg from Sitemap.Finalize method
@@ -74,6 +80,36 @@ func (opts *Options) SetPretty(pretty bool) {
 // SetAdapter sets that arg from Sitemap.SetAdapter method
 func (opts *Options) SetAdapter(adp Adapter) {
 	opts.adp = adp
+}
+
+// SetImage inject image header in xml additional headers
+func (opts *Options) SetImage(image bool) {
+	opts.image = image
+}
+
+// SetVideo inject video header in xml additional headers
+func (opts *Options) SetVideo(video bool) {
+	opts.video = video
+}
+
+// SetGeo inject video header in xml additional headers
+func (opts *Options) SetGeo(geo bool) {
+	opts.geo = geo
+}
+
+// SetNews inject news header in xml additional headers
+func (opts *Options) SetNews(news bool) {
+	opts.news = news
+}
+
+// SetMobile inject mobile header in xml additional headers
+func (opts *Options) SetMobile(mobile bool) {
+	opts.mobile = mobile
+}
+
+// SetPageMap inject pagemap header in xml additional headers
+func (opts *Options) SetPageMap(pagemap bool) {
+	opts.pagemap = pagemap
 }
 
 // SitemapsHost sets that arg from Sitemap.SitemapsHost method

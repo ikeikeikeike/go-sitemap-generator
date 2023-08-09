@@ -101,14 +101,18 @@ func (su *sitemapURL) XML() []byte {
 		lastmod := url.CreateElement("lastmod")
 		lastmod.SetText(time.Now().Format(time.RFC3339))
 	}
-	if _, ok := SetBuilderElementValue(url, su.data, "changefreq"); !ok {
+
+	/**
+	Google ignores <priority> and <changefreq> values
+	*/
+	/*if _, ok := SetBuilderElementValue(url, su.data, "changefreq"); !ok {
 		changefreq := url.CreateElement("changefreq")
 		changefreq.SetText("weekly")
 	}
 	if _, ok := SetBuilderElementValue(url, su.data, "priority"); !ok {
 		priority := url.CreateElement("priority")
 		priority.SetText("0.5")
-	}
+	}*/
 	SetBuilderElementValue(url, su.data, "expires")
 	SetBuilderElementValue(url, su.data, "mobile")
 	SetBuilderElementValue(url, su.data, "news")
